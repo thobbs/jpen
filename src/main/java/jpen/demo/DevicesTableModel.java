@@ -22,7 +22,6 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -30,198 +29,209 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import jpen.PKind;
+import jpen.PenDevice;
+import jpen.PenProvider;
 import jpen.event.PenManagerListener;
 import jpen.owner.multiAwt.AwtPenToolkit;
-import jpen.PenDevice;
-import jpen.PenManager;
-import jpen.PenProvider;
-import jpen.PKind;
 
-class DevicesTableModel
-			extends AbstractTableModel
-	implements PenManagerListener{
+class DevicesTableModel extends AbstractTableModel implements PenManagerListener {
 
-	private final List<PenDevice> devices=new ArrayList<PenDevice>();
-	final PKindTypeNumberCombo kindTypeNumberCombo=new PKindTypeNumberCombo();
-	private boolean supportCustomPKinds;
+  private final List<PenDevice> devices = new ArrayList<PenDevice>();
+  final PKindTypeNumberCombo kindTypeNumberCombo = new PKindTypeNumberCombo();
+  private boolean supportCustomPKinds;
 
-	private final Column[] columns=new Column[]{
-				new Column<String>("Name (Physical Id)", String.class){
-					@Override
-					Object getValue(PenDevice device){
-						return device.getName()+" ("+device.getPhysicalId()+")";
-					}
-				},
-				/*new Column<String>("Provider", String.class){
-				 @Override
-				 Object getValue(PenDevice device){
-				  return device.getProvider().getConstructor().getName();
-				 }
-			},*/
-				/*new Column<Boolean>("Enabled", Boolean.class, true){
-				 @Override
-				 Object getValue(PenDevice device){
-				  return device.getEnabled();
-				 }
-				 @Override
-				 void setValue(Boolean val, PenDevice device){
-				  device.setEnabled(val);
-				 }
-			},*/	
-				new Column<Integer>("Kind", Integer.class, true){
-					private final MyCellRenderer myCellRenderer=new MyCellRenderer();
-					private final TableCellEditor myCellEditor=new DefaultCellEditor(kindTypeNumberCombo.comboBox);
+  private final Column[] columns =
+      new Column[] {
+        new Column<String>("Name (Physical Id)", String.class) {
+          @Override
+          Object getValue(PenDevice device) {
+            return device.getName() + " (" + device.getPhysicalId() + ")";
+          }
+        },
+        /*new Column<String>("Provider", String.class){
+        	 @Override
+        	 Object getValue(PenDevice device){
+        	  return device.getProvider().getConstructor().getName();
+        	 }
+        },*/
+        /*new Column<Boolean>("Enabled", Boolean.class, true){
+        	 @Override
+        	 Object getValue(PenDevice device){
+        	  return device.getEnabled();
+        	 }
+        	 @Override
+        	 void setValue(Boolean val, PenDevice device){
+        	  device.setEnabled(val);
+        	 }
+        },*/
+        new Column<Integer>("Kind", Integer.class, true) {
+          private final MyCellRenderer myCellRenderer = new MyCellRenderer();
+          private final TableCellEditor myCellEditor =
+              new DefaultCellEditor(kindTypeNumberCombo.comboBox);
 
-					class MyCellRenderer
-						extends DefaultTableCellRenderer{
-						{
-							setHorizontalAlignment(JLabel.CENTER);
-						}
-						@Override
-						public Component 	getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-							super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-							setText(PKindTypeNumberCombo.getPKindTypeStringValue((Integer)value));
-							return this;
-						}
-					}
+          class MyCellRenderer extends DefaultTableCellRenderer {
+            {
+              setHorizontalAlignment(JLabel.CENTER);
+            }
 
-					@Override
-					Object getValue(PenDevice device){
-						return device.getKindTypeNumber();
-					}
+            @Override
+            public Component getTableCellRendererComponent(
+                JTable table,
+                Object value,
+                boolean isSelected,
+                boolean hasFocus,
+                int row,
+                int column) {
+              super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+              setText(PKindTypeNumberCombo.getPKindTypeStringValue((Integer) value));
+              return this;
+            }
+          }
 
-					@Override
-					void setValue(Integer val, PenDevice device){
-						try{
-							if(device.getKindTypeNumber()==val)
-							return;
-							device.setKindTypeNumber(val);
-						}catch(Exception ex){
-							JOptionPane.showMessageDialog(null, ex.getMessage());
-						}
-						updateKindTypeNumberCombo();
-					}
+          @Override
+          Object getValue(PenDevice device) {
+            return device.getKindTypeNumber();
+          }
 
-					@Override
-					TableCellRenderer getCellRenderer(){
-						return myCellRenderer;
-					}
+          @Override
+          void setValue(Integer val, PenDevice device) {
+            try {
+              if (device.getKindTypeNumber() == val) return;
+              device.setKindTypeNumber(val);
+            } catch (Exception ex) {
+              JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
+            updateKindTypeNumberCombo();
+          }
 
-					@Override
-					TableCellEditor getCellEditor(){
-						return myCellEditor;
-					}
-				},
-			};
+          @Override
+          TableCellRenderer getCellRenderer() {
+            return myCellRenderer;
+          }
 
-	private abstract class Column<C>{
-		final String name;
-		final Class<C> clazz;
-		final boolean isCellEditable;
-		Column(String name, Class<C> clazz){
-			this(name, clazz, false);
-		}
-		Column(String name, Class<C> clazz, boolean isCellEditable){
-			this.name=name;
-			this.clazz=clazz;
-			this.isCellEditable=isCellEditable;
-		}
+          @Override
+          TableCellEditor getCellEditor() {
+            return myCellEditor;
+          }
+        },
+      };
 
-		Object getValueAt(int row){
-			return getValue(devices.get(row));
-		}
+  private abstract class Column<C> {
+    final String name;
+    final Class<C> clazz;
+    final boolean isCellEditable;
 
-		abstract Object getValue(PenDevice device);
+    Column(String name, Class<C> clazz) {
+      this(name, clazz, false);
+    }
 
-		void setValueAt(Object val, int row){
-			setValue(clazz.cast(val), devices.get(row));
-		}
+    Column(String name, Class<C> clazz, boolean isCellEditable) {
+      this.name = name;
+      this.clazz = clazz;
+      this.isCellEditable = isCellEditable;
+    }
 
-		void setValue(C val, PenDevice device){}
+    Object getValueAt(int row) {
+      return getValue(devices.get(row));
+    }
 
-		TableCellEditor getCellEditor(){
-			return null;
-		}
+    abstract Object getValue(PenDevice device);
 
-		TableCellRenderer getCellRenderer(){
-			return null;
-		}
-	}
+    void setValueAt(Object val, int row) {
+      setValue(clazz.cast(val), devices.get(row));
+    }
 
-	DevicesTableModel(){
-		AwtPenToolkit.getPenManager().addListener(this);
-		updateDevices();
-	}
+    void setValue(C val, PenDevice device) {}
 
-	void setSupportCustomPKinds(boolean supportCustomPKinds){
-		this.supportCustomPKinds=supportCustomPKinds;
-		updateKindTypeNumberCombo();
-	}
+    TableCellEditor getCellEditor() {
+      return null;
+    }
 
-	private void updateDevices(){
-		devices.clear();
-		devices.addAll(AwtPenToolkit.getPenManager().getDevices());
-		updateKindTypeNumberCombo();
-		fireTableDataChanged();
-	}
+    TableCellRenderer getCellRenderer() {
+      return null;
+    }
+  }
 
-	private void updateKindTypeNumberCombo(){
-		int devicesMax=0;
-		for(PenDevice device: devices)
-			if(devicesMax<device.getKindTypeNumber())
-				devicesMax=device.getKindTypeNumber();
-		if(supportCustomPKinds){
-			if(++devicesMax<PKind.Type.VALUES.size())
-				devicesMax=PKind.Type.VALUES.size(); // to show at least one custom PKind
-		}
-		if(devicesMax>kindTypeNumberCombo.getMaxPKindTypeNumber())
-			kindTypeNumberCombo.setMaxPKindTypeNumber(devicesMax);
-	}
+  DevicesTableModel() {
+    AwtPenToolkit.getPenManager().addListener(this);
+    updateDevices();
+  }
 
-	//@Override
-	public void 	penDeviceAdded(PenProvider.Constructor providerConstructor, PenDevice penDevice){
-		updateDevices();
-	}
+  void setSupportCustomPKinds(boolean supportCustomPKinds) {
+    this.supportCustomPKinds = supportCustomPKinds;
+    updateKindTypeNumberCombo();
+  }
 
-	//@Override
-	public void 	penDeviceRemoved(PenProvider.Constructor providerConstructor, PenDevice penDevice){
-		updateDevices();
-	}
+  private void updateDevices() {
+    devices.clear();
+    devices.addAll(AwtPenToolkit.getPenManager().getDevices());
+    updateKindTypeNumberCombo();
+    fireTableDataChanged();
+  }
 
-	//@Override
-	public int getRowCount(){
-		return devices.size();
-	}
-	//@Override
-	public int getColumnCount(){
-		return columns.length;
-	}
-	//@Override
-	public Object getValueAt(int row, int column){
-		return columns[column].getValueAt(row);
-	}
-	@Override
-	public String getColumnName(int col){
-		return columns[col].name;
-	}
-	@Override
-	public Class<?> getColumnClass(int col){
-		return columns[col].clazz;
-	}
-	@Override
-	public boolean isCellEditable(int row, int col){
-		return columns[col].isCellEditable;
-	}
-	@Override
-	public void 	setValueAt(Object aValue, int row, int col){
-		columns[col].setValueAt(aValue, row);
-	}
+  private void updateKindTypeNumberCombo() {
+    int devicesMax = 0;
+    for (PenDevice device : devices)
+      if (devicesMax < device.getKindTypeNumber()) devicesMax = device.getKindTypeNumber();
+    if (supportCustomPKinds) {
+      if (++devicesMax < PKind.Type.VALUES.size())
+        devicesMax = PKind.Type.VALUES.size(); // to show at least one custom PKind
+    }
+    if (devicesMax > kindTypeNumberCombo.getMaxPKindTypeNumber())
+      kindTypeNumberCombo.setMaxPKindTypeNumber(devicesMax);
+  }
 
-	public TableCellEditor getCellEditor(int row, int col){
-		return columns[col].getCellEditor();
-	}
+  // @Override
+  public void penDeviceAdded(PenProvider.Constructor providerConstructor, PenDevice penDevice) {
+    updateDevices();
+  }
 
-	public TableCellRenderer getCellRenderer(int row, int col){
-		return columns[col].getCellRenderer();
-	}
+  // @Override
+  public void penDeviceRemoved(PenProvider.Constructor providerConstructor, PenDevice penDevice) {
+    updateDevices();
+  }
+
+  // @Override
+  public int getRowCount() {
+    return devices.size();
+  }
+
+  // @Override
+  public int getColumnCount() {
+    return columns.length;
+  }
+
+  // @Override
+  public Object getValueAt(int row, int column) {
+    return columns[column].getValueAt(row);
+  }
+
+  @Override
+  public String getColumnName(int col) {
+    return columns[col].name;
+  }
+
+  @Override
+  public Class<?> getColumnClass(int col) {
+    return columns[col].clazz;
+  }
+
+  @Override
+  public boolean isCellEditable(int row, int col) {
+    return columns[col].isCellEditable;
+  }
+
+  @Override
+  public void setValueAt(Object aValue, int row, int col) {
+    columns[col].setValueAt(aValue, row);
+  }
+
+  public TableCellEditor getCellEditor(int row, int col) {
+    return columns[col].getCellEditor();
+  }
+
+  public TableCellRenderer getCellRenderer(int row, int col) {
+    return columns[col].getCellRenderer();
+  }
 }

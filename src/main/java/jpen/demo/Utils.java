@@ -20,58 +20,55 @@ package jpen.demo;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.border.Border;
 
 final class Utils {
 
-	private static final Border LABELED_COMPONENT_BORDER=BorderFactory.createEmptyBorder(3,3,2,2);
+  private static final Border LABELED_COMPONENT_BORDER =
+      BorderFactory.createEmptyBorder(3, 3, 2, 2);
 
-	static JComponent labelComponent(String label, JComponent c) {
-		Box box=Box.createHorizontalBox();
-		if(label!=null) {
-			if(!label.trim().endsWith(":"))
-				label=label.trim()+": ";
-			box.add(new JLabel(label));
-		}
-		box.add(Box.createHorizontalGlue());
-		freezeSizeToPreferred(c);
-		box.add(c);
-		box.setBorder(LABELED_COMPONENT_BORDER);
-		if(c instanceof JLabel)
-			box.add(Box.createHorizontalStrut(5));
-		return alignTopLeft(box);
-	}
+  static JComponent labelComponent(String label, JComponent c) {
+    Box box = Box.createHorizontalBox();
+    if (label != null) {
+      if (!label.trim().endsWith(":")) label = label.trim() + ": ";
+      box.add(new JLabel(label));
+    }
+    box.add(Box.createHorizontalGlue());
+    freezeSizeToPreferred(c);
+    box.add(c);
+    box.setBorder(LABELED_COMPONENT_BORDER);
+    if (c instanceof JLabel) box.add(Box.createHorizontalStrut(5));
+    return alignTopLeft(box);
+  }
 
-	static JComponent freezeSizeToPreferred(JComponent c) {
-		freezeSize(c, c.getPreferredSize());
-		return c;
-	}
+  static JComponent freezeSizeToPreferred(JComponent c) {
+    freezeSize(c, c.getPreferredSize());
+    return c;
+  }
 
-	static JComponent freezeSize(JComponent c, Dimension s) {
-		c.validate();
-		c.setMinimumSize(s);
-		c.setMaximumSize(s);
-		c.setPreferredSize(s);
-		return c;
-	}
+  static JComponent freezeSize(JComponent c, Dimension s) {
+    c.validate();
+    c.setMinimumSize(s);
+    c.setMaximumSize(s);
+    c.setPreferredSize(s);
+    return c;
+  }
 
-	static JComponent alignTopLeft(JComponent c) {
-		c.setAlignmentX(Component.LEFT_ALIGNMENT);
-		c.setAlignmentY(Component.TOP_ALIGNMENT);
-		return c;
-	}
+  static JComponent alignTopLeft(JComponent c) {
+    c.setAlignmentX(Component.LEFT_ALIGNMENT);
+    c.setAlignmentY(Component.TOP_ALIGNMENT);
+    return c;
+  }
 
-	static Component createHorizontalStrut() {
-		return new Box.Filler(new Dimension(3,0), new Dimension(3,0),
-							  new Dimension(3, 0));
-	}
+  static Component createHorizontalStrut() {
+    return new Box.Filler(new Dimension(3, 0), new Dimension(3, 0), new Dimension(3, 0));
+  }
 
-	static Component createVerticalStrut() {
-		return new Box.Filler(new Dimension(0,3), new Dimension(0,3),
-							  new Dimension(0, 3));
-	}
+  static Component createVerticalStrut() {
+    return new Box.Filler(new Dimension(0, 3), new Dimension(0, 3), new Dimension(0, 3));
+  }
 }

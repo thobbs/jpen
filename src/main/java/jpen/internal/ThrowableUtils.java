@@ -21,14 +21,14 @@ package jpen.internal;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public final class ThrowableUtils{
-	private ThrowableUtils(){}
+public final class ThrowableUtils {
+  private ThrowableUtils() {}
 
-	public static String evalStackTraceString(Throwable t){
-		StringWriter sw=new StringWriter();
-		PrintWriter pw=new PrintWriter(sw);
-		t.printStackTrace(pw);
-		pw.close();
-		return sw.toString();
-	}
+  public static String evalStackTraceString(Throwable t) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    t.printStackTrace(pw);
+    pw.close();
+    return sw.toString();
+  }
 }

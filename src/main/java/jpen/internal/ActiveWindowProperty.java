@@ -28,76 +28,81 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import javax.swing.SwingUtilities;
+
 /**
-Allows to keep an eye on the application active window avoiding the unnecessary null activeWindow change reported by the default KeyboardFocusManager when switching windows. 
-*/
-public final class ActiveWindowProperty
-	implements PropertyChangeListener, Runnable{
+ * Allows to keep an eye on the application active window avoiding the unnecessary null activeWindow
+ * change reported by the default KeyboardFocusManager when switching windows.
+ */
+public final class ActiveWindowProperty implements PropertyChangeListener, Runnable {
 
-	public interface Listener{
-		void activeWindowChanged(Window newWindow);
-	}
+  public interface Listener {
+    void activeWindowChanged(Window newWindow);
+  }
 
-	private final Listener listener;
-	private Window activeWindow;
+  private final Listener listener;
+  private Window activeWindow;
 
-	public ActiveWindowProperty(Listener listener){
-		this.listener=listener;
-		KeyboardFocusManager keyboardFocusManager=KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		keyboardFocusManager.addPropertyChangeListener("activeWindow",this);
-		activeWindow=keyboardFocusManager.getActiveWindow();
-	}
+  public ActiveWindowProperty(Listener listener) {
+    this.listener = listener;
+    KeyboardFocusManager keyboardFocusManager =
+        KeyboardFocusManager.getCurrentKeyboardFocusManager();
+    keyboardFocusManager.addPropertyChangeListener("activeWindow", this);
+    activeWindow = keyboardFocusManager.getActiveWindow();
+  }
 
-	public synchronized Window get(){
-		return activeWindow;
-	}
+  public synchronized Window get() {
+    return activeWindow;
+  }
 
-	private synchronized void set(Window activeWindow){
-		this.activeWindow=activeWindow;
-		listener.activeWindowChanged(activeWindow);
-	}
+  private synchronized void set(Window activeWindow) {
+    this.activeWindow = activeWindow;
+    listener.activeWindowChanged(activeWindow);
+  }
 
-	//@Override
-	public void propertyChange(PropertyChangeEvent ev){
-		Window activeWindow=(Window)ev.getNewValue();
-		if(activeWindow==this.activeWindow)
-			return;
-		if(activeWindow==null){
-			// if the new activeWindow is null then we do the change only after a delay to avoid unnecessary changes to null (java does change the activeWindow to null when switching).
-			if(nullWindowTask==null || nullWindowTask.isDone())
-				nullWindowTask=nullWindowScheduler.schedule(this, 50, TimeUnit.MILLISECONDS);
-			return;
-		}
-		if(nullWindowTask!=null){
-			nullWindowTask.cancel(false);
-			nullWindowTask=null;
-		}
-		set(activeWindow);
-	}
+  // @Override
+  public void propertyChange(PropertyChangeEvent ev) {
+    Window activeWindow = (Window) ev.getNewValue();
+    if (activeWindow == this.activeWindow) return;
+    if (activeWindow == null) {
+      // if the new activeWindow is null then we do the change only after a delay to avoid
+      // unnecessary changes to null (java does change the activeWindow to null when switching).
+      if (nullWindowTask == null || nullWindowTask.isDone())
+        nullWindowTask = nullWindowScheduler.schedule(this, 50, TimeUnit.MILLISECONDS);
+      return;
+    }
+    if (nullWindowTask != null) {
+      nullWindowTask.cancel(false);
+      nullWindowTask = null;
+    }
+    set(activeWindow);
+  }
 
-	private final ScheduledExecutorService nullWindowScheduler=Executors.newSingleThreadScheduledExecutor(new ThreadFactory(){
-				//@Override
-				public Thread newThread(Runnable runnable){
-					Thread t=new Thread(runnable, "jpen-ActiveWindow-filter");
-					t.setDaemon(true);
-					return t;
-				}
-			});
-	private ScheduledFuture nullWindowTask;
+  private final ScheduledExecutorService nullWindowScheduler =
+      Executors.newSingleThreadScheduledExecutor(
+          new ThreadFactory() {
+            // @Override
+            public Thread newThread(Runnable runnable) {
+              Thread t = new Thread(runnable, "jpen-ActiveWindow-filter");
+              t.setDaemon(true);
+              return t;
+            }
+          });
+  private ScheduledFuture nullWindowTask;
 
-	//@Override
-	public void run(){
-		try{
-			SwingUtilities.invokeAndWait(nullWindowRunnable);
-		}catch(Exception ex){
-			throw new AssertionError(ex);
-		}
-	}
+  // @Override
+  public void run() {
+    try {
+      SwingUtilities.invokeAndWait(nullWindowRunnable);
+    } catch (Exception ex) {
+      throw new AssertionError(ex);
+    }
+  }
 
-	private final Runnable nullWindowRunnable=new Runnable(){
-				//@Override
-				public void run(){
-					set(null);
-				}
-			};
+  private final Runnable nullWindowRunnable =
+      new Runnable() {
+        // @Override
+        public void run() {
+          set(null);
+        }
+      };
 }

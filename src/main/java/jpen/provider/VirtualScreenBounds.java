@@ -20,76 +20,72 @@
 % }] */
 package jpen.provider;
 
-import java.awt.DisplayMode;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.util.logging.Level;
+import java.awt.geom.Rectangle2D;
 import java.util.logging.Logger;
 import jpen.PLevel;
 
-public final class VirtualScreenBounds{
-	static final Logger L=Logger.getLogger(VirtualScreenBounds.class.getName());
-	private static VirtualScreenBounds INSTANCE;
-	private final Rectangle2D.Float r=new Rectangle2D.Float();
+public final class VirtualScreenBounds {
+  static final Logger L = Logger.getLogger(VirtualScreenBounds.class.getName());
+  private static VirtualScreenBounds INSTANCE;
+  private final Rectangle2D.Float r = new Rectangle2D.Float();
 
-	{
-		// first time calc is expensive... I do it once in a background thread
-		new Thread(){
-			{
-				setName("jpen-VirtualScreenBounds");
-				setDaemon(true);
-			}
-			@Override
-			public void run(){
-				reset();
-				L.fine("first calculation done.");
-			}
-		}.start();
-	}
+  {
+    // first time calc is expensive... I do it once in a background thread
+    new Thread() {
+      {
+        setName("jpen-VirtualScreenBounds");
+        setDaemon(true);
+      }
 
-	private VirtualScreenBounds(){}
+      @Override
+      public void run() {
+        reset();
+        L.fine("first calculation done.");
+      }
+    }.start();
+  }
 
-	public static VirtualScreenBounds getInstance(){
-		if(INSTANCE==null)
-			INSTANCE=new VirtualScreenBounds();
-		return INSTANCE;
-	}
+  private VirtualScreenBounds() {}
 
-	public synchronized void reset(){
-		r.x=r.y=r.width=r.height=0;
-		calc(r);
-	}
+  public static VirtualScreenBounds getInstance() {
+    if (INSTANCE == null) INSTANCE = new VirtualScreenBounds();
+    return INSTANCE;
+  }
 
-	static void calc(Rectangle2D r){
-		for (GraphicsDevice gd: GraphicsEnvironment.
-		        getLocalGraphicsEnvironment().getScreenDevices()){
-			GraphicsConfiguration graphicsConfiguration=gd.getDefaultConfiguration();
-			r.add(graphicsConfiguration.getBounds());
-		}
-	}
+  public synchronized void reset() {
+    r.x = r.y = r.width = r.height = 0;
+    calc(r);
+  }
 
-	public float getLevelRangeMult(PLevel.Type type) {
-		switch(type){
-		case X:
-			return r.width;
-		case Y:
-			return r.height;
-		default:
-			return 1f;
-		}
-	}
+  static void calc(Rectangle2D r) {
+    for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+      GraphicsConfiguration graphicsConfiguration = gd.getDefaultConfiguration();
+      r.add(graphicsConfiguration.getBounds());
+    }
+  }
 
-	public float getLevelRangeOffset(PLevel.Type type){
-		switch(type){
-		case X:
-			return r.x;
-		case Y:
-			return r.y;
-		default:
-			return 0f;
-		}
-	}
+  public float getLevelRangeMult(PLevel.Type type) {
+    switch (type) {
+      case X:
+        return r.width;
+      case Y:
+        return r.height;
+      default:
+        return 1f;
+    }
+  }
+
+  public float getLevelRangeOffset(PLevel.Type type) {
+    switch (type) {
+      case X:
+        return r.x;
+      case Y:
+        return r.y;
+      default:
+        return 0f;
+    }
+  }
 }

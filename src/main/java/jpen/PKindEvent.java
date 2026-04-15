@@ -20,31 +20,28 @@ package jpen;
 
 import jpen.event.PenListener;
 
-public class PKindEvent
-	extends PenEvent
-	implements java.io.Serializable {
-	public static final long serialVersionUID=1l;
+public class PKindEvent extends PenEvent implements java.io.Serializable {
+  public static final long serialVersionUID = 1l;
 
-	public final PKind kind;
+  public final PKind kind;
 
-	PKindEvent(PenDevice penDevice, long deviceTime, PKind kind) {
-		super(penDevice, deviceTime);
-		this.kind=kind;
-	}
+  PKindEvent(PenDevice penDevice, long deviceTime, PKind kind) {
+    super(penDevice, deviceTime);
+    this.kind = kind;
+  }
 
-	@Override
-	void copyTo(PenState penState){
-		penState.setKind(PKind.valueOf(kind.typeNumber));
-	}
+  @Override
+  void copyTo(PenState penState) {
+    penState.setKind(PKind.valueOf(kind.typeNumber));
+  }
 
-	@Override
-	void dispatch() {
-		for(PenListener l:pen.getListenersArray())
-			l.penKindEvent(this);
-	}
+  @Override
+  void dispatch() {
+    for (PenListener l : pen.getListenersArray()) l.penKindEvent(this);
+  }
 
-	@Override
-	public String toString(){
-		return "[PKindEvent: super="+super.toString()+", kind="+kind+"]";
-	}
+  @Override
+  public String toString() {
+    return "[PKindEvent: super=" + super.toString() + ", kind=" + kind + "]";
+  }
 }

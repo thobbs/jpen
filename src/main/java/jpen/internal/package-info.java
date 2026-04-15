@@ -17,6 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 /**
-<i>Don't use this package or its subpackages directly</i>, they contain various utilities for JPen internal use only and may change without notice.
-*/
+ * <i>Don't use this package or its subpackages directly</i>, they contain various utilities for
+ * JPen internal use only and may change without notice.
+ */
 package jpen.internal;

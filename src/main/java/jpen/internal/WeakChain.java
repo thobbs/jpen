@@ -23,108 +23,99 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class WeakChain<E>{
+public class WeakChain<E> {
 
-	private static	class Cell<E> extends WeakReference<E>{
-		Cell<E> nextCell;
-		Cell(E element, Cell<E> nextCell){
-			super(element);
-			if(element==null)
-				throw new IllegalArgumentException();
-			this.nextCell=nextCell;
-		}
-	}
+  private static class Cell<E> extends WeakReference<E> {
+    Cell<E> nextCell;
 
-	private Cell<E> headCell;
-	private Cell<E> tailCell;
+    Cell(E element, Cell<E> nextCell) {
+      super(element);
+      if (element == null) throw new IllegalArgumentException();
+      this.nextCell = nextCell;
+    }
+  }
 
-	public synchronized boolean add(E element){
-		Cell<E> newCell=new Cell<E>(element, null);
-		if(tailCell==null){
-			if(headCell!=null)
-				throw new AssertionError();
-			headCell=tailCell=newCell;
-		}else{
-			tailCell.nextCell=newCell;
-			tailCell=newCell;
-		}
-		return true;
-	}
+  private Cell<E> headCell;
+  private Cell<E> tailCell;
 
-	public synchronized void clear(){
-		headCell=tailCell=null;
-	}
+  public synchronized boolean add(E element) {
+    Cell<E> newCell = new Cell<E>(element, null);
+    if (tailCell == null) {
+      if (headCell != null) throw new AssertionError();
+      headCell = tailCell = newCell;
+    } else {
+      tailCell.nextCell = newCell;
+      tailCell = newCell;
+    }
+    return true;
+  }
 
-	public synchronized boolean remove(final E element){
-		Cell<E> prevCell=null;
-		Cell<E> cell=headCell;
-		if(cell==null)
-			return false;
-		do{
-			E cellElement=cell.get();
-			if(cellElement==null)
-				removeCell(cell, prevCell);
-			else if(cellElement==element){
-				removeCell(cell, prevCell);
-				return true;
-			}else
-				prevCell=cell;
-		}while((cell=cell.nextCell)!=null);
-		return false;
-	}
+  public synchronized void clear() {
+    headCell = tailCell = null;
+  }
 
-	private void removeCell(Cell<E> cell, Cell<E> prevCell){
-		if(prevCell!=null){ // cell is not be the head
-			prevCell.nextCell=cell.nextCell;
-		}else{ // cell must be the head
-			if(cell!=headCell)
-				throw new AssertionError();
-			headCell=cell.nextCell;
-		}
-		if(cell==tailCell){
-			tailCell=prevCell;
-			if(tailCell!=null)
-				tailCell.nextCell=null;
-		}
-	}
+  public synchronized boolean remove(final E element) {
+    Cell<E> prevCell = null;
+    Cell<E> cell = headCell;
+    if (cell == null) return false;
+    do {
+      E cellElement = cell.get();
+      if (cellElement == null) removeCell(cell, prevCell);
+      else if (cellElement == element) {
+        removeCell(cell, prevCell);
+        return true;
+      } else prevCell = cell;
+    } while ((cell = cell.nextCell) != null);
+    return false;
+  }
 
-	public Collection<E> snapshot(){
-		return snapshot(null);
-	}
+  private void removeCell(Cell<E> cell, Cell<E> prevCell) {
+    if (prevCell != null) { // cell is not be the head
+      prevCell.nextCell = cell.nextCell;
+    } else { // cell must be the head
+      if (cell != headCell) throw new AssertionError();
+      headCell = cell.nextCell;
+    }
+    if (cell == tailCell) {
+      tailCell = prevCell;
+      if (tailCell != null) tailCell.nextCell = null;
+    }
+  }
 
-	public synchronized Collection<E> snapshot(Collection<E> elements){
-		Cell<E> cell=headCell;
-		if(cell==null)
-			return elements==null? Collections.<E>emptyList(): elements;
-		if(elements==null){
-			if(cell==tailCell){// optimization
-				E cellElement=cell.get();
-				if(cellElement!=null)
-					return Collections.singletonList(cellElement);
-				removeCell(cell, null);
-				return Collections.emptyList();
-			}
-			elements=new LinkedList<E>();
-		}
-		Cell<E> prevCell=null;
-		do{
-			E cellElement=cell.get();
-			if(cellElement==null){
-				removeCell(cell, prevCell);
-			}else{
-				elements.add(cellElement);
-				prevCell=cell;
-			}
-		}while((cell=cell.nextCell)!=null);
-		return elements;
-	}
+  public Collection<E> snapshot() {
+    return snapshot(null);
+  }
 
-	public void purge(){
-		remove(null);
-	}
+  public synchronized Collection<E> snapshot(Collection<E> elements) {
+    Cell<E> cell = headCell;
+    if (cell == null) return elements == null ? Collections.<E>emptyList() : elements;
+    if (elements == null) {
+      if (cell == tailCell) { // optimization
+        E cellElement = cell.get();
+        if (cellElement != null) return Collections.singletonList(cellElement);
+        removeCell(cell, null);
+        return Collections.emptyList();
+      }
+      elements = new LinkedList<E>();
+    }
+    Cell<E> prevCell = null;
+    do {
+      E cellElement = cell.get();
+      if (cellElement == null) {
+        removeCell(cell, prevCell);
+      } else {
+        elements.add(cellElement);
+        prevCell = cell;
+      }
+    } while ((cell = cell.nextCell) != null);
+    return elements;
+  }
 
-	public synchronized boolean isEmpty(){
-		return headCell==null;
-	}
+  public void purge() {
+    remove(null);
+  }
 
+  public synchronized boolean isEmpty() {
+    return headCell == null;
+  }
 }

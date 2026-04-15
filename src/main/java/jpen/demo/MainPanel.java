@@ -24,31 +24,31 @@ import javax.swing.Box;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
-class MainPanel{
-	private final JTabbedPane tabbedPane=new JTabbedPane(JTabbedPane.TOP);
-	final Box panel=Box.createVerticalBox();
-	final DevicesPanel devicesPanel;
+class MainPanel {
+  private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+  final Box panel = Box.createVerticalBox();
+  final DevicesPanel devicesPanel;
 
-	MainPanel(){
-		JSplitPane canvasesPane=new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		canvasesPane.setLeftComponent(new PenCanvas().scrollPane);
-		canvasesPane.setRightComponent(new PenCanvas().scrollPane);
-		//canvasesPane.setContinuousLayout(true);
-		canvasesPane.setOneTouchExpandable(true);
-		canvasesPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-		canvasesPane.setBorder(BorderFactory.createTitledBorder("Pen Enabled Components"));
-		panel.add(canvasesPane);
+  MainPanel() {
+    JSplitPane canvasesPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+    canvasesPane.setLeftComponent(new PenCanvas().scrollPane);
+    canvasesPane.setRightComponent(new PenCanvas().scrollPane);
+    // canvasesPane.setContinuousLayout(true);
+    canvasesPane.setOneTouchExpandable(true);
+    canvasesPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+    canvasesPane.setBorder(BorderFactory.createTitledBorder("Pen Enabled Components"));
+    panel.add(canvasesPane);
 
-		StatePanel statePanel=new StatePanel();
-		tabbedPane.addTab("Pen", statePanel.panel);
+    StatePanel statePanel = new StatePanel();
+    tabbedPane.addTab("Pen", statePanel.panel);
 
-		devicesPanel=new DevicesPanel();
-		//devicesPanel.panel.setBorder(BorderFactory.createTitledBorder("Devices"));
-		tabbedPane.addTab("Input Devices", devicesPanel.panel);
+    devicesPanel = new DevicesPanel();
+    // devicesPanel.panel.setBorder(BorderFactory.createTitledBorder("Devices"));
+    tabbedPane.addTab("Input Devices", devicesPanel.panel);
 
-		tabbedPane.setMaximumSize(tabbedPane.getPreferredSize());
+    tabbedPane.setMaximumSize(tabbedPane.getPreferredSize());
 
-		tabbedPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panel.add(tabbedPane);
-	}
+    tabbedPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+    panel.add(tabbedPane);
+  }
 }

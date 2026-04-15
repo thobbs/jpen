@@ -20,36 +20,39 @@ package jpen.internal;
 
 public class Range {
 
-	public final float min;
-	public final float max;
-	private final float range;
-	
-	private final boolean fixForSmallAsymmetry;
+  public final float min;
+  public final float max;
+  private final float range;
 
-	public Range(float min, float max) {
-		this.fixForSmallAsymmetry=min<0 && max>0 && Math.abs(max+min)==1;// if true then apply a trick to avoid loosing the tool center getRangedValue(0)==0.5
-		if(fixForSmallAsymmetry) {
-			if(max>-min)
-				max--; // limits the range by 1 step, making max == -min
-			else
-				min++;
-		}
+  private final boolean fixForSmallAsymmetry;
 
-		this.min=min;
-		this.max=max;
-		this.range=max-min;
-	}
+  public Range(float min, float max) {
+    this.fixForSmallAsymmetry =
+        min < 0
+            && max > 0
+            && Math.abs(max + min)
+                == 1; // if true then apply a trick to avoid loosing the tool center
+    // getRangedValue(0)==0.5
+    if (fixForSmallAsymmetry) {
+      if (max > -min) max--; // limits the range by 1 step, making max == -min
+      else min++;
+    }
 
-	public final float getRangedValue(float value) {
-		if(fixForSmallAsymmetry) {
-			if (value <= min) return 0.0f;
-			if (value >= max) return 1.0f;
-		}
-		return (value-min)/range;
-	}
+    this.min = min;
+    this.max = max;
+    this.range = max - min;
+  }
 
-	@Override
-	public String toString() {
-		return "[Range: "+min+", "+max+"]";
-	}
+  public final float getRangedValue(float value) {
+    if (fixForSmallAsymmetry) {
+      if (value <= min) return 0.0f;
+      if (value >= max) return 1.0f;
+    }
+    return (value - min) / range;
+  }
+
+  @Override
+  public String toString() {
+    return "[Range: " + min + ", " + max + "]";
+  }
 }

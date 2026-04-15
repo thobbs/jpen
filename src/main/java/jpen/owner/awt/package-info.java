@@ -17,8 +17,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 /**
-Contains {@link jpen.owner.awt.AwtPenOwner} which allows JPen to be used on a single Java AWT component. <b>Warning:</b> see {@link jpen.owner.awt.AwtPenOwner#AwtPenOwner(java.awt.Component)}. 
-
-@see jpen.PenManager#PenManager(PenOwner)
-*/
+ * Contains {@link jpen.owner.awt.AwtPenOwner} which allows JPen to be used on a single Java AWT
+ * component. <b>Warning:</b> see {@link
+ * jpen.owner.awt.AwtPenOwner#AwtPenOwner(java.awt.Component)}.
+ *
+ * @see jpen.PenManager#PenManager(PenOwner)
+ */
 package jpen.owner.awt;

@@ -18,21 +18,29 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.owner;
 
-import java.awt.geom.Point2D;
 import java.awt.Point;
+import java.awt.geom.Point2D;
+
 /**
-Defines the screen area where {@link jpen.PenEvent}s are fired or a drag-out operation can be started.
-*/
-public interface PenClip{
-	/**
-	Evaluates the current location of the origin of this PenClip on the screen, using screen coordinates. This method is called while holding the {@link PenOwner.PenManagerHandle#getPenSchedulerLock()}.
-	@param locationOnScreen a Point to put the evaluated result on. 
-	*/
-	public void evalLocationOnScreen(Point locationOnScreen);
-	/**
-	 This method is called while holding the {@link PenOwner.PenManagerHandle#getPenSchedulerLock()}.
-	@param point The point to test in PenClip coordinates.
-	@return {@code true} if the given point is inside this PenClip.
-	*/
-	public boolean contains(Point2D.Float point);
+ * Defines the screen area where {@link jpen.PenEvent}s are fired or a drag-out operation can be
+ * started.
+ */
+public interface PenClip {
+  /**
+   * Evaluates the current location of the origin of this PenClip on the screen, using screen
+   * coordinates. This method is called while holding the {@link
+   * PenOwner.PenManagerHandle#getPenSchedulerLock()}.
+   *
+   * @param locationOnScreen a Point to put the evaluated result on.
+   */
+  public void evalLocationOnScreen(Point locationOnScreen);
+
+  /**
+   * This method is called while holding the {@link
+   * PenOwner.PenManagerHandle#getPenSchedulerLock()}.
+   *
+   * @param point The point to test in PenClip coordinates.
+   * @return {@code true} if the given point is inside this PenClip.
+   */
+  public boolean contains(Point2D.Float point);
 }

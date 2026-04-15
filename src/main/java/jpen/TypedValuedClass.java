@@ -18,20 +18,19 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen;
 
-public abstract class TypedValuedClass<T extends Enum<T>, V>
-	extends TypedClass<T>
-	implements java.io.Serializable {
-	public static final long serialVersionUID=1l;
+public abstract class TypedValuedClass<T extends Enum<T>, V> extends TypedClass<T>
+    implements java.io.Serializable {
+  public static final long serialVersionUID = 1l;
 
-	public V value;
+  public V value;
 
-	TypedValuedClass(int typeNumber, V value) {
-		super(typeNumber);
-		this.value=value;
-	}
+  TypedValuedClass(int typeNumber, V value) {
+    super(typeNumber);
+    this.value = value;
+  }
 
-	@Override
-	public String toString() {
-		return "(type="+getType()+", value="+value+")";
-	}
+  @Override
+  public String toString() {
+    return "(type=" + getType() + ", value=" + value + ")";
+  }
 }

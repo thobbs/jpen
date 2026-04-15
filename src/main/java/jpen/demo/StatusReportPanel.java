@@ -22,19 +22,20 @@ import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-class StatusReportPanel{
-	private final JTextArea textArea=new JTextArea();
-	
-	final JScrollPane panel=new JScrollPane(textArea);
-	{
-		panel.setPreferredSize(new Dimension(600, 430));
-	}
-	
-	StatusReportPanel(StatusReport statusReport){
-		textArea.setText(statusReport.toString());
-		textArea.setEditable(false);
-		textArea.setLineWrap(true);
-		textArea.setTabSize(1);
-		textArea.setCaretPosition(0);
-	}
+class StatusReportPanel {
+  private final JTextArea textArea = new JTextArea();
+
+  final JScrollPane panel = new JScrollPane(textArea);
+
+  {
+    panel.setPreferredSize(new Dimension(600, 430));
+  }
+
+  StatusReportPanel(StatusReport statusReport) {
+    textArea.setText(statusReport.toString());
+    textArea.setEditable(false);
+    textArea.setLineWrap(true);
+    textArea.setTabSize(1);
+    textArea.setCaretPosition(0);
+  }
 }

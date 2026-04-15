@@ -23,42 +23,40 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class PKind
-			extends TypedClass<PKind.Type>
-	implements java.io.Serializable {
-	public static final long serialVersionUID=1l;
+public class PKind extends TypedClass<PKind.Type> implements java.io.Serializable {
+  public static final long serialVersionUID = 1l;
 
-	public enum Type{
-		CURSOR, STYLUS, ERASER, 
-		/**
-		Used for devices that does not identify the pen, rater extend it, like the pad.
-		*/
-		IGNORE, 
-		CUSTOM;
-		
-		public static final List<Type> ALL_VALUES=Collections.unmodifiableList(Arrays.asList(values()));
-		public static final List<Type> VALUES=TypedClass.createStandardTypes(ALL_VALUES);
-	}
+  public enum Type {
+    CURSOR,
+    STYLUS,
+    ERASER,
+    /** Used for devices that does not identify the pen, rater extend it, like the pad. */
+    IGNORE,
+    CUSTOM;
 
-	private PKind(int typeNumber) {
-		super(typeNumber);
-	}
+    public static final List<Type> ALL_VALUES =
+        Collections.unmodifiableList(Arrays.asList(values()));
+    public static final List<Type> VALUES = TypedClass.createStandardTypes(ALL_VALUES);
+  }
 
-	private static final List<PKind> VALUES_L=new ArrayList<PKind>(Type.VALUES.size());
-	private static final List<PKind> VALUES=Collections.unmodifiableList(VALUES_L);
-	
-	public static PKind valueOf(Type type){
-		return valueOf(type.ordinal());
-	}
+  private PKind(int typeNumber) {
+    super(typeNumber);
+  }
 
-	public static PKind valueOf(int typeNumber){
-		while(VALUES_L.size()<=typeNumber)
-			VALUES_L.add(new PKind(VALUES_L.size()));
-		return VALUES_L.get(typeNumber);
-	}
+  private static final List<PKind> VALUES_L = new ArrayList<PKind>(Type.VALUES.size());
+  private static final List<PKind> VALUES = Collections.unmodifiableList(VALUES_L);
 
-	@Override
-	final List<Type> getAllTypes() {
-		return Type.ALL_VALUES;
-	}
+  public static PKind valueOf(Type type) {
+    return valueOf(type.ordinal());
+  }
+
+  public static PKind valueOf(int typeNumber) {
+    while (VALUES_L.size() <= typeNumber) VALUES_L.add(new PKind(VALUES_L.size()));
+    return VALUES_L.get(typeNumber);
+  }
+
+  @Override
+  final List<Type> getAllTypes() {
+    return Type.ALL_VALUES;
+  }
 }

@@ -18,24 +18,24 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.internal;
 
-public final class ObjectUtils{
-	private ObjectUtils(){}
+public final class ObjectUtils {
+  private ObjectUtils() {}
 
-	public static void synchronizedWait(Object lock, long timeout){
-		synchronized(lock){
-			waitUninterrupted(lock, timeout);
-		}
-	}
+  public static void synchronizedWait(Object lock, long timeout) {
+    synchronized (lock) {
+      waitUninterrupted(lock, timeout);
+    }
+  }
 
-	public static void waitUninterrupted(Object o, long timeout){
-		try{
-			o.wait(timeout);
-		}catch(InterruptedException ex){
-			throw new AssertionError(ex);
-		}
-	}
+  public static void waitUninterrupted(Object o, long timeout) {
+    try {
+      o.wait(timeout);
+    } catch (InterruptedException ex) {
+      throw new AssertionError(ex);
+    }
+  }
 
-	public static void waitUninterrupted(Object lock){
-		waitUninterrupted(lock, 0l);
-	}
+  public static void waitUninterrupted(Object lock) {
+    waitUninterrupted(lock, 0l);
+  }
 }

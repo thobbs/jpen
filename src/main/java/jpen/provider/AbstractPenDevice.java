@@ -18,113 +18,110 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.provider;
 
-import java.awt.Component;
-import java.util.ArrayList;
 import java.util.List;
-import jpen.owner.PenOwner;
-import jpen.PButton;
-import jpen.PButtonEvent;
+import jpen.PKind;
 import jpen.Pen;
 import jpen.PenDevice;
 import jpen.PenManager;
 import jpen.PenProvider;
-import jpen.PKind;
-import jpen.PLevel;
-import jpen.PLevelEvent;
 
 @SuppressWarnings("deprecation")
-public abstract class AbstractPenDevice
-	implements PenDevice {
+public abstract class AbstractPenDevice implements PenDevice {
 
-	private byte id;
-	private String physicalId;
-	private final PenProvider provider;
-	private int kindTypeNumber=PKind.Type.CURSOR.ordinal();
-	private boolean enabled;
+  private byte id;
+  private String physicalId;
+  private final PenProvider provider;
+  private int kindTypeNumber = PKind.Type.CURSOR.ordinal();
+  private boolean enabled;
 
-	protected AbstractPenDevice(PenProvider provider) {
-		this.provider=provider;
-	}
+  protected AbstractPenDevice(PenProvider provider) {
+    this.provider = provider;
+  }
 
-	//@Override
-	public byte getId(){
-		return id;
-	}
+  // @Override
+  public byte getId() {
+    return id;
+  }
 
-	//@Override
-	public void penManagerSetId(byte id){
-		this.id=id;
-	}
-	
-	//@Override
-	public PenProvider getProvider() {
-		return provider;
-	}
+  // @Override
+  public void penManagerSetId(byte id) {
+    this.id = id;
+  }
 
-	//@Override
-	public int getKindTypeNumber() {
-		return kindTypeNumber;
-	}
+  // @Override
+  public PenProvider getProvider() {
+    return provider;
+  }
 
-	//@Override
-	public void setKindTypeNumber(int kindTypeNumber) {
-		if(kindTypeNumber<0)
-			throw new IllegalArgumentException("PKind.Type must be >= 0");
-		this.kindTypeNumber=kindTypeNumber;
-	}
+  // @Override
+  public int getKindTypeNumber() {
+    return kindTypeNumber;
+  }
 
-	//@Override
-	public boolean getEnabled() {
-		return enabled;
-	}
+  // @Override
+  public void setKindTypeNumber(int kindTypeNumber) {
+    if (kindTypeNumber < 0) throw new IllegalArgumentException("PKind.Type must be >= 0");
+    this.kindTypeNumber = kindTypeNumber;
+  }
 
-	//@Override
-	public void setEnabled(boolean enabled) {
-		this.enabled=enabled;
-	}
+  // @Override
+  public boolean getEnabled() {
+    return enabled;
+  }
 
-	//@Override
-	public String getPhysicalId(){
-		String physicalId=this.physicalId;
-		if(physicalId==null)
-			synchronized(this){
-				physicalId=this.physicalId;
-				if(physicalId==null)
-					physicalId=this.physicalId=evalPhysicalId();
-			}
-		return physicalId;
-	}
+  // @Override
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
 
-	protected String evalPhysicalId(){
-		return getName().trim()+"@"+provider.getConstructor().getName().trim();
-	}
+  // @Override
+  public String getPhysicalId() {
+    String physicalId = this.physicalId;
+    if (physicalId == null)
+      synchronized (this) {
+        physicalId = this.physicalId;
+        if (physicalId == null) physicalId = this.physicalId = evalPhysicalId();
+      }
+    return physicalId;
+  }
 
-	public final PenManager getPenManager() {
-		return provider.getConstructor().getPenManager();
-	}
+  protected String evalPhysicalId() {
+    return getName().trim() + "@" + provider.getConstructor().getName().trim();
+  }
 
-	public final Pen getPen() {
-		return getPenManager().pen;
-	}
-	
-	//@Override
-	public boolean getUseFractionalMovements(){
-		return true;
-	}
-	
-	//@Override
-	public void penManagerSetUseFractionalMovements(boolean useFractionalMovement){
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public String toString() {
-		return "[PenDevice: provider="+getProvider()+", name="+getName()+", kind="+getOrNull(PKind.Type.VALUES, getKindTypeNumber())+"("+getKindTypeNumber()+")]";
-	}
+  public final PenManager getPenManager() {
+    return provider.getConstructor().getPenManager();
+  }
 
-	private static final <T> T getOrNull(List<T> l, int index){
-		if(index<0 || index>=l.size())
-			return null;
-		return l.get(index);
-	}
+  public final Pen getPen() {
+    return getPenManager().pen;
+  }
+
+  // @Override
+  public boolean getUseFractionalMovements() {
+    return true;
+  }
+
+  // @Override
+  public void penManagerSetUseFractionalMovements(boolean useFractionalMovement) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public String toString() {
+    return "[PenDevice: provider="
+        + getProvider()
+        + ", name="
+        + getName()
+        + ", kind="
+        + getOrNull(PKind.Type.VALUES, getKindTypeNumber())
+        + "("
+        + getKindTypeNumber()
+        + ")]";
+  }
+
+  private static final <T> T getOrNull(List<T> l, int index) {
+    if (index < 0 || index >= l.size()) return null;
+    return l.get(index);
+  }
 }

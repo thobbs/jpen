@@ -20,44 +20,41 @@ package jpen.internal.filter;
 
 import java.awt.geom.Point2D;
 
-class RelativeOnSlopesRule
-	implements RelativeLocationFilter.Rule{
+class RelativeOnSlopesRule implements RelativeLocationFilter.Rule {
 
-	private static final int THRESHOLD=3;
+  private static final int THRESHOLD = 3;
 
-	private int missedPoints;
-	private int positiveSlopes;
-	private final Point2D.Float previousAbsDeviation=new Point2D.Float();
+  private int missedPoints;
+  private int positiveSlopes;
+  private final Point2D.Float previousAbsDeviation = new Point2D.Float();
 
-	//@Override
-	public void reset(){
-		missedPoints=-1;
-		positiveSlopes=-1;
-	}
+  // @Override
+  public void reset() {
+    missedPoints = -1;
+    positiveSlopes = -1;
+  }
 
-	//@Override
-	public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter){
-		missedPoints++;
-		if(!filter.samplePoint.isComplete)
-			return null;
-		if(positiveSlopes==-1){
-			previousAbsDeviation.setLocation(filter.absDeviation);
-			positiveSlopes=0;
-		}else{
-			if(filter.absDeviation.x<=AbsoluteOnARowRule.THRESHOLD &&
-				 filter.absDeviation.y<=AbsoluteOnARowRule.THRESHOLD){
-				positiveSlopes=0;
-			}
-			else if(filter.absDeviation.x>=previousAbsDeviation.x ||
-				 filter.absDeviation.y>=previousAbsDeviation.y){
-				positiveSlopes++;
-			}
-		}
-		if(positiveSlopes>=THRESHOLD){
-				//System.out.println("relative device detected, missedPoints="+missedPoints);
-				return RelativeLocationFilter.State.RELATIVE;
-			}
-		previousAbsDeviation.setLocation(filter.absDeviation);
-		return null;
-	}
+  // @Override
+  public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter) {
+    missedPoints++;
+    if (!filter.samplePoint.isComplete) return null;
+    if (positiveSlopes == -1) {
+      previousAbsDeviation.setLocation(filter.absDeviation);
+      positiveSlopes = 0;
+    } else {
+      if (filter.absDeviation.x <= AbsoluteOnARowRule.THRESHOLD
+          && filter.absDeviation.y <= AbsoluteOnARowRule.THRESHOLD) {
+        positiveSlopes = 0;
+      } else if (filter.absDeviation.x >= previousAbsDeviation.x
+          || filter.absDeviation.y >= previousAbsDeviation.y) {
+        positiveSlopes++;
+      }
+    }
+    if (positiveSlopes >= THRESHOLD) {
+      // System.out.println("relative device detected, missedPoints="+missedPoints);
+      return RelativeLocationFilter.State.RELATIVE;
+    }
+    previousAbsDeviation.setLocation(filter.absDeviation);
+    return null;
+  }
 }

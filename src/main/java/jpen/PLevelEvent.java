@@ -26,64 +26,59 @@ import java.util.Set;
 import jpen.event.PenListener;
 import jpen.internal.AccessibleField;
 
-public class PLevelEvent
-			extends PenEvent
-	implements java.io.Serializable {
-	public static final long serialVersionUID=2l;
+public class PLevelEvent extends PenEvent implements java.io.Serializable {
+  public static final long serialVersionUID = 2l;
 
-	public final PLevel[] levels;
+  public final PLevel[] levels;
 
-	public PLevelEvent(PenDevice device, long deviceTime, PLevel[] levels) {
-		super(device, deviceTime);
-		this.levels=levels;
-	}
-	
-	@Override
-	void copyTo(PenState penState){
-		penState.levels.setValues(this);
-	}
+  public PLevelEvent(PenDevice device, long deviceTime, PLevel[] levels) {
+    super(device, deviceTime);
+    this.levels = levels;
+  }
 
-	@Override
-	void dispatch() {
-		for(PenListener l:pen.getListenersArray())
-			l.penLevelEvent(this);
-	}
+  @Override
+  void copyTo(PenState penState) {
+    penState.levels.setValues(this);
+  }
 
-	public boolean containsLevelOfType(Set<PLevel.Type> levelTypes){
-		for(int i=levels.length; --i>=0;)
-			if(levelTypes.contains(levels[i].getType()))
-				return true;
-		return false;
-	}
+  @Override
+  void dispatch() {
+    for (PenListener l : pen.getListenersArray()) l.penLevelEvent(this);
+  }
 
-	public boolean isMovement() {
-		return containsLevelOfType(PLevel.Type.MOVEMENT_TYPES);
-	}
+  public boolean containsLevelOfType(Set<PLevel.Type> levelTypes) {
+    for (int i = levels.length; --i >= 0; )
+      if (levelTypes.contains(levels[i].getType())) return true;
+    return false;
+  }
 
-	@Override
-	public String toString() {
-		return "[PLevelEvent: super="+super.toString()+", levels="+Arrays.asList(levels)+"]";
-	}
+  public boolean isMovement() {
+    return containsLevelOfType(PLevel.Type.MOVEMENT_TYPES);
+  }
 
-	private void readObject(ObjectInputStream in)
-	throws IOException, ClassNotFoundException {
-		try{
-			ObjectInputStream.GetField fields = in.readFields();
-			levelsField.getField().set(this, fields.get("levels", null));
-			//v Backwards compatibility:
-			//vv deviceId and deviceTime were moved to the super class PenEvent:
-			ObjectStreamClass objectStreamClass=fields.getObjectStreamClass();
-			if(objectStreamClass.getField("deviceId")!=null)
-				PenEvent.deviceIdField.getField().set(this, fields.get("deviceId", (byte)0));
-			if(objectStreamClass.getField("deviceTime")!=null)
-				PenEvent.deviceTimeField.getField().set(this, fields.get("deviceTime", 0l));
-			//^^
-			//^
-		}catch(IllegalAccessException ex){
-			throw new AssertionError(ex);
-		}
-	}
+  @Override
+  public String toString() {
+    return "[PLevelEvent: super=" + super.toString() + ", levels=" + Arrays.asList(levels) + "]";
+  }
 
-	private static final AccessibleField levelsField=new AccessibleField(PLevelEvent.class, "levels");
+  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    try {
+      ObjectInputStream.GetField fields = in.readFields();
+      levelsField.getField().set(this, fields.get("levels", null));
+      // v Backwards compatibility:
+      // vv deviceId and deviceTime were moved to the super class PenEvent:
+      ObjectStreamClass objectStreamClass = fields.getObjectStreamClass();
+      if (objectStreamClass.getField("deviceId") != null)
+        PenEvent.deviceIdField.getField().set(this, fields.get("deviceId", (byte) 0));
+      if (objectStreamClass.getField("deviceTime") != null)
+        PenEvent.deviceTimeField.getField().set(this, fields.get("deviceTime", 0l));
+      // ^^
+      // ^
+    } catch (IllegalAccessException ex) {
+      throw new AssertionError(ex);
+    }
+  }
 
+  private static final AccessibleField levelsField =
+      new AccessibleField(PLevelEvent.class, "levels");
 }

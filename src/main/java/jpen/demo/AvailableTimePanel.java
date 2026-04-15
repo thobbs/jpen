@@ -20,29 +20,31 @@ package jpen.demo;
 
 import javax.swing.JComponent;
 import javax.swing.JTextField;
-import jpen.event.PenAdapter;
 import jpen.Pen;
+import jpen.event.PenAdapter;
 
-class AvailableTimePanel{
-	final StringBuilder text=new StringBuilder();
-	final JTextField textField=new JTextField(7);
+class AvailableTimePanel {
+  final StringBuilder text = new StringBuilder();
+  final JTextField textField = new JTextField(7);
 
-	final JComponent panel=textField;
+  final JComponent panel = textField;
 
-	AvailableTimePanel(final Pen pen){
-		textField.setHorizontalAlignment(JTextField.RIGHT);
-		textField.setEditable(false);
-		pen.addListener(new PenAdapter(){
-			                String period=String.valueOf(1000/pen.getFrequency());
-			                @Override
-			                public void penTock(long availableMillis){
-				                text.setLength(0);
-				                text.append(availableMillis);
-				                text.append(" / ");
-				                text.append(period);
-												text.append(" ms");
-				                textField.setText(text.toString());
-			                }
-		                });
-	}
+  AvailableTimePanel(final Pen pen) {
+    textField.setHorizontalAlignment(JTextField.RIGHT);
+    textField.setEditable(false);
+    pen.addListener(
+        new PenAdapter() {
+          String period = String.valueOf(1000 / pen.getFrequency());
+
+          @Override
+          public void penTock(long availableMillis) {
+            text.setLength(0);
+            text.append(availableMillis);
+            text.append(" / ");
+            text.append(period);
+            text.append(" ms");
+            textField.setText(text.toString());
+          }
+        });
+  }
 }

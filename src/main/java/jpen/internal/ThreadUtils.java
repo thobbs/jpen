@@ -18,14 +18,14 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.internal;
 
-public final class ThreadUtils{
-	private ThreadUtils(){}
-	
-	public static void sleepUninterrupted(long millis){
-		try{
-			Thread.currentThread().sleep(millis);
-		}catch(InterruptedException ex){
-			throw new AssertionError(ex);
-		}
-	}
+public final class ThreadUtils {
+  private ThreadUtils() {}
+
+  public static void sleepUninterrupted(long millis) {
+    try {
+      Thread.currentThread().sleep(millis);
+    } catch (InterruptedException ex) {
+      throw new AssertionError(ex);
+    }
+  }
 }

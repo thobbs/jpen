@@ -22,98 +22,103 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import jpen.PenProvider;
 import jpen.PenDevice;
 import jpen.PenManager;
+import jpen.PenProvider;
 
-public abstract class AbstractPenProvider
-	implements PenProvider {
-	private final Constructor constructor;
-	protected final List<PenDevice> devices=new ArrayList<PenDevice>();
-	private final List<PenDevice> devicesA=Collections.unmodifiableList(devices);
+public abstract class AbstractPenProvider implements PenProvider {
+  private final Constructor constructor;
+  protected final List<PenDevice> devices = new ArrayList<PenDevice>();
+  private final List<PenDevice> devicesA = Collections.unmodifiableList(devices);
 
-	protected AbstractPenProvider(Constructor constructor) {
-		this.constructor=constructor;
-	}
+  protected AbstractPenProvider(Constructor constructor) {
+    this.constructor = constructor;
+  }
 
-	//@Override
-	public Collection<PenDevice> getDevices() {
-		return devicesA;
-	}
+  // @Override
+  public Collection<PenDevice> getDevices() {
+    return devicesA;
+  }
 
-	public final PenManager getPenManager() {
-		return getConstructor().getPenManager();
-	}
+  public final PenManager getPenManager() {
+    return getConstructor().getPenManager();
+  }
 
-	//@Override
-	public final Constructor getConstructor() {
-		return constructor;
-	}
-	
-	//@Override
-	public boolean getUseRelativeLocationFilter(){
-		return false;
-	}
+  // @Override
+  public final Constructor getConstructor() {
+    return constructor;
+  }
 
-	//@Override
-	public String toString() {
-		return "[PenProvider: constructor.name="+getConstructor().getName()+"]";
-	}
-	
-	public static abstract class AbstractConstructor
-		implements PenProvider.Constructor{
-		private PenManager penManager;
-		private PenProvider constructed;
-		private ConstructionException constructionException;
+  // @Override
+  public boolean getUseRelativeLocationFilter() {
+    return false;
+  }
 
-		//@Override
-		public PenManager getPenManager(){
-			return penManager;
-		}
+  // @Override
+  public String toString() {
+    return "[PenProvider: constructor.name=" + getConstructor().getName() + "]";
+  }
 
-		//@Override
-		public ConstructionException getConstructionException(){
-			return constructionException;
-		}
+  public abstract static class AbstractConstructor implements PenProvider.Constructor {
+    private PenManager penManager;
+    private PenProvider constructed;
+    private ConstructionException constructionException;
 
-		//@Override
-		public PenProvider getConstructed(){
-			return constructed;
-		}
+    // @Override
+    public PenManager getPenManager() {
+      return penManager;
+    }
 
-		//@Override
-		public final boolean construct(PenManager penManager){
-			if(this.penManager!=null)
-				throw new IllegalStateException("constructor already used by PenManager");
-			this.penManager=penManager;
-			try{
-				checkExpectedNativeBuild();
-				this.constructed=constructProvider();
-			}catch(Throwable t){
-				this.constructionException=new ConstructionException(t);
-				return false;
-			}
-			return true;
-		}
-		
-		protected abstract PenProvider constructProvider() throws Throwable;
-		
-		private void checkExpectedNativeBuild() throws IllegalStateException{
-			if(getExpectedNativeBuild()>getNativeBuild())
-				throw new IllegalStateException("expectedNativeBuild number ("+getExpectedNativeBuild()+") is greater than library's nativeBuild number ("+getNativeBuild()+")");
-		}
-		
-		//@Override
-		public int getNativeVersion(){
-			return -1;
-		}
-		//@Override
-		public int getNativeBuild(){
-			return -1;
-		}
-		//@Override
-		public int getExpectedNativeBuild(){
-			return -1;
-		}
-	}
+    // @Override
+    public ConstructionException getConstructionException() {
+      return constructionException;
+    }
+
+    // @Override
+    public PenProvider getConstructed() {
+      return constructed;
+    }
+
+    // @Override
+    public final boolean construct(PenManager penManager) {
+      if (this.penManager != null)
+        throw new IllegalStateException("constructor already used by PenManager");
+      this.penManager = penManager;
+      try {
+        checkExpectedNativeBuild();
+        this.constructed = constructProvider();
+      } catch (Throwable t) {
+        this.constructionException = new ConstructionException(t);
+        return false;
+      }
+      return true;
+    }
+
+    protected abstract PenProvider constructProvider() throws Throwable;
+
+    private void checkExpectedNativeBuild() throws IllegalStateException {
+      if (getExpectedNativeBuild() > getNativeBuild())
+        throw new IllegalStateException(
+            "expectedNativeBuild number ("
+                + getExpectedNativeBuild()
+                + ") is greater than library's nativeBuild number ("
+                + getNativeBuild()
+                + ")");
+    }
+
+    // @Override
+    public int getNativeVersion() {
+      return -1;
+    }
+
+    // @Override
+    public int getNativeBuild() {
+      return -1;
+    }
+
+    // @Override
+    public int getExpectedNativeBuild() {
+      return -1;
+    }
+  }
 }

@@ -20,28 +20,28 @@ package jpen.internal;
 
 import java.util.ResourceBundle;
 
-public final class BuildInfo{
+public final class BuildInfo {
 
-	private static ResourceBundle buildProperties;
+  private static ResourceBundle buildProperties;
 
-	private BuildInfo(){}
+  private BuildInfo() {}
 
-	public static ResourceBundle getProperties() {
-		if(buildProperties==null) {
-			buildProperties=ResourceBundle.getBundle("jpen.build");
-		}
-		return buildProperties;
-	}
+  public static ResourceBundle getProperties() {
+    if (buildProperties == null) {
+      buildProperties = ResourceBundle.getBundle("jpen.build");
+    }
+    return buildProperties;
+  }
 
-	public static String getModuleId(){
-		return getProperties().getString("module.id");
-	}
+  public static String getModuleId() {
+    return getProperties().getString("module.id");
+  }
 
-	public static String getVersion(){
-		return getProperties().getString("module.version");
-	}
+  public static String getVersion() {
+    return getProperties().getString("module.version");
+  }
 
-	public static String getFullVersion(){
-		return getProperties().getString("module.fullVersion");
-	}
+  public static String getFullVersion() {
+    return getProperties().getString("module.fullVersion");
+  }
 }

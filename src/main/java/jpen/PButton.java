@@ -25,82 +25,78 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class PButton
-			extends TypedValuedClass<PButton.Type, Boolean>
-	implements java.io.Serializable {
-	public static final long serialVersionUID=1l;
+public class PButton extends TypedValuedClass<PButton.Type, Boolean>
+    implements java.io.Serializable {
+  public static final long serialVersionUID = 1l;
 
-	public enum Type{
-		LEFT(TypeGroup.MOUSE), CENTER(TypeGroup.MOUSE), RIGHT(TypeGroup.MOUSE),
-		/**
-		Used whenever the {@link Pen} {@link PLevel.Type#PRESSURE} level value changes from/to 0.
-		*/
-		ON_PRESSURE(TypeGroup.LEVEL),
+  public enum Type {
+    LEFT(TypeGroup.MOUSE),
+    CENTER(TypeGroup.MOUSE),
+    RIGHT(TypeGroup.MOUSE),
+    /** Used whenever the {@link Pen} {@link PLevel.Type#PRESSURE} level value changes from/to 0. */
+    ON_PRESSURE(TypeGroup.LEVEL),
 
-		CONTROL(TypeGroup.MODIFIER), SHIFT(TypeGroup.MODIFIER), ALT(TypeGroup.MODIFIER),
-		/* nicarran: experimental keyboard buttons support:
-		VK_1(TypeGroup.VK_NUMBER), VK_2(TypeGroup.VK_NUMBER), VK_3(TypeGroup.VK_NUMBER), VK_4(TypeGroup.VK_NUMBER), VK_5(TypeGroup.VK_NUMBER), VK_6(TypeGroup.VK_NUMBER), VK_7(TypeGroup.VK_NUMBER), VK_8(TypeGroup.VK_NUMBER), VK_9(TypeGroup.VK_NUMBER), VK_0(TypeGroup.VK_NUMBER),
-		*/
+    CONTROL(TypeGroup.MODIFIER),
+    SHIFT(TypeGroup.MODIFIER),
+    ALT(TypeGroup.MODIFIER),
+    /* nicarran: experimental keyboard buttons support:
+    VK_1(TypeGroup.VK_NUMBER), VK_2(TypeGroup.VK_NUMBER), VK_3(TypeGroup.VK_NUMBER), VK_4(TypeGroup.VK_NUMBER), VK_5(TypeGroup.VK_NUMBER), VK_6(TypeGroup.VK_NUMBER), VK_7(TypeGroup.VK_NUMBER), VK_8(TypeGroup.VK_NUMBER), VK_9(TypeGroup.VK_NUMBER), VK_0(TypeGroup.VK_NUMBER),
+    */
 
-		CUSTOM(TypeGroup.UNDEFINED);
-		
-		private final TypeGroup group;
+    CUSTOM(TypeGroup.UNDEFINED);
 
-		Type(TypeGroup group){
-			this.group=group;
-			group.types.add(this);
-		}
-		
-		public TypeGroup getGroup(){
-			return group;
-		}
+    private final TypeGroup group;
 
-		public static final List<Type> ALL_VALUES=Collections.unmodifiableList(Arrays.asList(values()));
-		public static final List<Type> VALUES=TypedClass.createStandardTypes(ALL_VALUES);
-	}
+    Type(TypeGroup group) {
+      this.group = group;
+      group.types.add(this);
+    }
 
-	public enum TypeGroup{
-		/**
-		Standard mouse buttons.
-		*/
-		MOUSE,
-		/**
-		Level condition buttons.
-		*/
-		LEVEL,
-		/**
-		Modifier buttons.
-		*/
-		MODIFIER,
-		/* nicarran: experimental keyboard buttons support:
-		/**
-		Virtual key number buttons.
-		VK_NUMBER,
-		*/
-		UNDEFINED;
+    public TypeGroup getGroup() {
+      return group;
+    }
 
-		private Collection<Type> types=new ArrayList<Type>();
-		private Collection<Type> typesAccess;
+    public static final List<Type> ALL_VALUES =
+        Collections.unmodifiableList(Arrays.asList(values()));
+    public static final List<Type> VALUES = TypedClass.createStandardTypes(ALL_VALUES);
+  }
 
-		public Collection<Type> getTypes(){
-			if(typesAccess==null){
-				types=EnumSet.copyOf(types);
-				typesAccess=Collections.unmodifiableCollection(types);
-			}
-			return typesAccess;
-		}
-	}
+  public enum TypeGroup {
+    /** Standard mouse buttons. */
+    MOUSE,
+    /** Level condition buttons. */
+    LEVEL,
+    /** Modifier buttons. */
+    MODIFIER,
+    /* nicarran: experimental keyboard buttons support:
+    /**
+    Virtual key number buttons.
+    VK_NUMBER,
+    */
+    UNDEFINED;
 
-	public PButton(Type type, Boolean value){
-		this(type.ordinal(), value);
-	}
+    private Collection<Type> types = new ArrayList<Type>();
+    private Collection<Type> typesAccess;
 
-	public PButton(int typeNumber, Boolean value) {
-		super(typeNumber, value);
-	}
+    public Collection<Type> getTypes() {
+      if (typesAccess == null) {
+        types = EnumSet.copyOf(types);
+        typesAccess = Collections.unmodifiableCollection(types);
+      }
+      return typesAccess;
+    }
+  }
 
-	@Override
-	final List<Type> getAllTypes(){
-		return Type.ALL_VALUES;
-	}
+  public PButton(Type type, Boolean value) {
+    this(type.ordinal(), value);
+  }
+
+  public PButton(int typeNumber, Boolean value) {
+    super(typeNumber, value);
+  }
+
+  @Override
+  final List<Type> getAllTypes() {
+    return Type.ALL_VALUES;
+  }
 }

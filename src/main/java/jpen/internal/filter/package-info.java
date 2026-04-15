@@ -16,7 +16,5 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
-/**
-Filter to remove movement data from tablet devices in relative (mouse) mode.
-*/
+/** Filter to remove movement data from tablet devices in relative (mouse) mode. */
 package jpen.internal.filter;

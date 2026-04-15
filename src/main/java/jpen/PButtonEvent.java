@@ -20,31 +20,28 @@ package jpen;
 
 import jpen.event.PenListener;
 
-public class PButtonEvent
-	extends PenEvent
-	implements java.io.Serializable {
-	public static final long serialVersionUID=1l;
+public class PButtonEvent extends PenEvent implements java.io.Serializable {
+  public static final long serialVersionUID = 1l;
 
-	public final PButton button;
+  public final PButton button;
 
-	PButtonEvent(PenDevice device, long deviceTime, PButton button) {
-		super(device, deviceTime);
-		this.button=button;
-	}
+  PButtonEvent(PenDevice device, long deviceTime, PButton button) {
+    super(device, deviceTime);
+    this.button = button;
+  }
 
-	@Override
-	void copyTo(PenState penState){
-		penState.setButtonValue(button.typeNumber, button.value);
-	}
+  @Override
+  void copyTo(PenState penState) {
+    penState.setButtonValue(button.typeNumber, button.value);
+  }
 
-	@Override
-	void dispatch() {
-		for(PenListener l:pen.getListenersArray())
-			l.penButtonEvent(this);
-	}
+  @Override
+  void dispatch() {
+    for (PenListener l : pen.getListenersArray()) l.penButtonEvent(this);
+  }
 
-	@Override
-	public String toString() {
-		return "[PButtonEvent: super="+super.toString()+", button="+button+"]";
-	}
+  @Override
+  public String toString() {
+    return "[PButtonEvent: super=" + super.toString() + ", button=" + button + "]";
+  }
 }

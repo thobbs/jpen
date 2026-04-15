@@ -25,35 +25,36 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import jpen.PenManager;
 
-class DevicesPanel{
+class DevicesPanel {
 
-	final DevicesTableModel devicesTableModel;
-	private final JScrollPane scrollPane;
-	final JComponent panel;
+  final DevicesTableModel devicesTableModel;
+  private final JScrollPane scrollPane;
+  final JComponent panel;
 
-	DevicesPanel(){
-		this.devicesTableModel=new DevicesTableModel();
-		JTable table=new JTable(devicesTableModel){
-									 @Override
-									 public TableCellEditor getCellEditor(int row, int col){
-										 TableCellEditor cellEditor=devicesTableModel.getCellEditor(
-													 /*convertRowIndexToModel(*/row/*)*/,
-													 convertColumnIndexToModel(col));
-										 return cellEditor==null? super.getCellEditor(row, col): cellEditor;
-									 }
-									 @Override
-									 public TableCellRenderer getCellRenderer(int row, int col){
-										 TableCellRenderer cellRenderer=devicesTableModel.getCellRenderer(
-													 /*convertRowIndexToModel(*/row/*)*/,
-													 convertColumnIndexToModel(col));
-										 return cellRenderer==null? super.getCellRenderer(row, col): cellRenderer;
-									 }
-								 };
-		this.scrollPane=new JScrollPane(table);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 2, 2));
-		scrollPane.setPreferredSize(new Dimension(100, 100));
-		this.panel=scrollPane;
-	}
+  DevicesPanel() {
+    this.devicesTableModel = new DevicesTableModel();
+    JTable table =
+        new JTable(devicesTableModel) {
+          @Override
+          public TableCellEditor getCellEditor(int row, int col) {
+            TableCellEditor cellEditor =
+                devicesTableModel.getCellEditor(
+                    /*convertRowIndexToModel(*/ row /*)*/, convertColumnIndexToModel(col));
+            return cellEditor == null ? super.getCellEditor(row, col) : cellEditor;
+          }
+
+          @Override
+          public TableCellRenderer getCellRenderer(int row, int col) {
+            TableCellRenderer cellRenderer =
+                devicesTableModel.getCellRenderer(
+                    /*convertRowIndexToModel(*/ row /*)*/, convertColumnIndexToModel(col));
+            return cellRenderer == null ? super.getCellRenderer(row, col) : cellRenderer;
+          }
+        };
+    this.scrollPane = new JScrollPane(table);
+    scrollPane.setBorder(BorderFactory.createEmptyBorder(3, 3, 2, 2));
+    scrollPane.setPreferredSize(new Dimension(100, 100));
+    this.panel = scrollPane;
+  }
 }

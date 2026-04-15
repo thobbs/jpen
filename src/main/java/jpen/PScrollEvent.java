@@ -20,29 +20,26 @@ package jpen;
 
 import jpen.event.PenListener;
 
-public class PScrollEvent
-			extends PenEvent
-	implements java.io.Serializable {
-	public static final long serialVersionUID=1l;
+public class PScrollEvent extends PenEvent implements java.io.Serializable {
+  public static final long serialVersionUID = 1l;
 
-	public final PScroll scroll;
+  public final PScroll scroll;
 
-	PScrollEvent(PenDevice device, long deviceTime, PScroll scroll) {
-		super(device, deviceTime);
-		this.scroll=scroll;
-	}
+  PScrollEvent(PenDevice device, long deviceTime, PScroll scroll) {
+    super(device, deviceTime);
+    this.scroll = scroll;
+  }
 
-	@Override
-	void copyTo(PenState penState){}
+  @Override
+  void copyTo(PenState penState) {}
 
-	@Override
-	void dispatch() {
-		for(PenListener l:pen.getListenersArray())
-			l.penScrollEvent(this);
-	}
+  @Override
+  void dispatch() {
+    for (PenListener l : pen.getListenersArray()) l.penScrollEvent(this);
+  }
 
-	@Override
-	public String toString(){
-		return "[PScrollEvent: super="+super.toString()+", scroll="+scroll+"]";
-	}
+  @Override
+  public String toString() {
+    return "[PScrollEvent: super=" + super.toString() + ", scroll=" + scroll + "]";
+  }
 }

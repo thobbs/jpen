@@ -20,86 +20,85 @@ package jpen.provider.osx;
 
 import java.util.EnumMap;
 import java.util.Map;
+import jpen.PKind;
 import jpen.PenManager;
 import jpen.PenProvider;
-import jpen.PKind;
+import jpen.internal.BuildInfo;
 import jpen.provider.AbstractPenProvider;
 import jpen.provider.NativeLibraryLoader;
-import jpen.internal.BuildInfo;
 
 public class CocoaProvider extends AbstractPenProvider {
 
-	private static final NativeLibraryLoader LIB_LOADER=new NativeLibraryLoader(
-				Integer.valueOf(BuildInfo.getProperties().getString("jpen.provider.osx.nativeVersion")));
+  private static final NativeLibraryLoader LIB_LOADER =
+      new NativeLibraryLoader(
+          Integer.valueOf(BuildInfo.getProperties().getString("jpen.provider.osx.nativeVersion")));
 
-	public static class Constructor
-		extends AbstractPenProvider.AbstractConstructor{
+  public static class Constructor extends AbstractPenProvider.AbstractConstructor {
 
-		public String getName() {
-			return "Cocoa";
-		}
+    public String getName() {
+      return "Cocoa";
+    }
 
-		//@Override
-		public boolean constructable(PenManager penManager) {
-			return System.getProperty("os.name").toLowerCase().contains("mac");
-		}
+    // @Override
+    public boolean constructable(PenManager penManager) {
+      return System.getProperty("os.name").toLowerCase().contains("mac");
+    }
 
-		@Override
-		public PenProvider constructProvider() throws Throwable {
-			LIB_LOADER.load();
-			CocoaAccess cocoaAccess=new CocoaAccess();
-			return new CocoaProvider(this, cocoaAccess);
-		}
-		@Override
-		public int getNativeVersion(){
-			return LIB_LOADER.nativeVersion;
-		}
-		@Override
-		public int getNativeBuild(){
-			LIB_LOADER.load();
-			return CocoaAccess.getNativeBuild();
-		}
-		@Override
-		public int getExpectedNativeBuild(){
-			return Integer.valueOf(BuildInfo.getProperties().
-						 getString("jpen.provider.osx.nativeBuild"));
-		}
-	}
+    @Override
+    public PenProvider constructProvider() throws Throwable {
+      LIB_LOADER.load();
+      CocoaAccess cocoaAccess = new CocoaAccess();
+      return new CocoaProvider(this, cocoaAccess);
+    }
 
+    @Override
+    public int getNativeVersion() {
+      return LIB_LOADER.nativeVersion;
+    }
 
-	private final CocoaAccess cocoaAccess;
-	private final Map<PKind.Type, CocoaDevice> deviceMap;
+    @Override
+    public int getNativeBuild() {
+      LIB_LOADER.load();
+      return CocoaAccess.getNativeBuild();
+    }
 
-	private CocoaProvider(final Constructor _constructor, final CocoaAccess _cocoaAccess) {
-		super(_constructor);
-		cocoaAccess = _cocoaAccess;
-		cocoaAccess.setProvider(this);
+    @Override
+    public int getExpectedNativeBuild() {
+      return Integer.valueOf(BuildInfo.getProperties().getString("jpen.provider.osx.nativeBuild"));
+    }
+  }
 
-		deviceMap = new EnumMap<PKind.Type, CocoaDevice>(PKind.Type.class);
-		for (PKind.Type type : PKind.Type.VALUES) {
-			final CocoaDevice device = new CocoaDevice(this, type);
-			deviceMap.put(type, device);
-			devices.add(device);
-		}
+  private final CocoaAccess cocoaAccess;
+  private final Map<PKind.Type, CocoaDevice> deviceMap;
 
-		cocoaAccess.start();
-	}
+  private CocoaProvider(final Constructor _constructor, final CocoaAccess _cocoaAccess) {
+    super(_constructor);
+    cocoaAccess = _cocoaAccess;
+    cocoaAccess.setProvider(this);
 
-	public CocoaDevice getDevice(final PKind.Type type) {
-		return deviceMap.get(type);
-	}
+    deviceMap = new EnumMap<PKind.Type, CocoaDevice>(PKind.Type.class);
+    for (PKind.Type type : PKind.Type.VALUES) {
+      final CocoaDevice device = new CocoaDevice(this, type);
+      deviceMap.put(type, device);
+      devices.add(device);
+    }
 
-	public void penManagerPaused(final boolean paused) {
-		if (! paused) {
-			cocoaAccess.enable();
-		}
-		else {
-			cocoaAccess.disable();
-		}
-	}
+    cocoaAccess.start();
+  }
 
+  public CocoaDevice getDevice(final PKind.Type type) {
+    return deviceMap.get(type);
+  }
 
-	public void dispose() {
-		cocoaAccess.stop();
-	}
+  public void penManagerPaused(final boolean paused) {
+    if (!paused) {
+      cocoaAccess.enable();
+    } else {
+      cocoaAccess.disable();
+    }
+  }
+
+  public void dispose() {
+    cocoaAccess.stop();
+  }
 }

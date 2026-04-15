@@ -25,100 +25,95 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-final class LogToFileRule
-	implements RelativeLocationFilter.Rule{
-	private static final Logger L=Logger.getLogger(LogToFileRule.class.getName());
-	//static { L.setLevel(Level.ALL); }
+final class LogToFileRule implements RelativeLocationFilter.Rule {
+  private static final Logger L = Logger.getLogger(LogToFileRule.class.getName());
+  // static { L.setLevel(Level.ALL); }
 
-	private int logFileStamp=0;
-	private List<Record> records;
+  private int logFileStamp = 0;
+  private List<Record> records;
 
-	static class Record{
-		final RelativeLocationFilter.SamplePoint samplePoint;
-		final Point2D.Float reference;
-		final Point2D.Float deviation;
-		Record(RelativeLocationFilter filter){
-			this.samplePoint=filter.samplePoint.clone();
-			this.reference=new Point2D.Float();
-			this.reference.setLocation(filter.reference);
-			this.deviation=new Point2D.Float();
-			this.deviation.setLocation(filter.deviation);
-		}
-	}
+  static class Record {
+    final RelativeLocationFilter.SamplePoint samplePoint;
+    final Point2D.Float reference;
+    final Point2D.Float deviation;
 
-	//@Override
-	public void reset(){
-		if(records==null){
-			logFileStamp++;
-			records=new ArrayList<Record>();
-		}else
-			records.clear();
-	}
+    Record(RelativeLocationFilter filter) {
+      this.samplePoint = filter.samplePoint.clone();
+      this.reference = new Point2D.Float();
+      this.reference.setLocation(filter.reference);
+      this.deviation = new Point2D.Float();
+      this.deviation.setLocation(filter.deviation);
+    }
+  }
 
-	//@Override
-	public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter){
-		if(records==null)
-			return null;
-		if(records.size()>=100){
-			writeRecords();
-			records=null;
-			return null;
-		}
-		records.add(new Record(filter));
-		return RelativeLocationFilter.State.UNDEFINED;
-	}
+  // @Override
+  public void reset() {
+    if (records == null) {
+      logFileStamp++;
+      records = new ArrayList<Record>();
+    } else records.clear();
+  }
 
-	private void writeRecords(){
-		try{
-			StringBuilder filePath=new StringBuilder();
-			filePath.append("RelativeLocationFilter-");
-			filePath.append(logFileStamp);
-			filePath.append(".txt");
-			Writer writer=new BufferedWriter(new FileWriter(new File(filePath.toString())));
-			for(int i=0; i<records.size(); i++){
-				Record record=records.get(i);
-				writer.write(Integer.valueOf(i+1).toString());
-				writer.write(", reference=");
-				writePoint(writer, record.samplePoint, record.reference.x, record.reference.y);
-				writer.write(", sample=");
-				writePoint(writer, record.samplePoint,
-									 record.samplePoint.levelX==null? 0: record.samplePoint.levelX.value,
-									 record.samplePoint.levelY==null? 0: record.samplePoint.levelY.value);
-				writer.write(", deviation=");
-				writePoint(writer, record.samplePoint, record.deviation.x, record.deviation.y);
-				writer.write("\n");
-			}
-			writer.close();
-			L.info("written: "+filePath);
-		}catch(IOException ex){
-			throw new AssertionError(ex);
-		}
-	}
+  // @Override
+  public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter) {
+    if (records == null) return null;
+    if (records.size() >= 100) {
+      writeRecords();
+      records = null;
+      return null;
+    }
+    records.add(new Record(filter));
+    return RelativeLocationFilter.State.UNDEFINED;
+  }
 
-	private void writePoint(Writer writer, RelativeLocationFilter.SamplePoint samplePoint, float x, float y)
-	throws IOException{
-		writer.write("(");
-		if(samplePoint.levelX!=null)
-			writeValue(writer, x);
-		else
-			writer.write("??");
-		writer.write(", ");
-		if(samplePoint.levelY!=null)
-			writeValue(writer, y);
-		else
-			writer.write("??");
-		writer.write(")");
-	}
+  private void writeRecords() {
+    try {
+      StringBuilder filePath = new StringBuilder();
+      filePath.append("RelativeLocationFilter-");
+      filePath.append(logFileStamp);
+      filePath.append(".txt");
+      Writer writer = new BufferedWriter(new FileWriter(new File(filePath.toString())));
+      for (int i = 0; i < records.size(); i++) {
+        Record record = records.get(i);
+        writer.write(Integer.valueOf(i + 1).toString());
+        writer.write(", reference=");
+        writePoint(writer, record.samplePoint, record.reference.x, record.reference.y);
+        writer.write(", sample=");
+        writePoint(
+            writer,
+            record.samplePoint,
+            record.samplePoint.levelX == null ? 0 : record.samplePoint.levelX.value,
+            record.samplePoint.levelY == null ? 0 : record.samplePoint.levelY.value);
+        writer.write(", deviation=");
+        writePoint(writer, record.samplePoint, record.deviation.x, record.deviation.y);
+        writer.write("\n");
+      }
+      writer.close();
+      L.info("written: " + filePath);
+    } catch (IOException ex) {
+      throw new AssertionError(ex);
+    }
+  }
 
-	private static final DecimalFormat decimalFormat=new DecimalFormat("###0.0");
+  private void writePoint(
+      Writer writer, RelativeLocationFilter.SamplePoint samplePoint, float x, float y)
+      throws IOException {
+    writer.write("(");
+    if (samplePoint.levelX != null) writeValue(writer, x);
+    else writer.write("??");
+    writer.write(", ");
+    if (samplePoint.levelY != null) writeValue(writer, y);
+    else writer.write("??");
+    writer.write(")");
+  }
 
-	private void writeValue(Writer writer, float value) throws IOException{
-		writer.write(decimalFormat.format(value));
-	}
+  private static final DecimalFormat decimalFormat = new DecimalFormat("###0.0");
+
+  private void writeValue(Writer writer, float value) throws IOException {
+    writer.write(decimalFormat.format(value));
+  }
 }

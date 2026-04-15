@@ -18,70 +18,72 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.demo;
 
-import java.awt.Component;
 import java.util.EnumMap;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.JTextField;
-import jpen.event.PenAdapter;
-import jpen.Pen;
 import jpen.PScroll;
 import jpen.PScrollEvent;
+import jpen.Pen;
+import jpen.event.PenAdapter;
 
-class ScrollsPanel{
-	private final Map<PScroll.Type, Display> scrollTypeToDisplay=new EnumMap<PScroll.Type, Display>(PScroll.Type.class);
-	{
-		for(PScroll.Type scrollType: PScroll.Type.VALUES)
-			scrollTypeToDisplay.put(scrollType, new Display());
-	}
+class ScrollsPanel {
+  private final Map<PScroll.Type, Display> scrollTypeToDisplay =
+      new EnumMap<PScroll.Type, Display>(PScroll.Type.class);
 
-	static class Display
-		extends DataDisplay<JTextField>{
-		private int value=0;
-		Display(){
-			super(new JTextField(3));
-			component.setHorizontalAlignment(JTextField.RIGHT);
-			component.setEditable(false);
-		}
+  {
+    for (PScroll.Type scrollType : PScroll.Type.VALUES)
+      scrollTypeToDisplay.put(scrollType, new Display());
+  }
 
-		@Override
-		void updateImp(Pen pen){
-			component.setText(String.valueOf(value));
-		}
+  static class Display extends DataDisplay<JTextField> {
+    private int value = 0;
 
-		void increase(int value){
-			this.value+=value;
-			setIsDirty(true);
-		}
-	}
+    Display() {
+      super(new JTextField(3));
+      component.setHorizontalAlignment(JTextField.RIGHT);
+      component.setEditable(false);
+    }
 
-	Box panel=Box.createVerticalBox();
-	{
-		for(PScroll.Type scrollType: PScroll.Type.VALUES){
-			panel.add(Utils.labelComponent(
-									scrollType.toString(), scrollTypeToDisplay.get(scrollType).component
-								));
-		}
-	}
+    @Override
+    void updateImp(Pen pen) {
+      component.setText(String.valueOf(value));
+    }
 
-	ScrollsPanel(Pen pen){
-		pen.addListener(new PenAdapter(){
-											private Pen pen;
-											@Override
-											public void penScrollEvent(PScrollEvent ev){
-												pen=ev.pen;
-												Display display=scrollTypeToDisplay.get(ev.scroll.getType());
-												if(display!=null)
-													display.increase(ev.scroll.value);
-											}
-											@Override
-											public void penTock(long availableMillis){
-												if(pen==null)
-													return;
-												for(Display display: scrollTypeToDisplay.values())
-													display.update(pen);
-												pen=null;
-											}
-										});
-	}
+    void increase(int value) {
+      this.value += value;
+      setIsDirty(true);
+    }
+  }
+
+  Box panel = Box.createVerticalBox();
+
+  {
+    for (PScroll.Type scrollType : PScroll.Type.VALUES) {
+      panel.add(
+          Utils.labelComponent(
+              scrollType.toString(), scrollTypeToDisplay.get(scrollType).component));
+    }
+  }
+
+  ScrollsPanel(Pen pen) {
+    pen.addListener(
+        new PenAdapter() {
+          private Pen pen;
+
+          @Override
+          public void penScrollEvent(PScrollEvent ev) {
+            pen = ev.pen;
+            Display display = scrollTypeToDisplay.get(ev.scroll.getType());
+            if (display != null) display.increase(ev.scroll.value);
+          }
+
+          @Override
+          public void penTock(long availableMillis) {
+            if (pen == null) return;
+            for (Display display : scrollTypeToDisplay.values()) display.update(pen);
+            pen = null;
+          }
+        });
+  }
 }

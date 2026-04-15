@@ -16,7 +16,5 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
-/**
-Java AWT mouse {@link jpen.PenProvider}.
-*/
+/** Java AWT mouse {@link jpen.PenProvider}. */
 package jpen.provider.system;

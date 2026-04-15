@@ -18,51 +18,54 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen;
 
-import java.util.Collection;
-
 public interface PenDevice {
 
-	PenProvider getProvider();
+  PenProvider getProvider();
 
-	int getKindTypeNumber();
+  int getKindTypeNumber();
 
-	void setKindTypeNumber(int kindTypeNumber);
+  void setKindTypeNumber(int kindTypeNumber);
 
-	void setEnabled(boolean enabled);
+  void setEnabled(boolean enabled);
 
-	boolean getEnabled();
+  boolean getEnabled();
 
-	String getName();
-	/**
-	@return A unique and constant id. This id is assigned at runtime by the {@link PenManager} and can change between restarts.
-	
-	@see #getPhysicalId()
-	*/
-	byte getId();
-	
-	/**
-	Don't call this method. It is only for use by the {@link PenManager}. This method is called when the device is being constructed to set a meaningful {@code id}.
-	
-	@param id id for this {@code PenDevice}
-	@see PLevelEvent#getDeviceId()
-	*/
-	void penManagerSetId(byte id);
-	
-	/**
-	@return A unique and constant id. This {@code physicalId} is always the same for the given device, even if the program restarts. Each PenDevice has a different {@code physicalId}.  
-	*/
-	String getPhysicalId();
-	
-	/**
-	@return {@code true} if this device uses fractional (floating point precision) movement levels.
-	*/
-	boolean getUseFractionalMovements();
-	
-	/**
-	Don't call this method. It is only for use by the {@link PenManager}. This method is called when the provider {@link PenProvider#getUseRelativeLocationFilter()} is {@code true} and this {@code PenDevice} must change its {@code useFractionalMovement} mode.
-	
-	@param useFractionalMovements new value of {@code useFractionalMovements} to be set, see {@link #getUseFractionalMovements()}
-	*/
-	void penManagerSetUseFractionalMovements(boolean useFractionalMovements);
-	
+  String getName();
+
+  /**
+   * @return A unique and constant id. This id is assigned at runtime by the {@link PenManager} and
+   *     can change between restarts.
+   * @see #getPhysicalId()
+   */
+  byte getId();
+
+  /**
+   * Don't call this method. It is only for use by the {@link PenManager}. This method is called
+   * when the device is being constructed to set a meaningful {@code id}.
+   *
+   * @param id id for this {@code PenDevice}
+   * @see PLevelEvent#getDeviceId()
+   */
+  void penManagerSetId(byte id);
+
+  /**
+   * @return A unique and constant id. This {@code physicalId} is always the same for the given
+   *     device, even if the program restarts. Each PenDevice has a different {@code physicalId}.
+   */
+  String getPhysicalId();
+
+  /**
+   * @return {@code true} if this device uses fractional (floating point precision) movement levels.
+   */
+  boolean getUseFractionalMovements();
+
+  /**
+   * Don't call this method. It is only for use by the {@link PenManager}. This method is called
+   * when the provider {@link PenProvider#getUseRelativeLocationFilter()} is {@code true} and this
+   * {@code PenDevice} must change its {@code useFractionalMovement} mode.
+   *
+   * @param useFractionalMovements new value of {@code useFractionalMovements} to be set, see {@link
+   *     #getUseFractionalMovements()}
+   */
+  void penManagerSetUseFractionalMovements(boolean useFractionalMovements);
 }

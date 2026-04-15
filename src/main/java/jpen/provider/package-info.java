@@ -16,7 +16,5 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
-/**
-{@link jpen.PenProvider} utilities and various {@code PenProvider} implementations.
-*/
+/** {@link jpen.PenProvider} utilities and various {@code PenProvider} implementations. */
 package jpen.provider;

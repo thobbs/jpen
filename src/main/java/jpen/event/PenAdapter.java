@@ -18,21 +18,24 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.event;
 
+import jpen.PButtonEvent;
 import jpen.PKindEvent;
 import jpen.PLevelEvent;
 import jpen.PScrollEvent;
-import jpen.PButtonEvent;
 
-public class PenAdapter
-	implements PenListener {
-	//@Override
-	public void penKindEvent(PKindEvent ev) {}
-	//@Override
-	public void penLevelEvent(PLevelEvent ev) {}
-	//@Override
-	public void penButtonEvent(PButtonEvent ev) {}
-	//@Override
-	public void penScrollEvent(PScrollEvent ev) {}
-	//@Override
-	public void penTock(long availableMillis) {}
+public class PenAdapter implements PenListener {
+  // @Override
+  public void penKindEvent(PKindEvent ev) {}
+
+  // @Override
+  public void penLevelEvent(PLevelEvent ev) {}
+
+  // @Override
+  public void penButtonEvent(PButtonEvent ev) {}
+
+  // @Override
+  public void penScrollEvent(PScrollEvent ev) {}
+
+  // @Override
+  public void penTock(long availableMillis) {}
 }

@@ -17,6 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 /**
-Event classes for JPen client applications. Provides interfaces and classes for dealing with events fired by JPen. 
-*/
+ * Event classes for JPen client applications. Provides interfaces and classes for dealing with
+ * events fired by JPen.
+ */
 package jpen.event;

@@ -18,31 +18,26 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.internal.filter;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+class AbsoluteLocationRule implements RelativeLocationFilter.Rule {
+  // private static final Logger L=Logger.getLogger(AbsoluteLocationRule.class.getName());
+  // static { L.setLevel(Level.ALL); }
 
-class AbsoluteLocationRule
-	implements RelativeLocationFilter.Rule{
-	//private static final Logger L=Logger.getLogger(AbsoluteLocationRule.class.getName());
-	//static { L.setLevel(Level.ALL); }
+  private int missedPoints;
 
-	private int missedPoints;
+  // @Override
+  public void reset() {
+    missedPoints = -1;
+  }
 
-	//@Override
-	public void reset(){
-		missedPoints=-1;
-	}
-
-	//@Override
-	public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter){
-		missedPoints++;
-		if(!filter.samplePoint.isComplete)
-			return null;
-		float maxDeviation=Math.max(filter.absDeviation.x, filter.absDeviation.y);
-		if(maxDeviation<1.5f){
-			//System.out.println("absolute device detected, missedPoints="+missedPoints);
-			return RelativeLocationFilter.State.ABSOLUTE;
-		}
-		return null;
-	}
+  // @Override
+  public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter) {
+    missedPoints++;
+    if (!filter.samplePoint.isComplete) return null;
+    float maxDeviation = Math.max(filter.absDeviation.x, filter.absDeviation.y);
+    if (maxDeviation < 1.5f) {
+      // System.out.println("absolute device detected, missedPoints="+missedPoints);
+      return RelativeLocationFilter.State.ABSOLUTE;
+    }
+    return null;
+  }
 }

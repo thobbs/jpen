@@ -22,57 +22,59 @@ import jpen.provider.AbstractPenDevice;
 import jpen.provider.AbstractPenProvider;
 
 @SuppressWarnings("deprecation")
-final class EmulationProvider
-	extends AbstractPenProvider{
+final class EmulationProvider extends AbstractPenProvider {
 
-	final static class Constructor
-		extends AbstractConstructor{
-		//@Override
-		public String getName(){
-			return "JPen";
-		}
+  static final class Constructor extends AbstractConstructor {
+    // @Override
+    public String getName() {
+      return "JPen";
+    }
 
-		//@Override
-		public boolean constructable(PenManager pm){
-			return true;
-		}
+    // @Override
+    public boolean constructable(PenManager pm) {
+      return true;
+    }
 
-		@Override
-		protected PenProvider constructProvider(){
-			return new EmulationProvider(this);
-		}
-	}
+    @Override
+    protected PenProvider constructProvider() {
+      return new EmulationProvider(this);
+    }
+  }
 
-	final PenDevice device;
+  final PenDevice device;
 
-	private EmulationProvider(Constructor constructor){
-		super(constructor);
-		devices.add(device=new Device());
-	}
+  private EmulationProvider(Constructor constructor) {
+    super(constructor);
+    devices.add(device = new Device());
+  }
 
-	final class Device
-		extends AbstractPenDevice{
-		private Device(){
-			super(EmulationProvider.this);
-			super.setKindTypeNumber(PKind.Type.IGNORE.ordinal());
-			super.setEnabled(true); // but the enabled state is currently ignored on this device... it is considered as always enabled.
-		}
+  final class Device extends AbstractPenDevice {
+    private Device() {
+      super(EmulationProvider.this);
+      super.setKindTypeNumber(PKind.Type.IGNORE.ordinal());
+      super.setEnabled(
+          true); // but the enabled state is currently ignored on this device... it is considered as
+      // always enabled.
+    }
 
-		@Override
-		public void setEnabled(boolean enabled){
-			throw new UnsupportedOperationException("the enabled state can not be changed on the Emulation device");
-		}
+    @Override
+    public void setEnabled(boolean enabled) {
+      throw new UnsupportedOperationException(
+          "the enabled state can not be changed on the Emulation device");
+    }
 
-		//@Override
-		public String getName(){
-			return "Emulation";
-		}
-		@Override
-		public void setKindTypeNumber(int kindType){
-			throw new UnsupportedOperationException("the pen kind can not be changed on the Emulation device");
-		}
-	}
+    // @Override
+    public String getName() {
+      return "Emulation";
+    }
 
-	//@Override
-	public void penManagerPaused(boolean paused){}
+    @Override
+    public void setKindTypeNumber(int kindType) {
+      throw new UnsupportedOperationException(
+          "the pen kind can not be changed on the Emulation device");
+    }
+  }
+
+  // @Override
+  public void penManagerPaused(boolean paused) {}
 }

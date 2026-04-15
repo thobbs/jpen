@@ -18,107 +18,105 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.demo;
 
-import java.awt.Component;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.EnumMap;
 import java.util.Map;
 import javax.swing.Box;
 import javax.swing.JTextField;
-import jpen.event.PenAdapter;
-import jpen.Pen;
 import jpen.PLevel;
 import jpen.PLevelEvent;
+import jpen.Pen;
+import jpen.event.PenAdapter;
 
-class LevelsPanel{
-	final Map<PLevel.Type, Display> levelTypeToDisplay=new EnumMap<PLevel.Type, Display>(PLevel.Type.class);
-	{
-		for(PLevel.Type levelType: PLevel.Type.VALUES){
-			levelTypeToDisplay.put(levelType,
-			    PLevel.Type.TILT_TYPES.contains(levelType) ||
-			    PLevel.Type.ROTATION.equals(levelType)?
-			    new AngleDisplay(levelType):
-			    new Display(levelType));
-		}
-	}
+class LevelsPanel {
+  final Map<PLevel.Type, Display> levelTypeToDisplay =
+      new EnumMap<PLevel.Type, Display>(PLevel.Type.class);
 
-	static class Display
-		extends DataDisplay<JTextField>{
+  {
+    for (PLevel.Type levelType : PLevel.Type.VALUES) {
+      levelTypeToDisplay.put(
+          levelType,
+          PLevel.Type.TILT_TYPES.contains(levelType) || PLevel.Type.ROTATION.equals(levelType)
+              ? new AngleDisplay(levelType)
+              : new Display(levelType));
+    }
+  }
 
-		static NumberFormat FORMAT=new DecimalFormat("###0.000");
+  static class Display extends DataDisplay<JTextField> {
 
-		final PLevel.Type levelType;
+    static NumberFormat FORMAT = new DecimalFormat("###0.000");
 
-		Display(PLevel.Type levelType){
-			super(new JTextField(6));
-			this.levelType=levelType;
-			component.setHorizontalAlignment(JTextField.RIGHT);
-			component.setEditable(false);
-		}
+    final PLevel.Type levelType;
 
-		@Override
-		void updateImp(Pen pen){
-			setValue(pen.getLevelValue(levelType));
-		}
+    Display(PLevel.Type levelType) {
+      super(new JTextField(6));
+      this.levelType = levelType;
+      component.setHorizontalAlignment(JTextField.RIGHT);
+      component.setEditable(false);
+    }
 
-		public void setValue(float value){
-			component.setText(format(value));
-		}
+    @Override
+    void updateImp(Pen pen) {
+      setValue(pen.getLevelValue(levelType));
+    }
 
-		String format(float value){
-			return FORMAT.format(value);
-		}
-	}
+    public void setValue(float value) {
+      component.setText(format(value));
+    }
 
-	static class AngleDisplay
-		extends Display{
-		static NumberFormat FORMAT=new DecimalFormat("###0.0\u00ba");
-		static float RAD_TO_DEG=(float)(180f/Math.PI);
+    String format(float value) {
+      return FORMAT.format(value);
+    }
+  }
 
-		AngleDisplay(PLevel.Type levelType){
-			super(levelType);
-		}
+  static class AngleDisplay extends Display {
+    static NumberFormat FORMAT = new DecimalFormat("###0.0\u00ba");
+    static float RAD_TO_DEG = (float) (180f / Math.PI);
 
-		String format(float value){
-			value*=RAD_TO_DEG;
-			return FORMAT.format(value);
-		}
-	}
+    AngleDisplay(PLevel.Type levelType) {
+      super(levelType);
+    }
 
-	final Box panel=Box.createVerticalBox();
-	{
-		for(PLevel.Type levelType:PLevel.Type.VALUES){
-			panel.add(Utils.labelComponent(
-			            levelType.toString(),levelTypeToDisplay.get(levelType).component
-			          ));
-		}
-	}
+    String format(float value) {
+      value *= RAD_TO_DEG;
+      return FORMAT.format(value);
+    }
+  }
 
-	LevelsPanel(Pen pen){
-		pen.addListener(new PenAdapter(){
-										private Pen pen;
-			                @Override
-			                public void penLevelEvent(PLevelEvent ev){
-												pen=ev.pen;
-				                for(PLevel level: ev.levels){
-					                Display display=levelTypeToDisplay.get(level.getType());
-													if(display!=null)
-														display.setIsDirty(true);
-				                }
-			                }
-											@Override
-											public void penTock(long availableMillis){
-												if(pen==null)
-													return;
-												for(Display display: levelTypeToDisplay.values())
-													display.update(pen);
-												pen=null;
-											}
-		                });
-		for(PLevel.Type levelType: PLevel.Type.VALUES){
-			Display display=levelTypeToDisplay.get(levelType);
-			display.setValue(pen.getLevelValue(levelType));
-		}
-	}
+  final Box panel = Box.createVerticalBox();
 
+  {
+    for (PLevel.Type levelType : PLevel.Type.VALUES) {
+      panel.add(
+          Utils.labelComponent(levelType.toString(), levelTypeToDisplay.get(levelType).component));
+    }
+  }
+
+  LevelsPanel(Pen pen) {
+    pen.addListener(
+        new PenAdapter() {
+          private Pen pen;
+
+          @Override
+          public void penLevelEvent(PLevelEvent ev) {
+            pen = ev.pen;
+            for (PLevel level : ev.levels) {
+              Display display = levelTypeToDisplay.get(level.getType());
+              if (display != null) display.setIsDirty(true);
+            }
+          }
+
+          @Override
+          public void penTock(long availableMillis) {
+            if (pen == null) return;
+            for (Display display : levelTypeToDisplay.values()) display.update(pen);
+            pen = null;
+          }
+        });
+    for (PLevel.Type levelType : PLevel.Type.VALUES) {
+      Display display = levelTypeToDisplay.get(levelType);
+      display.setValue(pen.getLevelValue(levelType));
+    }
+  }
 }

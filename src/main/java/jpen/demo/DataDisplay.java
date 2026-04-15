@@ -21,28 +21,26 @@ package jpen.demo;
 import javax.swing.JComponent;
 import jpen.Pen;
 
-abstract class DataDisplay<
-	C extends JComponent>{
-	final C component;
-	private boolean isDirty;
+abstract class DataDisplay<C extends JComponent> {
+  final C component;
+  private boolean isDirty;
 
-	DataDisplay(C component){
-		this.component=component;
-	}
+  DataDisplay(C component) {
+    this.component = component;
+  }
 
-	void setIsDirty(boolean isDirty){
-		this.isDirty=isDirty;
-	}
-	
-	boolean getIsDirty(){
-		return isDirty;
-	}
+  void setIsDirty(boolean isDirty) {
+    this.isDirty = isDirty;
+  }
 
-	final void update(Pen pen){
-		if(getIsDirty())
-			updateImp(pen);
-		setIsDirty(false);
-	}
-	
-	abstract void updateImp(Pen pen);
+  boolean getIsDirty() {
+    return isDirty;
+  }
+
+  final void update(Pen pen) {
+    if (getIsDirty()) updateImp(pen);
+    setIsDirty(false);
+  }
+
+  abstract void updateImp(Pen pen);
 }

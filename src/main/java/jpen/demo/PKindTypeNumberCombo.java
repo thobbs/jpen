@@ -25,46 +25,46 @@ import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 import jpen.PKind;
 
-class PKindTypeNumberCombo{
-	final JComboBox comboBox=new JComboBox();
-	private int maxPKindTypeNumber=PKind.Type.VALUES.size()-1;
-	{
-		update();
-		comboBox.setRenderer(new BasicComboBoxRenderer(){
-					{
-						setHorizontalAlignment(JLabel.CENTER);
-					}
-					@Override
-					public Component 	getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus){
-						super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-						setText(getPKindTypeStringValue((Integer)value));
-						return this;
-					}
-				});
-	}
+class PKindTypeNumberCombo {
+  final JComboBox comboBox = new JComboBox();
+  private int maxPKindTypeNumber = PKind.Type.VALUES.size() - 1;
 
+  {
+    update();
+    comboBox.setRenderer(
+        new BasicComboBoxRenderer() {
+          {
+            setHorizontalAlignment(JLabel.CENTER);
+          }
 
-	static String getPKindTypeStringValue(int intValue){
-		int maxKindTypeNumber=PKind.Type.VALUES.size();
-		if(intValue>=maxKindTypeNumber)
-			return "CUSTOM "+(intValue-maxKindTypeNumber);
-		else
-			return PKind.Type.VALUES.get(intValue).toString();
-	}
+          @Override
+          public Component getListCellRendererComponent(
+              JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            setText(getPKindTypeStringValue((Integer) value));
+            return this;
+          }
+        });
+  }
 
-	private void update(){
-		comboBox.removeAllItems();
-		for(int i=0; i<=maxPKindTypeNumber; i++)// the CUSTOM PKind can not be set directly.
-				comboBox.addItem(Integer.valueOf(i));
-	}
+  static String getPKindTypeStringValue(int intValue) {
+    int maxKindTypeNumber = PKind.Type.VALUES.size();
+    if (intValue >= maxKindTypeNumber) return "CUSTOM " + (intValue - maxKindTypeNumber);
+    else return PKind.Type.VALUES.get(intValue).toString();
+  }
 
-	int getMaxPKindTypeNumber(){
-		return maxPKindTypeNumber;
-	}
+  private void update() {
+    comboBox.removeAllItems();
+    for (int i = 0; i <= maxPKindTypeNumber; i++) // the CUSTOM PKind can not be set directly.
+    comboBox.addItem(Integer.valueOf(i));
+  }
 
-	void setMaxPKindTypeNumber(int maxPKindTypeNumber){
-		this.maxPKindTypeNumber=maxPKindTypeNumber;
-		update();
-	}
+  int getMaxPKindTypeNumber() {
+    return maxPKindTypeNumber;
+  }
 
+  void setMaxPKindTypeNumber(int maxPKindTypeNumber) {
+    this.maxPKindTypeNumber = maxPKindTypeNumber;
+    update();
+  }
 }

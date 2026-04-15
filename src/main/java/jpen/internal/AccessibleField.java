@@ -23,35 +23,36 @@ import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
-public final class AccessibleField{
-	private final Class clazz;
-	private final String fieldName;
-	private Field field;
+public final class AccessibleField {
+  private final Class clazz;
+  private final String fieldName;
+  private Field field;
 
-	public AccessibleField(Class clazz, String fieldName){
-		this.clazz=clazz;
-		this.fieldName=fieldName;
-	}
+  public AccessibleField(Class clazz, String fieldName) {
+    this.clazz = clazz;
+    this.fieldName = fieldName;
+  }
 
-	public Field getField(){
-		if(field==null)
-			try{
-				field=getAccessibleField(clazz, fieldName);
-			}catch(PrivilegedActionException ex){
-				throw new AssertionError(ex);
-			}
-		return field;
-	}
+  public Field getField() {
+    if (field == null)
+      try {
+        field = getAccessibleField(clazz, fieldName);
+      } catch (PrivilegedActionException ex) {
+        throw new AssertionError(ex);
+      }
+    return field;
+  }
 
-	private static Field getAccessibleField(final Class clazz, final String fieldName)
-	throws PrivilegedActionException{
-		return AccessController.doPrivileged(new PrivilegedExceptionAction<Field>(){
-						 //@Override
-						 public Field run() throws Exception{
-							 Field field=clazz.getDeclaredField(fieldName);
-							 field.setAccessible(true);
-							 return field;
-						 }
-					 });
-	}
+  private static Field getAccessibleField(final Class clazz, final String fieldName)
+      throws PrivilegedActionException {
+    return AccessController.doPrivileged(
+        new PrivilegedExceptionAction<Field>() {
+          // @Override
+          public Field run() throws Exception {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field;
+          }
+        });
+  }
 }

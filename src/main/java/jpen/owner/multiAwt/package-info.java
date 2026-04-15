@@ -17,6 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 /**
-Contains {@link jpen.owner.multiAwt.AwtPenToolkit} which allows JPen to be used on one or many Java AWT components. 
-*/
+ * Contains {@link jpen.owner.multiAwt.AwtPenToolkit} which allows JPen to be used on one or many
+ * Java AWT components.
+ */
 package jpen.owner.multiAwt;

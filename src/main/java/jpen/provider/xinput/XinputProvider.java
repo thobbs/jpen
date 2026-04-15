@@ -18,118 +18,117 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.provider.xinput;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Logger;
-import jpen.PenDevice;
+import jpen.PKind;
 import jpen.PenManager;
 import jpen.PenProvider;
-import jpen.PKind;
+import jpen.internal.BuildInfo;
 import jpen.provider.AbstractPenProvider;
 import jpen.provider.NativeLibraryLoader;
 import jpen.provider.VirtualScreenBounds;
-import jpen.internal.BuildInfo;
 
-public final class XinputProvider
-	extends AbstractPenProvider {
+public final class XinputProvider extends AbstractPenProvider {
 
-	private static final Logger L=Logger.getLogger(XinputProvider.class.getName());
+  private static final Logger L = Logger.getLogger(XinputProvider.class.getName());
 
-	private static final NativeLibraryLoader LIB_LOADER=new NativeLibraryLoader(new String[] {""},
-			new String[] {"x86_64"},
-			Integer.valueOf(BuildInfo.getProperties().getString("jpen.provider.xinput.nativeVersion")));
+  private static final NativeLibraryLoader LIB_LOADER =
+      new NativeLibraryLoader(
+          new String[] {""},
+          new String[] {"x86_64"},
+          Integer.valueOf(
+              BuildInfo.getProperties().getString("jpen.provider.xinput.nativeVersion")));
 
-	static void loadLibrary() {
-		LIB_LOADER.load();
-	}
+  static void loadLibrary() {
+    LIB_LOADER.load();
+  }
 
-	private final XinputDevice[] xinputDevices;
-	final VirtualScreenBounds screenBounds=VirtualScreenBounds.getInstance();
+  private final XinputDevice[] xinputDevices;
+  final VirtualScreenBounds screenBounds = VirtualScreenBounds.getInstance();
 
-	public static class Constructor
-		extends AbstractPenProvider.AbstractConstructor {
+  public static class Constructor extends AbstractPenProvider.AbstractConstructor {
 
-		//@Override
-		public String getName() {
-			return "XInput";
-		}
-		//@Override
-		public boolean constructable(PenManager penManager) {
-			String os = System.getProperty("os.name").toLowerCase();
-			return os.contains("linux") || os.contains("bsd");
-		}
+    // @Override
+    public String getName() {
+      return "XInput";
+    }
 
-		@Override
-		public PenProvider constructProvider() throws Throwable {
-			loadLibrary();
-			return new XinputProvider(this);
-		}
-		@Override
-		public int getNativeVersion() {
-			return LIB_LOADER.nativeVersion;
-		}
-		@Override
-		public int getNativeBuild() {
-			loadLibrary();
-			return XiBus.getNativeBuild();
-		}
-		@Override
-		public int getExpectedNativeBuild() {
-			return Integer.valueOf(BuildInfo.getProperties().getString("jpen.provider.xinput.nativeBuild"));
-		}
-	}
+    // @Override
+    public boolean constructable(PenManager penManager) {
+      String os = System.getProperty("os.name").toLowerCase();
+      return os.contains("linux") || os.contains("bsd");
+    }
 
-	private XinputProvider(Constructor constructor) throws Exception {
-		super(constructor);
-		L.fine("start");
+    @Override
+    public PenProvider constructProvider() throws Throwable {
+      loadLibrary();
+      return new XinputProvider(this);
+    }
 
-		XiBus xiBus=new XiBus();
+    @Override
+    public int getNativeVersion() {
+      return LIB_LOADER.nativeVersion;
+    }
 
-		for(int xiDeviceIndex=xiBus.getXiDevicesSize(); --xiDeviceIndex>=0; ) {
-			XiBus xiBus2=new XiBus(); // each XiBus opens a connection to the X server.
-			try {
-				xiBus2.setXiDevice(xiDeviceIndex);
-			} catch(Exception ex) {
-				continue;
-			}
-			XinputDevice xinputDevice=new XinputDevice(this, xiBus2.getXiDevice());
-			devices.add(xinputDevice);
-		}
+    @Override
+    public int getNativeBuild() {
+      loadLibrary();
+      return XiBus.getNativeBuild();
+    }
 
-		xinputDevices=devices.toArray(new XinputDevice[devices.size()]);
-		if(devices.size()==1) {
-			xinputDevices[0].setKindTypeNumber(PKind.Type.STYLUS.ordinal());
-		}
-		L.fine("end");
-	}
+    @Override
+    public int getExpectedNativeBuild() {
+      return Integer.valueOf(
+          BuildInfo.getProperties().getString("jpen.provider.xinput.nativeBuild"));
+    }
+  }
 
-	private void resetXinputDevices() {
-		for(int i=xinputDevices.length; --i>=0;)
-			xinputDevices[i].reset();
-	}
+  private XinputProvider(Constructor constructor) throws Exception {
+    super(constructor);
+    L.fine("start");
 
-	private void pauseXinputDevices(boolean paused) {
-		for(int i=xinputDevices.length; --i>=0;)
-			xinputDevices[i].setIsListening(!paused);
-	}
+    XiBus xiBus = new XiBus();
 
-	//@Override
-	public void penManagerPaused(boolean paused) {
-		pauseXinputDevices(paused);
-		if(!paused) {
-			screenBounds.reset();
-			resetXinputDevices();
-		}
-	}
+    for (int xiDeviceIndex = xiBus.getXiDevicesSize(); --xiDeviceIndex >= 0; ) {
+      XiBus xiBus2 = new XiBus(); // each XiBus opens a connection to the X server.
+      try {
+        xiBus2.setXiDevice(xiDeviceIndex);
+      } catch (Exception ex) {
+        continue;
+      }
+      XinputDevice xinputDevice = new XinputDevice(this, xiBus2.getXiDevice());
+      devices.add(xinputDevice);
+    }
 
-	/*
-	//v EXPERIMENTAL:
-	@Override
-	public boolean getUseRelativeLocationFilter(){
-		return true;
-	}
-	//^
-	*/
+    xinputDevices = devices.toArray(new XinputDevice[devices.size()]);
+    if (devices.size() == 1) {
+      xinputDevices[0].setKindTypeNumber(PKind.Type.STYLUS.ordinal());
+    }
+    L.fine("end");
+  }
+
+  private void resetXinputDevices() {
+    for (int i = xinputDevices.length; --i >= 0; ) xinputDevices[i].reset();
+  }
+
+  private void pauseXinputDevices(boolean paused) {
+    for (int i = xinputDevices.length; --i >= 0; ) xinputDevices[i].setIsListening(!paused);
+  }
+
+  // @Override
+  public void penManagerPaused(boolean paused) {
+    pauseXinputDevices(paused);
+    if (!paused) {
+      screenBounds.reset();
+      resetXinputDevices();
+    }
+  }
+
+  /*
+  //v EXPERIMENTAL:
+  @Override
+  public boolean getUseRelativeLocationFilter(){
+  	return true;
+  }
+  //^
+  */
 }

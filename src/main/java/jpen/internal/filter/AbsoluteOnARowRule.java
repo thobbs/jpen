@@ -18,34 +18,31 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.internal.filter;
 
-class AbsoluteOnARowRule
-	implements RelativeLocationFilter.Rule{
-	static final float THRESHOLD=7f;
-	static final int ROW_COUNT_TO_ABSOLUTE=20;
-	
-	private int missedPoints;
-	int rowCount;
+class AbsoluteOnARowRule implements RelativeLocationFilter.Rule {
+  static final float THRESHOLD = 7f;
+  static final int ROW_COUNT_TO_ABSOLUTE = 20;
 
-	//@Override
-	public void reset(){
-		missedPoints=-1;
-		rowCount=0;
-	}
+  private int missedPoints;
+  int rowCount;
 
-	//@Override
-	public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter){
-		missedPoints++;
-		if(!filter.samplePoint.isComplete)
-			return null;
-		rowCount++;
-		if(filter.absDeviation.x>THRESHOLD ||
-			 filter.absDeviation.y>THRESHOLD){
-			rowCount=0;
-		}
-		if(rowCount>=ROW_COUNT_TO_ABSOLUTE){
-			//System.out.println("absolute device detected (row), missedPoints="+missedPoints);
-			return RelativeLocationFilter.State.ABSOLUTE;
-		}
-		return null;
-	}
+  // @Override
+  public void reset() {
+    missedPoints = -1;
+    rowCount = 0;
+  }
+
+  // @Override
+  public RelativeLocationFilter.State evalFilterNextState(RelativeLocationFilter filter) {
+    missedPoints++;
+    if (!filter.samplePoint.isComplete) return null;
+    rowCount++;
+    if (filter.absDeviation.x > THRESHOLD || filter.absDeviation.y > THRESHOLD) {
+      rowCount = 0;
+    }
+    if (rowCount >= ROW_COUNT_TO_ABSOLUTE) {
+      // System.out.println("absolute device detected (row), missedPoints="+missedPoints);
+      return RelativeLocationFilter.State.ABSOLUTE;
+    }
+    return null;
+  }
 }

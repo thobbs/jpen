@@ -18,52 +18,47 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.provider.system;
 
-import java.awt.Component;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import jpen.owner.awt.ComponentPenOwner;
-import jpen.PenDevice;
 import jpen.PenManager;
 import jpen.PenProvider;
+import jpen.owner.awt.ComponentPenOwner;
 import jpen.provider.AbstractPenProvider;
 
-public final class SystemProvider
-	extends AbstractPenProvider {
+public final class SystemProvider extends AbstractPenProvider {
 
-	public static class Constructor
-		extends AbstractPenProvider.AbstractConstructor {
-		public static final String NAME="System";
-		//@Override
-		public String getName() {
-			return NAME;
-		}
-		//@Override
-		public boolean constructable(PenManager penManager) {
-			return penManager.penOwner instanceof ComponentPenOwner;
-		}
-		@Override
-		protected PenProvider constructProvider() throws Throwable {
-			ComponentPenOwner componentPenOwner=(ComponentPenOwner)getPenManager().penOwner;
-			return new SystemProvider(this, componentPenOwner);
-		}
-	}
+  public static class Constructor extends AbstractPenProvider.AbstractConstructor {
+    public static final String NAME = "System";
 
-	final ComponentPenOwner componentPenOwner;
-	private final MouseDevice mouseDevice=new MouseDevice(this);
-	private final KeyboardDevice keyboardDevice=new KeyboardDevice(this);
+    // @Override
+    public String getName() {
+      return NAME;
+    }
 
-	private SystemProvider(Constructor constructor, ComponentPenOwner componentPenOwner) {
-		super(constructor);
-		this.componentPenOwner=componentPenOwner;
-		devices.add(mouseDevice);
-		devices.add(keyboardDevice);
-	}
+    // @Override
+    public boolean constructable(PenManager penManager) {
+      return penManager.penOwner instanceof ComponentPenOwner;
+    }
 
-	//@Override
-	public void penManagerPaused(boolean paused) {
-		mouseDevice.setPaused(paused);
-		keyboardDevice.setPaused(paused);
-	}
+    @Override
+    protected PenProvider constructProvider() throws Throwable {
+      ComponentPenOwner componentPenOwner = (ComponentPenOwner) getPenManager().penOwner;
+      return new SystemProvider(this, componentPenOwner);
+    }
+  }
+
+  final ComponentPenOwner componentPenOwner;
+  private final MouseDevice mouseDevice = new MouseDevice(this);
+  private final KeyboardDevice keyboardDevice = new KeyboardDevice(this);
+
+  private SystemProvider(Constructor constructor, ComponentPenOwner componentPenOwner) {
+    super(constructor);
+    this.componentPenOwner = componentPenOwner;
+    devices.add(mouseDevice);
+    devices.add(keyboardDevice);
+  }
+
+  // @Override
+  public void penManagerPaused(boolean paused) {
+    mouseDevice.setPaused(paused);
+    keyboardDevice.setPaused(paused);
+  }
 }

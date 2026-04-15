@@ -22,6 +22,7 @@ import jpen.PenDevice;
 import jpen.PenProvider;
 
 public interface PenManagerListener {
-	void penDeviceAdded(PenProvider.Constructor providerConstructor, PenDevice penDevice);
-	void penDeviceRemoved(PenProvider.Constructor providerConstructor, PenDevice penDevice);
+  void penDeviceAdded(PenProvider.Constructor providerConstructor, PenDevice penDevice);
+
+  void penDeviceRemoved(PenProvider.Constructor providerConstructor, PenDevice penDevice);
 }
