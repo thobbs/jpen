@@ -20,7 +20,7 @@ package jpen;
 
 import jpen.event.PenListener;
 
-public class PScrollEvent extends PenEvent implements java.io.Serializable {
+public class PScrollEvent extends PenEvent {
   public static final long serialVersionUID = 1l;
 
   public final PScroll scroll;

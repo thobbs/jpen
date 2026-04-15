@@ -20,7 +20,7 @@ package jpen;
 
 import jpen.event.PenListener;
 
-public class PKindEvent extends PenEvent implements java.io.Serializable {
+public class PKindEvent extends PenEvent {
   public static final long serialVersionUID = 1l;
 
   public final PKind kind;

@@ -25,8 +25,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-public class PButton extends TypedValuedClass<PButton.Type, Boolean>
-    implements java.io.Serializable {
+public class PButton extends TypedValuedClass<PButton.Type, Boolean> {
   public static final long serialVersionUID = 1l;
 
   public enum Type {

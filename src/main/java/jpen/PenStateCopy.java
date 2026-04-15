@@ -20,7 +20,7 @@
 % }] */
 package jpen;
 
-public class PenStateCopy extends PenState implements java.io.Serializable {
+public class PenStateCopy extends PenState {
   public static final long serialVersionUID = 1l;
 
   public PenStateCopy() {}

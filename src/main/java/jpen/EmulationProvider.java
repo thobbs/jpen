@@ -21,7 +21,6 @@ package jpen;
 import jpen.provider.AbstractPenDevice;
 import jpen.provider.AbstractPenProvider;
 
-@SuppressWarnings("deprecation")
 final class EmulationProvider extends AbstractPenProvider {
 
   static final class Constructor extends AbstractConstructor {

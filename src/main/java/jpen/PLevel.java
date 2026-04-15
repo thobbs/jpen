@@ -25,12 +25,9 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
-public class PLevel extends TypedValuedClass<PLevel.Type, Float> implements java.io.Serializable {
+public class PLevel extends TypedValuedClass<PLevel.Type, Float> {
 
-  private static final Logger L = Logger.getLogger(PLevel.class.getName());
-  // static{L.setLevel(Level.FINE);}
   public static final long serialVersionUID = 1l;
 
   public enum Type {

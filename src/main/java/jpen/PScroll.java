@@ -22,8 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class PScroll extends TypedValuedClass<PScroll.Type, Integer>
-    implements java.io.Serializable {
+public class PScroll extends TypedValuedClass<PScroll.Type, Integer> {
   public static final long serialVersionUID = 1l;
 
   public enum Type {

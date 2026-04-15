@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class PKind extends TypedClass<PKind.Type> implements java.io.Serializable {
+public class PKind extends TypedClass<PKind.Type> {
   public static final long serialVersionUID = 1l;
 
   public enum Type {
@@ -44,7 +44,6 @@ public class PKind extends TypedClass<PKind.Type> implements java.io.Serializabl
   }
 
   private static final List<PKind> VALUES_L = new ArrayList<PKind>(Type.VALUES.size());
-  private static final List<PKind> VALUES = Collections.unmodifiableList(VALUES_L);
 
   public static PKind valueOf(Type type) {
     return valueOf(type.ordinal());

@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import jpen.event.PenManagerListener;
 import jpen.internal.BuildInfo;
 import jpen.internal.ObjectUtils;
@@ -40,8 +39,6 @@ import jpen.provider.system.MouseDevice;
  * contains one ready to be used.
  */
 public final class PenManager {
-
-  private static final Logger L = Logger.getLogger(PenManager.class.getName());
 
   public static String getJPenFullVersion() {
     return BuildInfo.getFullVersion();
@@ -99,7 +96,6 @@ public final class PenManager {
     synchronized (pen.scheduler) {
       PenProvider.Constructor emulationProviderConstructor = new EmulationProvider.Constructor();
       addProvider(emulationProviderConstructor);
-      @SuppressWarnings("unchecked")
       EmulationProvider emulationProvider =
           (EmulationProvider) emulationProviderConstructor.getConstructed();
       emulationDevice = emulationProvider.device;

@@ -26,7 +26,7 @@ import java.util.Set;
 import jpen.event.PenListener;
 import jpen.internal.AccessibleField;
 
-public class PLevelEvent extends PenEvent implements java.io.Serializable {
+public class PLevelEvent extends PenEvent {
   public static final long serialVersionUID = 2l;
 
   public final PLevel[] levels;

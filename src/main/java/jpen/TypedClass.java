@@ -50,7 +50,6 @@ public abstract class TypedClass<T extends Enum<T>> implements java.io.Serializa
     return allTypes.size() - 1; // the last is always the CUSTOM
   }
 
-  @SuppressWarnings("unchecked")
   static final <T extends Enum<T>> List<T> createStandardTypes(List<T> allTypes) {
     int customTypeOrdinal = getCustomTypeOrdinal(allTypes);
     List<T> stdTypes = new ArrayList<T>(customTypeOrdinal);
