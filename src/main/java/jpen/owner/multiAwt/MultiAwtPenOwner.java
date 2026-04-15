@@ -22,7 +22,6 @@ import java.awt.Component;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import jpen.PButtonEvent;
 import jpen.PKindEvent;
@@ -34,8 +33,6 @@ import jpen.internal.WeakChain;
 import jpen.owner.awt.ComponentPenOwner;
 
 final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.Listener {
-  private static final Logger L = Logger.getLogger(MultiAwtPenOwner.class.getName());
-  // static { L.setLevel(Level.ALL); }
 
   final ComponentPool componentPool = new ComponentPool(this);
   private ActiveComponentInfo activeComponentInfo = ActiveComponentInfo.emptyInstance;
@@ -78,7 +75,6 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
           }
         }
 
-        // @Override
         public void penKindEvent(PKindEvent ev) {
           updateListeners(ev);
           for (PenListener listener : listeners) listener.penKindEvent(ev);
@@ -89,19 +85,16 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
               (ActiveComponentInfo) penManagerHandle.retrievePenEventTag(ev));
         }
 
-        // @Override
         public void penLevelEvent(PLevelEvent ev) {
           updateListeners(ev);
           for (PenListener listener : listeners) listener.penLevelEvent(ev);
         }
 
-        // @Override
         public void penButtonEvent(PButtonEvent ev) {
           updateListeners(ev);
           for (PenListener listener : listeners) listener.penButtonEvent(ev);
         }
 
-        // @Override
         public void penScrollEvent(PScrollEvent ev) {
           updateListeners(ev);
           for (PenListener listener : listeners) listener.penScrollEvent(ev);
@@ -111,12 +104,6 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
 
         // @Override
         public void penTock(final long availableMillis) {
-          /*
-          	long startTime=System.nanoTime();
-          	for(PenListener listener: listeners){
-          		listener.penTock(availableMillis- (System.nanoTime()-startTime)/NANOS_TO_MILLIS_DIV );
-          }
-          	*/
           // v System.nanoTime is expensive compared to currentTimeMillis => optimized version of
           // the previous loop:
           int size = listeners.size();
@@ -162,7 +149,6 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
     return activeComponentInfo == null ? null : activeComponentInfo.getComponent();
   }
 
-  // @Override
   public void pointerComponentChanged(Component component) {
     setActiveComponent(component);
   }
@@ -186,7 +172,6 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
     }
   }
 
-  // @Override
   public void componentRemoved(Component component) {
     stopDraggingOutAndPause(component);
   }
@@ -197,10 +182,8 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
     }
   }
 
-  // Override
   public void componentUndisplayable(final Component component) {
-    // we are holing component's treeLock here... we have to schedule stopDraggingOutAndPause for
-    // later:
+    // we are holding component's treeLock here, we have to schedule stopDraggingOutAndPause for later:
     SwingUtilities.invokeLater(
         new Runnable() {
           // @Override
@@ -210,7 +193,6 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
         });
   }
 
-  // @Override
   public void pointerComponentPenListenersChanged(Component pointerComponent) {
     synchronized (getPenSchedulerLock()) {
       if (pointerComponent == getActiveComponent())

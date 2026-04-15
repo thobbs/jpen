@@ -25,7 +25,6 @@ import jpen.PenDevice;
 import jpen.PenManager;
 import jpen.PenProvider;
 
-@SuppressWarnings("deprecation")
 public abstract class AbstractPenDevice implements PenDevice {
 
   private byte id;
@@ -38,43 +37,35 @@ public abstract class AbstractPenDevice implements PenDevice {
     this.provider = provider;
   }
 
-  // @Override
   public byte getId() {
     return id;
   }
 
-  // @Override
   public void penManagerSetId(byte id) {
     this.id = id;
   }
 
-  // @Override
   public PenProvider getProvider() {
     return provider;
   }
 
-  // @Override
   public int getKindTypeNumber() {
     return kindTypeNumber;
   }
 
-  // @Override
   public void setKindTypeNumber(int kindTypeNumber) {
     if (kindTypeNumber < 0) throw new IllegalArgumentException("PKind.Type must be >= 0");
     this.kindTypeNumber = kindTypeNumber;
   }
 
-  // @Override
   public boolean getEnabled() {
     return enabled;
   }
 
-  // @Override
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
   }
 
-  // @Override
   public String getPhysicalId() {
     String physicalId = this.physicalId;
     if (physicalId == null)
@@ -97,12 +88,10 @@ public abstract class AbstractPenDevice implements PenDevice {
     return getPenManager().pen;
   }
 
-  // @Override
   public boolean getUseFractionalMovements() {
     return true;
   }
 
-  // @Override
   public void penManagerSetUseFractionalMovements(boolean useFractionalMovement) {
     throw new UnsupportedOperationException();
   }

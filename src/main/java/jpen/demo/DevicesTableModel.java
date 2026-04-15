@@ -182,27 +182,22 @@ class DevicesTableModel extends AbstractTableModel implements PenManagerListener
       kindTypeNumberCombo.setMaxPKindTypeNumber(devicesMax);
   }
 
-  // @Override
   public void penDeviceAdded(PenProvider.Constructor providerConstructor, PenDevice penDevice) {
     updateDevices();
   }
 
-  // @Override
   public void penDeviceRemoved(PenProvider.Constructor providerConstructor, PenDevice penDevice) {
     updateDevices();
   }
 
-  // @Override
   public int getRowCount() {
     return devices.size();
   }
 
-  // @Override
   public int getColumnCount() {
     return columns.length;
   }
 
-  // @Override
   public Object getValueAt(int row, int column) {
     return columns[column].getValueAt(row);
   }

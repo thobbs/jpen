@@ -31,7 +31,7 @@ import jpen.internal.BuildInfo;
 
 public class NativeLibraryLoader {
   private static final Logger L = Logger.getLogger(NativeLibraryLoader.class.getName());
-  // static{L.setLevel(Level.ALL);	}
+
   private static String PREFERENCE_KEY$ARCHITECTURE = "NativeLibraryLoader.architecture";
 
   private final Map<String, Collection<String>> dataModelToArchitectures =

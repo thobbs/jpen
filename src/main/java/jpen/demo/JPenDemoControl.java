@@ -31,15 +31,14 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+
 import jpen.PenManager;
 import jpen.demo.inspect.Inspector;
 import jpen.owner.multiAwt.AwtPenToolkit;
 
 public class JPenDemoControl {
   private static final Logger L = Logger.getLogger(JPenDemoControl.class.getName());
-  // static{L.setLevel(Level.ALL);}
-
-  // private static final Dimension SIZE=new Dimension(400, 400);
 
   final MainPanel mainPanel;
   final JButton statusReportButton = new JButton("Status Report...");
@@ -57,11 +56,9 @@ public class JPenDemoControl {
 
     statusReportButton.addActionListener(
         new ActionListener() {
-          // @Override
           public void actionPerformed(ActionEvent ev) {
             StatusReportPanel statusReportPanel =
                 new StatusReportPanel(new StatusReport(AwtPenToolkit.getPenManager()));
-            // statusReportPanel.panel.setPreferredSize(SIZE);
             JOptionPane.showMessageDialog(
                 mainPanel.panel,
                 statusReportPanel.panel,
@@ -71,7 +68,6 @@ public class JPenDemoControl {
         });
     newInstanceButton.addActionListener(
         new ActionListener() {
-          // @Override
           public void actionPerformed(ActionEvent ev) {
             JPenDemoControl jpenDemoControl = new JPenDemoControl();
             jpenDemoControl.showFrame();
@@ -112,7 +108,7 @@ public class JPenDemoControl {
     String inspectorPeriodProperty = System.getProperty("jpen.demo.inspectorPeriod");
     if (inspectorPeriodProperty != null) {
       int inspectorPeriod = Integer.valueOf(inspectorPeriodProperty);
-      Inspector inspector = new Inspector(penManager, "jpen", inspectorPeriod);
+      new Inspector(penManager, "jpen", inspectorPeriod);
       L.info("inspector constructed");
     }
   }
@@ -125,14 +121,12 @@ public class JPenDemoControl {
     framePanel.add(mainPanel.panel);
     Box buttonBox = Box.createHorizontalBox();
     buttonBox.add(Box.createHorizontalGlue());
-    // buttonBox.add(newInstanceButton);
-    // buttonBox.add(Box.createHorizontalStrut(5));
     buttonBox.add(statusReportButton);
     framePanel.add(buttonBox, BorderLayout.SOUTH);
 
     f.pack();
     f.setLocationByPlatform(true);
     f.setVisible(true);
-    f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
+    f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
   }
 }

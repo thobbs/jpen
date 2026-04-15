@@ -23,7 +23,7 @@ public final class ThreadUtils {
 
   public static void sleepUninterrupted(long millis) {
     try {
-      Thread.currentThread().sleep(millis);
+      Thread.sleep(millis);
     } catch (InterruptedException ex) {
       throw new AssertionError(ex);
     }

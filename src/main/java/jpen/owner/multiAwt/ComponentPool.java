@@ -59,8 +59,8 @@ final class ComponentPool {
       new HierarchyListener() {
         // @Override
         public void hierarchyChanged(HierarchyEvent ev) {
-          if (ev.getID() == ev.HIERARCHY_CHANGED
-              && (ev.getChangeFlags() & ev.DISPLAYABILITY_CHANGED) > 0
+          if (ev.getID() == HierarchyEvent.HIERARCHY_CHANGED
+              && (ev.getChangeFlags() & HierarchyEvent.DISPLAYABILITY_CHANGED) > 0
               && !ev.getComponent().isDisplayable()) fireComponentUndisplayable(ev.getComponent());
         }
       };
@@ -89,7 +89,6 @@ final class ComponentPool {
   private void setPointerComponent(Component pointerComponent) {
     synchronized (multiAwtPenOwner.getPenSchedulerLock(pointerComponent)) {
       if (pointerComponent == this.pointerComponent) return;
-      Component oldPointerComponent = this.pointerComponent;
       this.pointerComponent = pointerComponent;
       firePointerComponentChanged();
     }

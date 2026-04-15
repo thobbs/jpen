@@ -45,7 +45,6 @@ import jpen.owner.multiAwt.AwtPenToolkit;
 class PenCanvas extends JComponent {
   public static final long serialVersionUID = 1l;
   private static final Logger L = Logger.getLogger(PenCanvas.class.getName());
-  // static {L.setLevel(Level.ALL);}
 
   private static final Dimension SIZE = new Dimension(1000, 1000);
   private static final Color BACKGROUND_COLOR = new Color(247, 217, 186); // pink yellow
@@ -104,6 +103,8 @@ class PenCanvas extends JComponent {
                   break;
                 case Y:
                   cursorCenter.y = value;
+                  break;
+                default:
                   break;
               }
             }
@@ -170,6 +171,9 @@ class PenCanvas extends JComponent {
         break;
       case CURSOR:
         g.setColor(Color.BLUE);
+        break;
+      default:
+        break;
     }
     stroke.x = cursorCenter.x - r;
     stroke.y = cursorCenter.y - r;
