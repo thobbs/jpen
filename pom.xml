@@ -33,7 +33,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
         <plugin>
           <groupId>com.github.maven-nar</groupId>
           <artifactId>nar-maven-plugin</artifactId>
-          <version>3.2.3</version>
+          <version>3.10.1</version>
           <extensions>true</extensions>
         </plugin>
       </plugins>
@@ -43,7 +43,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0-alpha-2</version>
+        <version>1.2.1</version>
         <executions>
           <execution>
             <phase>initialize</phase>
@@ -61,7 +61,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.6</version>
+        <version>3.4.2</version>
         <configuration>
           <archive>
             <manifest>
@@ -78,35 +78,23 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0.2</version>
+        <version>3.13.0</version>
         <configuration>
-          <source>${module.javacTarget}</source>
-          <target>${module.javacTarget}</target>
+          <release>${module.javacTarget}</release>
           <debug>false</debug>
-          <optimize>true</optimize>
+          <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
       <plugin>
         <groupId>com.github.maven-nar</groupId>
         <artifactId>nar-maven-plugin</artifactId>
-        <version>3.2.3</version>
+        <version>3.10.1</version>
         <extensions>true</extensions>
         <configuration>
           <java>
             <include>true</include>
           </java>
-          <javah>
-            <excludes>
-              <exclude>**/WintabAccess.class</exclude>
-            </excludes>
-            <!-- cmd.exe /X /C ""C:\Program Files\Java\jdk\bin\javah" -classpath "C:\Users\path\jpen\target\classes" -d "C:\Users\path\jpen\target\nar\javah-include" jpen.NarSystem jpen.provider.xinput.XiDevice jpen.provider.osx.CocoaAccess jpen.provider.xinput.XiBus -->
-            <!-- javah is deprecated and the c headers are in src/main/c/
-                 it should be ok to disable javah execution ; 
-                 except that target/nar/nar-generated/NarSystem.java is not processed.
-                 May be it's necessary to run javac -h on NarSystem.java
-             -->
-
-          </javah>
+          <!-- javah was removed in Java 11; headers are maintained in src/main/c/ -->
           <output>jpen-${module.version}</output>
           <libraries>
             <library>
@@ -123,17 +111,24 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
             <DISPLAY>${env.DISPLAY}</DISPLAY>
           </environmentVariables>
         </configuration>
+        <executions>
+          <execution>
+            <id>default-nar-javah</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.19</version>
+        <version>3.5.2</version>
         <configuration>
           <skip>true</skip>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
       </plugin>
     </plugins>
   </build>
@@ -141,12 +136,14 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>3.8.2</version>
+      <version>4.13.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
   <properties>
     <source.dir>src/main/c/linux</source.dir>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
   <profiles>
     <profile>
@@ -162,7 +159,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
           <plugin>
             <groupId>com.github.maven-nar</groupId>
             <artifactId>nar-maven-plugin</artifactId>
-            <version>3.2.3</version>
+            <version>3.10.1</version>
             <extensions>true</extensions>
             <configuration>
               <output>jpen-${module.version}-${jpen.provider.xinput.nativeVersion}-x86_64</output>
@@ -194,9 +191,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
       <build>
         <plugins>
           <plugin>
-            <!--
-    Also build i386 lib under amd64
-  -->
+            <!-- Also build i386 lib under amd64 -->
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
               <execution>
@@ -236,11 +231,11 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
       <id>osx</id>
       <activation>
         <os>
-          <name>mac os x</name>          
+          <name>mac os x</name>
         </os>
         <file>
             <exists>/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/</exists>
-        </file>    
+        </file>
       </activation>
       <properties>
         <source.dir>src/main/c/osx</source.dir>
