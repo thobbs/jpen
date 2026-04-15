@@ -52,7 +52,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
             </goals>
             <configuration>
               <files>
-                <file>build.properties</file>
+                <file>module.properties</file>
               </files>
             </configuration>
           </execution>
@@ -95,7 +95,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
             <include>true</include>
           </java>
           <!-- javah was removed in Java 11; headers are maintained in src/main/c/ -->
-          <output>jpen-${module.version}</output>
+          <output>jpen-${project.version}</output>
           <libraries>
             <library>
               <type>jni</type>
@@ -196,7 +196,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
             <version>3.10.1</version>
             <extensions>true</extensions>
             <configuration>
-              <output>jpen-${module.version}-${jpen.provider.xinput.nativeVersion}-x86_64</output>
+              <output>jpen-${project.version}-${jpen.provider.xinput.nativeVersion}-x86_64</output>
               <linker>
                 <name>g++</name>
                 <sysLibs>
@@ -238,7 +238,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <arg value="-fpic"/>
                       <arg value="-shared"/>
                       <arg value="-o"/>
-                      <arg value="libjpen-${module.version}-${jpen.provider.xinput.nativeVersion}.so"/>
+                      <arg value="libjpen-${project.version}-${jpen.provider.xinput.nativeVersion}.so"/>
                       <arg value="-LXi"/>
                       <arg value="-I${JAVA_HOME}/include/"/>
                       <arg value="-I${JAVA_HOME}/include/linux/"/>
@@ -280,7 +280,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                   <groupId>com.github.maven-nar</groupId>
                   <artifactId>nar-maven-plugin</artifactId>
                   <configuration>
-                      <output>jpen-${module.version}-${jpen.provider.osx.nativeVersion}</output>
+                      <output>jpen-${project.version}-${jpen.provider.osx.nativeVersion}</output>
                       <c>
                           <name>gcc</name>
                           <options>
@@ -319,8 +319,8 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                           <phase>pre-integration-test</phase>
                           <configuration>
                               <target>
-                                 <copy file="${project.basedir}/target/nar/${module.id-fullVer}-x86_64-MacOSX-gpp-jni/lib/x86_64-MacOSX-gpp/jni/libjpen-${module.version}-${jpen.provider.osx.nativeVersion}.jnilib" todir="${project.basedir}"/>
-                                 <copy file="${project.basedir}/target/nar/${module.id-fullVer}-x86_64-MacOSX-gpp-jni/lib/x86_64-MacOSX-gpp/jni/libjpen-${module.version}-${jpen.provider.osx.nativeVersion}.jnilib" todir="${project.basedir}/target"/>
+                                 <copy file="${project.basedir}/target/nar/${project.artifactId}-${project.version}-x86_64-MacOSX-gpp-jni/lib/x86_64-MacOSX-gpp/jni/libjpen-${project.version}-${jpen.provider.osx.nativeVersion}.jnilib" todir="${project.basedir}"/>
+                                 <copy file="${project.basedir}/target/nar/${project.artifactId}-${project.version}-x86_64-MacOSX-gpp-jni/lib/x86_64-MacOSX-gpp/jni/libjpen-${project.version}-${jpen.provider.osx.nativeVersion}.jnilib" todir="${project.basedir}/target"/>
                               </target>
                           </configuration>
                           <goals>
@@ -350,7 +350,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
             <groupId>com.github.maven-nar</groupId>
             <artifactId>nar-maven-plugin</artifactId>
             <configuration>
-              <output>jpen-${module.version}-${jpen.provider.wintab.nativeVersion}-64</output>
+              <output>jpen-${project.version}-${jpen.provider.wintab.nativeVersion}-64</output>
               <linker>
                 <name>g++</name>
                 <libs>
@@ -394,7 +394,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                     <exec executable="gcc" dir="target/nar/lib/amd64-Windows-gpp/jni/">
                       <arg value="-shared"/>
                       <arg value="-o"/>
-                      <arg value="jpen-${module.version}-${jpen.provider.wintab.nativeVersion}-64.dll"/>
+                      <arg value="jpen-${project.version}-${jpen.provider.wintab.nativeVersion}-64.dll"/>
                       <arg value="../../../obj/amd64-Windows-gpp/jpen_provider_wintab_WintabAccess.o"/>
                       <arg value="../../../obj/amd64-Windows-gpp/Access.o"/>
                       <arg value="../../../obj/amd64-Windows-gpp/macros.o"/>
@@ -402,7 +402,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <arg value="-Wl,-kill-at"/>
                       <arg value="-lWINTAB64"/>
                     </exec>
-                    <copy file="${project.basedir}/target/nar/${module.id-fullVer}-amd64-Windows-gpp-jni/lib/amd64-Windows-gpp/jni/jpen-${module.version}-${jpen.provider.wintab.nativeVersion}-64.dll" todir="${project.basedir}/target"/>
+                    <copy file="${project.basedir}/target/nar/${project.artifactId}-${project.version}-amd64-Windows-gpp-jni/lib/amd64-Windows-gpp/jni/jpen-${project.version}-${jpen.provider.wintab.nativeVersion}-64.dll" todir="${project.basedir}/target"/>
                   </target>
                 </configuration>
                 <goals>
@@ -434,7 +434,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
             <artifactId>nar-maven-plugin</artifactId>
             <configuration>
               <architecture>x86</architecture>
-              <output>jpen-${module.version}-${jpen.provider.wintab.nativeVersion}</output>
+              <output>jpen-${project.version}-${jpen.provider.wintab.nativeVersion}</output>
               <linker>
                 <name>g++</name>
                 <!--
@@ -484,7 +484,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <!-- <arg value="-m32"/> -->
                       <arg value="-shared"/>
                       <arg value="-o"/>
-                      <arg value="jpen-${module.version}-${jpen.provider.wintab.nativeVersion}.dll"/>
+                      <arg value="jpen-${project.version}-${jpen.provider.wintab.nativeVersion}.dll"/>
                       <arg value="../../../obj/x86-Windows-gpp/jpen_provider_wintab_WintabAccess.o"/>
                       <arg value="../../../obj/x86-Windows-gpp/Access.o"/>
                       <arg value="../../../obj/x86-Windows-gpp/macros.o"/>
@@ -492,7 +492,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <arg value="-Wl,-kill-at"/>
                       <arg value="-lWINTAB32"/>
                     </exec>
-                    <copy file="${project.basedir}/target/nar/${module.id-fullVer}-x86-Windows-gpp-jni/lib/x86-Windows-gpp/jni/jpen-${module.version}-${jpen.provider.wintab.nativeVersion}.dll" todir="${project.basedir}/target"/>
+                    <copy file="${project.basedir}/target/nar/${project.artifactId}-${project.version}-x86-Windows-gpp-jni/lib/x86-Windows-gpp/jni/jpen-${project.version}-${jpen.provider.wintab.nativeVersion}.dll" todir="${project.basedir}/target"/>
                   </target>
                 </configuration>
                 <goals>
