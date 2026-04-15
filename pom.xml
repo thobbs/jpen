@@ -130,6 +130,20 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
         <artifactId>maven-antrun-plugin</artifactId>
         <version>3.1.0</version>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+            <argument>-Djava.library.path=${project.build.directory}</argument>
+            <argument>-classpath</argument>
+            <classpath/>
+            <argument>jpen.demo.JPenDemoControl</argument>
+          </arguments>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -197,7 +211,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
               <execution>
                 <phase>process-classes</phase>
                 <configuration>
-                  <tasks>
+                  <target>
                     <mkdir dir="target/nar/lib/i386-Linux-g++/jni/"/>
                     <exec executable="gcc" dir="target/nar/lib/i386-Linux-g++/jni/">
                       <arg value="-m32"/>
@@ -216,7 +230,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <arg value="../../../../../src/main/c/linux/macros.c"/>
                       <arg value="../../../../../src/main/c/linux/TestType.c"/>
                     </exec>
-                  </tasks>
+                  </target>
                 </configuration>
                 <goals>
                   <goal>run</goal>
@@ -284,10 +298,10 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <execution>
                           <phase>pre-integration-test</phase>
                           <configuration>
-                              <tasks>
+                              <target>
                                  <copy file="${project.basedir}/target/nar/${module.id-fullVer}-x86_64-MacOSX-gpp-jni/lib/x86_64-MacOSX-gpp/jni/libjpen-${module.version}-${jpen.provider.osx.nativeVersion}.jnilib" todir="${project.basedir}"/>
                                  <copy file="${project.basedir}/target/nar/${module.id-fullVer}-x86_64-MacOSX-gpp-jni/lib/x86_64-MacOSX-gpp/jni/libjpen-${module.version}-${jpen.provider.osx.nativeVersion}.jnilib" todir="${project.basedir}/target"/>
-                              </tasks>
+                              </target>
                           </configuration>
                           <goals>
                               <goal>run</goal>
@@ -355,7 +369,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
               <execution>
                 <phase>process-classes</phase>
                 <configuration>
-                  <tasks>
+                  <target>
                     <mkdir dir="target/nar/lib/amd64-Windows-gpp/jni/"/>
                     <exec executable="gcc" dir="target/nar/lib/amd64-Windows-gpp/jni/">
                       <arg value="-shared"/>
@@ -368,8 +382,8 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <arg value="-Wl,-kill-at"/>
                       <arg value="-lWINTAB64"/>
                     </exec>
-                    <copy file="${project.basedir}/target/nar/lib/amd64-Windows-gpp/jni/jpen-${module.version}-${jpen.provider.wintab.nativeVersion}-64.dll" todir="${project.basedir}/target"/>
-                  </tasks>
+                    <copy file="${project.basedir}/target/nar/${module.id-fullVer}-amd64-Windows-gpp-jni/lib/amd64-Windows-gpp/jni/jpen-${module.version}-${jpen.provider.wintab.nativeVersion}-64.dll" todir="${project.basedir}/target"/>
+                  </target>
                 </configuration>
                 <goals>
                   <goal>run</goal>
@@ -444,7 +458,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
               <execution>
                 <phase>process-classes</phase>
                 <configuration>
-                  <tasks>
+                  <target>
                     <mkdir dir="target/nar/lib/x86-Windows-gpp/jni/"/>
                     <exec executable="gcc" dir="target/nar/lib/x86-Windows-gpp/jni/">
                       <!-- <arg value="-m32"/> -->
@@ -458,8 +472,8 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       <arg value="-Wl,-kill-at"/>
                       <arg value="-lWINTAB32"/>
                     </exec>
-                    <copy file="${project.basedir}/target/nar/lib/x86-Windows-gpp/jni/jpen-${module.version}-${jpen.provider.wintab.nativeVersion}.dll" todir="${project.basedir}/target"/>
-                  </tasks>
+                    <copy file="${project.basedir}/target/nar/${module.id-fullVer}-x86-Windows-gpp-jni/lib/x86-Windows-gpp/jni/jpen-${module.version}-${jpen.provider.wintab.nativeVersion}.dll" todir="${project.basedir}/target"/>
+                  </target>
                 </configuration>
                 <goals>
                   <goal>run</goal>
