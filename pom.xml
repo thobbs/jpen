@@ -126,7 +126,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
           <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
-            <version>4.0.24</version>
+            <version>5.0.5</version>
             <scope>runtime</scope>
           </dependency>
         </dependencies>
