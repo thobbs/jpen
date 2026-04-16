@@ -23,7 +23,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
   <artifactId>jpen</artifactId>
   <packaging>nar</packaging>
   <name>JPEN</name>
-  <version>2.2.0</version>
+  <version>2.2.1-SNAPSHOT</version>
   <description>Java Pen Tablet Access Library</description>
   <repositories>
   </repositories>
@@ -168,6 +168,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
         <artifactId>spotless-maven-plugin</artifactId>
         <version>3.4.0</version>
         <configuration>
+          <lineEndings>UNIX</lineEndings>
           <java>
             <googleJavaFormat>
               <version>1.35.0</version>
@@ -213,7 +214,7 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- Module properties (formerly in module.properties) -->
     <module.version>2</module.version>
-    <module.fullVersion>2.2.0</module.fullVersion>
+    <module.fullVersion>2.2.1-SNAPSHOT</module.fullVersion>
     <module.author>JPen Team</module.author>
     <module.url>http://jpen.sf.net</module.url>
     <module.artifactId>jpen</module.artifactId>
