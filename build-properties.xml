@@ -40,10 +40,6 @@ This Ant build file contains tasks for loading/creating/writing build properties
 		
 		<property name="module.url" value="UNDEFINED"/>
 		<property name="module.commercialId" value="${module.package}"/>
-		<exec executable="bash" outputproperty="module.version">
-			<arg value="build-scripts/getVersion.sh"/>
-			<arg value="${module.fullVersion}"/>
-		</exec>
 		<property name="module.id-ver" value="${module.id}-${module.version}"/>
 		<property name="module.id-fullVer" value="${module.id}-${module.fullVersion}"/>
 		<property name="module.package-ver" value="${module.package}-${module.version}"/>
