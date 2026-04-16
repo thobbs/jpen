@@ -445,9 +445,9 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
                       new File(project.basedir, 'target/nar/lib/amd64-Windows-gpp/jni/').mkdirs()
                       def proc = new ProcessBuilder(['gcc', '-shared', '-o',
                               'jpen-${module.version}-${jpen.provider.wintab.nativeVersion}-64.dll',
-                              '../../../obj/amd64-Windows-gpp/jpen_provider_wintab_WintabAccess.o',
-                              '../../../obj/amd64-Windows-gpp/Access.o',
-                              '../../../obj/amd64-Windows-gpp/macros.o',
+                              '../../../obj/amd64-Windows-gpp/jpen_provider_wintab_WintabAccess.*.o',
+                              '../../../obj/amd64-Windows-gpp/Access.*.o',
+                              '../../../obj/amd64-Windows-gpp/macros.*.o',
                               '-L../../../../../src/main/c/windows/lib-64',
                               '-Wl,-kill-at', '-lWINTAB64'])
                           .directory(new File(project.basedir, 'target/nar/lib/amd64-Windows-gpp/jni/'))
