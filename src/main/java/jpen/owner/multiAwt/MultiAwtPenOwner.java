@@ -183,7 +183,8 @@ final class MultiAwtPenOwner extends ComponentPenOwner implements ComponentPool.
   }
 
   public void componentUndisplayable(final Component component) {
-    // we are holding component's treeLock here, we have to schedule stopDraggingOutAndPause for later:
+    // we are holding component's treeLock here, we have to schedule stopDraggingOutAndPause for
+    // later:
     SwingUtilities.invokeLater(
         new Runnable() {
           // @Override

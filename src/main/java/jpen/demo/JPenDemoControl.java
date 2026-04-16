@@ -32,7 +32,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-
 import jpen.PenManager;
 import jpen.demo.inspect.Inspector;
 import jpen.owner.multiAwt.AwtPenToolkit;
