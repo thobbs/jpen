@@ -166,7 +166,6 @@ public class NativeLibraryLoader {
         new PrivilegedAction<Object>() {
           final String jniLibName = getJniLibName(architecture, nativeVersion);
 
-          // @Override
           public Object run() {
             try {
               L.info(
@@ -177,16 +176,16 @@ public class NativeLibraryLoader {
               L.info("{} loaded", jniLibName);
               return null;
             } catch (RuntimeException ex) {
-              logOnFail();
+              logOnFail(ex);
               throw ex;
             } catch (Error ex) {
-              logOnFail();
+              logOnFail(ex);
               throw ex;
             }
           }
 
-          private void logOnFail() {
-            L.warn("{} couldn't be loaded", jniLibName);
+          private void logOnFail(Throwable ex) {
+            L.warn("{} couldn't be loaded", jniLibName, ex);
           }
         });
   }
