@@ -104,7 +104,7 @@ public class Pen extends PenState {
 
     public void run() {
       try {
-        L.trace("v");
+        L.trace("Starting Pen.run()");
         if (oldThread != null) oldThread.join();
         oldThread = null;
         while (!stopRunning) {
@@ -119,22 +119,36 @@ public class Pen extends PenState {
             lastDispatchedEvent = event;
             eventDispatched = true;
           }
-          // System.out.println("after event dispatching, procTime="+evalCurrentProcTime());
+
+          if (L.isTraceEnabled()) {
+            L.trace("after event dispatching, procTime={}", evalCurrentProcTime());
+          }
           availablePeriod =
               periodMillis
                   + waitTime; // waitTime here is always <=0, if it is <0 then the whole processing
+
           // of the previous round took longer than the time available.
-          // System.out.println("going to fire tock "+System.currentTimeMillis());
+
+          if (L.isTraceEnabled()) {
+            L.trace("going to fire tock {}", System.currentTimeMillis());
+          }
+
           if (eventDispatched) firePenTock();
-          // System.out.println("after penTock, procTime="+evalCurrentProcTime());
+          if (L.isTraceEnabled()) {
+            L.trace("after penTock, procTime={}", evalCurrentProcTime());
+          }
           waitTime =
               availablePeriodLeft(); // the same:  (periodMillis-evalCurrentProcTime())+waitTime;
           if (waitTime > 0) {
-            // System.out.println("going to wait: "+waitTime);
+            if (L.isTraceEnabled()) {
+              L.trace("going to wait: {}", waitTime);
+            }
             ThreadUtils.sleepUninterrupted(waitTime);
+
             // waiter.doWait(waitTime); // in some cases, this (instead of sleepUninterrupted ^ )
             // gives better overall performance (wintab-pulling, jpen demo). We can put this as an
             // alternate behavior if  needed.
+
             waitTime = 0;
           }
         }
@@ -142,7 +156,7 @@ public class Pen extends PenState {
         L.error("jpen-Pen thread threw an exception", ex);
         exception = ex;
       }
-      L.trace("^");
+      L.trace("Ending Pen.run()");
     }
 
     private long evalCurrentProcTime() {
@@ -221,7 +235,7 @@ public class Pen extends PenState {
     if (frequency == this.frequency) return;
     if (wait && SwingUtilities.isEventDispatchThread())
       throw new Error("Cannot call setFrequency(int, <true>) from the event dispatcher thread");
-    L.trace("v");
+    L.trace("Starting setFrequency");
     MyThread oldThread = this.thread;
     if (oldThread != null) {
       oldThread.stop(wait);
@@ -229,7 +243,7 @@ public class Pen extends PenState {
     this.frequency = frequency;
     thread = new MyThread(oldThread);
     thread.start();
-    L.trace("^");
+    L.trace("Done setting frequency");
   }
 
   public int getFrequency() {

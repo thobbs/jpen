@@ -94,12 +94,10 @@ public class WintabProvider extends AbstractPenProvider {
   private boolean systemCursorEnabled = true;
 
   public static class Constructor extends AbstractPenProvider.AbstractConstructor {
-    // @Override
     public String getName() {
       return "Wintab";
     }
 
-    // @Override
     public boolean constructable(PenManager penManager) {
       String osName = System.getProperty("os.name");
       boolean constructable = osName.toLowerCase().contains("windows");
@@ -210,7 +208,6 @@ public class WintabProvider extends AbstractPenProvider {
 
   private WintabProvider(Constructor constructor, WintabAccess wintabAccess) {
     super(constructor);
-    L.debug("start");
     this.wintabAccess = wintabAccess;
     L.info(
         "WintabProvider initializing: deviceName='{}', packetRate={}, hardwareCapabilities=0x{}, systemCursorEnabled={}",
@@ -229,8 +226,7 @@ public class WintabProvider extends AbstractPenProvider {
     thread = new MyThread();
     thread.start();
     L.debug("Wintab thread started: {}", thread.getName());
-    L.trace("wintabAccess={}", wintabAccess);
-    L.debug("end");
+    L.debug("wintabAccess={}", wintabAccess);
   }
 
   Range getLevelRange(PLevel.Type type) {
@@ -278,7 +274,7 @@ public class WintabProvider extends AbstractPenProvider {
   }
 
   synchronized void setPaused(boolean paused) {
-    L.debug("start");
+    L.trace("executing setPaused()");
     if (paused == this.paused) return;
     this.paused = paused;
     if (!paused) {
@@ -291,7 +287,6 @@ public class WintabProvider extends AbstractPenProvider {
       }
       wintabAccess.enable(true);
     }
-    L.debug("end");
   }
 
   @Override

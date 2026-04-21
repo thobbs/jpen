@@ -69,14 +69,14 @@ public class NativeLibraryLoader {
 
   public synchronized void load() {
     if (!loaded) {
-      L.trace("v");
+      L.debug("Starting native library load process");
       Throwable loadExceptionCause = doLoad();
       loaded = true;
       if (loadExceptionCause != null) {
         L.warn("no suitable JNI library found");
         throw new LoadException(loadExceptionCause);
       }
-      L.trace("^");
+      L.trace("Finished native library load process");
     }
   }
 
