@@ -25,6 +25,7 @@ import java.util.List;
 import jpen.PLevel;
 import jpen.internal.Range;
 
+/** This class is the low-level wrapper around the native C code from the dll. */
 final class WintabAccess {
   private static final Object LOCK = new Object();
 

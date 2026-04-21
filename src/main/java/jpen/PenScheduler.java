@@ -23,15 +23,14 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jpen.internal.filter.RelativeLocationFilter;
 import jpen.owner.PenOwner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class PenScheduler {
 
-  static final Logger L = Logger.getLogger(PenScheduler.class.getName());
-  // static { L.setLevel(Level.ALL); }
+  static final Logger L = LoggerFactory.getLogger(PenScheduler.class);
 
   private final Pen pen;
   private PenEvent lastScheduledEvent;
@@ -164,11 +163,9 @@ final class PenScheduler {
         && kindTypeNumber != lastScheduledState.getKind().typeNumber
         && !lastScheduledState.hasPressedButtons()) {
       PKind newKind = PKind.valueOf(kindTypeNumber);
-      if (L.isLoggable(Level.FINE)) {
-        L.fine("changing kind to:" + newKind);
-        L.fine("scheduledLevels: " + scheduledLevels);
-        L.fine("device: " + device);
-      }
+      L.debug("changing kind to:{}", newKind);
+      L.debug("scheduledLevels: {}", scheduledLevels);
+      L.debug("device: {}", device);
       lastScheduledState.setKind(newKind);
       scheduleEmulatedZeroPressureEvent();
       schedule(new PKindEvent(device, deviceTime, newKind));
@@ -277,7 +274,7 @@ final class PenScheduler {
 
   synchronized void scheduleButtonEvent(PenDevice device, long deviceTime, PButton button) {
     if (lastScheduledState.setButtonValue(button.typeNumber, button.value)) {
-      if (L.isLoggable(Level.FINE)) L.fine("scheduling button event: " + button);
+      L.debug("scheduling button event: {}", button);
       PButtonEvent buttonEvent = new PButtonEvent(device, deviceTime, button);
       schedule(buttonEvent);
       if (pen.levelEmulator != null) pen.levelEmulator.scheduleEmulatedEvent(buttonEvent);

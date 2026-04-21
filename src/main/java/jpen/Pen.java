@@ -23,15 +23,14 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import jpen.event.PenListener;
 import jpen.internal.ThreadUtils;
-import jpen.internal.ThrowableUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Pen extends PenState {
-  private static final Logger L = Logger.getLogger(Pen.class.getName());
-  // static{L.setLevel(Level.ALL);}
+  private static final Logger L = LoggerFactory.getLogger(Pen.class);
 
   public static final int DEFAULT_FREQUENCY = 60; // TODO: 50 is a better default or less??
 
@@ -105,7 +104,7 @@ public class Pen extends PenState {
 
     public void run() {
       try {
-        L.finest("v");
+        L.trace("v");
         if (oldThread != null) oldThread.join();
         oldThread = null;
         while (!stopRunning) {
@@ -140,10 +139,10 @@ public class Pen extends PenState {
           }
         }
       } catch (Exception ex) {
-        L.severe("jpen-Pen thread threw an exception: " + ThrowableUtils.evalStackTraceString(ex));
+        L.error("jpen-Pen thread threw an exception", ex);
         exception = ex;
       }
-      L.finest("^");
+      L.trace("^");
     }
 
     private long evalCurrentProcTime() {
@@ -222,7 +221,7 @@ public class Pen extends PenState {
     if (frequency == this.frequency) return;
     if (wait && SwingUtilities.isEventDispatchThread())
       throw new Error("Cannot call setFrequency(int, <true>) from the event dispatcher thread");
-    L.finest("v");
+    L.trace("v");
     MyThread oldThread = this.thread;
     if (oldThread != null) {
       oldThread.stop(wait);
@@ -230,7 +229,7 @@ public class Pen extends PenState {
     this.frequency = frequency;
     thread = new MyThread(oldThread);
     thread.start();
-    L.finest("^");
+    L.trace("^");
   }
 
   public int getFrequency() {

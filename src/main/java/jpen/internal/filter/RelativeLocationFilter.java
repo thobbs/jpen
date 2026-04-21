@@ -24,15 +24,15 @@ import java.awt.geom.Point2D;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Collection;
-import java.util.logging.Logger;
 import jpen.PLevel;
 import jpen.PenDevice;
 import jpen.PenState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class RelativeLocationFilter {
 
-  private static final Logger L = Logger.getLogger(RelativeLocationFilter.class.getName());
-  // static { L.setLevel(Level.ALL); }
+  private static final Logger L = LoggerFactory.getLogger(RelativeLocationFilter.class);
 
   private PenDevice penDevice;
   private State state = State.UNDEFINED;
@@ -193,7 +193,7 @@ public final class RelativeLocationFilter {
   private boolean setupReference() {
     PointerInfo pointerInfo = AccessController.doPrivileged(getPointerInfoAction);
     if (pointerInfo == null) {
-      L.warning("No mouse found. Can not correct devices on relative (mouse) mode.");
+      L.warn("No mouse found. Can not correct devices on relative (mouse) mode.");
       state = State.OFF;
       return false;
     }

@@ -22,13 +22,11 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PLevelEmulator {
-  static final Logger L = Logger.getLogger(PLevelEmulator.class.getName());
-
-  // static { L.setLevel(Level.ALL); }
+  static final Logger L = LoggerFactory.getLogger(PLevelEmulator.class);
 
   public static class ButtonTriggerPolicy {
     public final int levelType;
@@ -147,8 +145,7 @@ public final class PLevelEmulator {
     PenState lastScheduledState = pen.lastScheduledState;
     ButtonTriggerPolicy triggerPolicy =
         getButtonTriggerPolicy(lastScheduledState.getKind().typeNumber, buttonType);
-    if (L.isLoggable(Level.FINE))
-      L.fine("triggerPolicy: " + triggerPolicy + ", buttonType: " + buttonType);
+    L.debug("triggerPolicy: {}, buttonType: {}", triggerPolicy, buttonType);
     if (triggerPolicy != null) {
       setActiveButtonTriggerPolicy(buttonType, triggerPolicy);
       if (lastScheduledState.getLevelValue(triggerPolicy.levelType) == triggerPolicy.onPressValue)
@@ -172,8 +169,7 @@ public final class PLevelEmulator {
   private PLevel emulateOnRelease(int buttonType) {
     ensureListSize(activeButtonTriggerPolicies, buttonType);
     ButtonTriggerPolicy triggerPolicy = getActiveButtonTriggerPolicy(buttonType);
-    if (L.isLoggable(Level.FINE))
-      L.fine("triggerPolicy: " + triggerPolicy + ", buttonType: " + buttonType);
+    L.debug("triggerPolicy: {}, buttonType: {}", triggerPolicy, buttonType);
     if (triggerPolicy != null) {
       setActiveButtonTriggerPolicy(buttonType, null);
       PLevel pLevel = new PLevel(triggerPolicy.levelType, triggerPolicy.onReleaseValue);

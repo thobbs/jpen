@@ -18,9 +18,11 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.internal.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class AbsoluteLocationRule implements RelativeLocationFilter.Rule {
-  // private static final Logger L=Logger.getLogger(AbsoluteLocationRule.class.getName());
-  // static { L.setLevel(Level.ALL); }
+  private static final Logger L = LoggerFactory.getLogger(AbsoluteLocationRule.class);
 
   private int missedPoints;
 
@@ -35,7 +37,7 @@ class AbsoluteLocationRule implements RelativeLocationFilter.Rule {
     if (!filter.samplePoint.isComplete) return null;
     float maxDeviation = Math.max(filter.absDeviation.x, filter.absDeviation.y);
     if (maxDeviation < 1.5f) {
-      // System.out.println("absolute device detected, missedPoints="+missedPoints);
+      L.trace("absolute device detected, missedPoints={}", missedPoints);
       return RelativeLocationFilter.State.ABSOLUTE;
     }
     return null;

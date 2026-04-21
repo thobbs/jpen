@@ -18,7 +18,6 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.provider.xinput;
 
-import java.util.logging.Logger;
 import jpen.PKind;
 import jpen.PenManager;
 import jpen.PenProvider;
@@ -26,10 +25,12 @@ import jpen.internal.BuildInfo;
 import jpen.provider.AbstractPenProvider;
 import jpen.provider.NativeLibraryLoader;
 import jpen.provider.VirtualScreenBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class XinputProvider extends AbstractPenProvider {
 
-  private static final Logger L = Logger.getLogger(XinputProvider.class.getName());
+  private static final Logger L = LoggerFactory.getLogger(XinputProvider.class);
 
   private static final NativeLibraryLoader LIB_LOADER =
       new NativeLibraryLoader(
@@ -84,7 +85,7 @@ public final class XinputProvider extends AbstractPenProvider {
 
   private XinputProvider(Constructor constructor) throws Exception {
     super(constructor);
-    L.fine("start");
+    L.debug("start");
 
     XiBus xiBus = new XiBus();
 
@@ -103,7 +104,7 @@ public final class XinputProvider extends AbstractPenProvider {
     if (devices.size() == 1) {
       xinputDevices[0].setKindTypeNumber(PKind.Type.STYLUS.ordinal());
     }
-    L.fine("end");
+    L.debug("end");
   }
 
   private void resetXinputDevices() {

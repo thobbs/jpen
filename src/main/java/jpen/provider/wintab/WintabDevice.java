@@ -24,15 +24,15 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import jpen.PKind;
 import jpen.PLevel;
 import jpen.provider.AbstractPenDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("deprecation")
 class WintabDevice extends AbstractPenDevice {
-  private static final Logger L = Logger.getLogger(WintabDevice.class.getName());
-  // static { L.setLevel(Level.ALL);	}
+  private static final Logger L = LoggerFactory.getLogger(WintabDevice.class);
 
   private static final String PRINT_ALTITUDE_AND_AZIMUTH_SYSTEM_PROPERTY =
       "jpen.provider.wintab.WintabDevice.printAltitudeAndAzimuth";
@@ -48,12 +48,12 @@ class WintabDevice extends AbstractPenDevice {
 
   WintabDevice(WintabProvider wintabProvider, int cursor) {
     super(wintabProvider);
-    L.fine("start");
+    L.debug("start");
     this.wintabProvider = wintabProvider;
     this.cursor = cursor;
     setKindTypeNumber(getDefaultKindTypeNumber());
     setEnabled(true);
-    L.fine("end");
+    L.debug("end");
   }
 
   @Override
@@ -101,11 +101,10 @@ class WintabDevice extends AbstractPenDevice {
 
   void scheduleEvents() {
     if (!getEnabled()) {
-      L.fine("disabled");
+      L.debug("disabled");
       return;
     }
-    // if(L.isLoggable(Level.FINE))
-    // L.fine(wintabProvider.wintabAccess.toString());
+    L.trace("{}", wintabProvider.wintabAccess);
     scheduleLevelEvent();
     // scheduleButtonEvents(); nicarran:  TODO use this to support extra buttons?
   }

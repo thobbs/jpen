@@ -20,12 +20,12 @@ package jpen.demo.inspect;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.logging.Logger;
 import jpen.demo.StatusReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InspectorThread implements Runnable {
-  static final Logger L = Logger.getLogger(InspectorThread.class.getName());
-  // static { L.setLevel(Level.ALL); }
+  static final Logger L = LoggerFactory.getLogger(InspectorThread.class);
 
   final Inspector inspector;
   final long period;
@@ -45,27 +45,24 @@ public class InspectorThread implements Runnable {
   public synchronized void run() {
     try {
       long totalTime = times * period / 1000;
-      L.warning("JPen Demo will automatically shut down in " + totalTime + " seconds");
+      L.warn("JPen Demo will automatically shut down in {} seconds", totalTime);
       logInfo(0);
       for (int i = 1; i <= times; i++) {
         wait(period);
         logInfo(i);
-        inspector.fileHandler.flush();
       }
-      inspector.fileHandler.close();
+      inspector.close();
       L.info("shutting down...");
       System.exit(0);
     } catch (InterruptedException ex) {
-      L.warning("interrupted!");
-      ex.printStackTrace();
+      L.warn("interrupted!", ex);
     }
   }
 
   private void logInfo(int count) {
-    L.info("collecting info " + count + "/" + times);
-    L.fine(new StatusReport(inspector.penManager).toString());
-    L.fine(evalThreadsDump(count));
-    inspector.fileHandler.flush();
+    L.info("collecting info {}/{}", count, times);
+    inspector.writer.println(new StatusReport(inspector.penManager));
+    inspector.writer.println(evalThreadsDump(count));
     L.info("info collected");
   }
 

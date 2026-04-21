@@ -21,15 +21,14 @@ package jpen.provider.xinput;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 import jpen.PLevel;
 import jpen.internal.Range;
 import jpen.internal.ThreadUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class XiDevice {
-  static final Logger L = Logger.getLogger(XiDevice.class.getName());
-
-  // static { L.setLevel(Level.ALL); }
+  static final Logger L = LoggerFactory.getLogger(XiDevice.class);
 
   public enum EventType {
     BUTTON_PRESS,
@@ -75,7 +74,7 @@ final class XiDevice {
           setIsListening(cellIndex, isListening);
           if (isListening && !getIsListening()) { // the device couldn't be grabbed
             if (attempts++ > 20) {
-              L.severe("the tablet device couldn't be grabbed");
+              L.error("the tablet device couldn't be grabbed");
               break;
             }
             ThreadUtils.sleepUninterrupted(40);

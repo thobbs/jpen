@@ -21,8 +21,6 @@ package jpen.demo;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -35,9 +33,11 @@ import javax.swing.WindowConstants;
 import jpen.PenManager;
 import jpen.demo.inspect.Inspector;
 import jpen.owner.multiAwt.AwtPenToolkit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JPenDemoControl {
-  private static final Logger L = Logger.getLogger(JPenDemoControl.class.getName());
+  private static final Logger L = LoggerFactory.getLogger(JPenDemoControl.class);
 
   final MainPanel mainPanel;
   final JButton statusReportButton = new JButton("Status Report...");
@@ -86,7 +86,7 @@ public class JPenDemoControl {
     return statusReportButton;
   }
 
-  public static void main(String... args) throws IOException, NumberFormatException {
+  public static void main(String... args) {
     setupLookAndFeel();
     JPenDemoControl jpenDemoControl = new JPenDemoControl();
     startInspector(AwtPenToolkit.getPenManager());
@@ -99,11 +99,11 @@ public class JPenDemoControl {
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
       else UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (Exception ex) {
-      L.warning("The \"system\" look and feel couldn't be set.");
+      L.warn("The \"system\" look and feel couldn't be set.");
     }
   }
 
-  static void startInspector(PenManager penManager) throws IOException {
+  static void startInspector(PenManager penManager) {
     String inspectorPeriodProperty = System.getProperty("jpen.demo.inspectorPeriod");
     if (inspectorPeriodProperty != null) {
       int inspectorPeriod = Integer.valueOf(inspectorPeriodProperty);

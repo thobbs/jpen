@@ -24,11 +24,12 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.geom.Rectangle2D;
-import java.util.logging.Logger;
 import jpen.PLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class VirtualScreenBounds {
-  static final Logger L = Logger.getLogger(VirtualScreenBounds.class.getName());
+  static final Logger L = LoggerFactory.getLogger(VirtualScreenBounds.class);
   private static VirtualScreenBounds INSTANCE;
   private final Rectangle2D.Float r = new Rectangle2D.Float();
 
@@ -43,7 +44,7 @@ public final class VirtualScreenBounds {
       @Override
       public void run() {
         reset();
-        L.fine("first calculation done.");
+        L.debug("first calculation done.");
       }
     }.start();
   }

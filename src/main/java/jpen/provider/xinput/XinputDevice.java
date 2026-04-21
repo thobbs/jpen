@@ -24,18 +24,18 @@ import java.awt.Dimension;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import jpen.PKind;
 import jpen.PLevel;
 import jpen.PScroll;
 import jpen.internal.ObjectUtils;
 import jpen.internal.Range;
 import jpen.provider.AbstractPenDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("deprecation")
 final class XinputDevice extends AbstractPenDevice {
-  private static final Logger L = Logger.getLogger(XinputDevice.class.getName());
-  // static{L.setLevel(Level.ALL);}
+  private static final Logger L = LoggerFactory.getLogger(XinputDevice.class);
 
   private final XiDevice xiDevice;
   private final Range[] levelRanges;
@@ -62,7 +62,7 @@ final class XinputDevice extends AbstractPenDevice {
               while (!isWorking()) ObjectUtils.synchronizedWait(this, 0);
               if (XinputDevice.this.xiDevice.waitNextEvent()) processLastEvent();
               else { // then a call to xiDevice.stopWaitingNextEvent was made
-                // System.out.println("stopWaitingNextEvent was called");
+                L.trace("stopWaitingNextEvent was called");
                 synchronized (
                     XinputDevice
                         .this) { // try to aquire this lock to wait until the XinputDevice.this sync

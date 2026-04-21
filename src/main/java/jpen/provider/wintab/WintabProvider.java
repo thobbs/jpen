@@ -25,8 +25,6 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jpen.PLevel;
 import jpen.PenManager;
 import jpen.PenProvider;
@@ -35,9 +33,11 @@ import jpen.internal.Range;
 import jpen.provider.AbstractPenProvider;
 import jpen.provider.NativeLibraryLoader;
 import jpen.provider.VirtualScreenBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WintabProvider extends AbstractPenProvider {
-  private static final Logger L = Logger.getLogger(WintabProvider.class.getName());
+  private static final Logger L = LoggerFactory.getLogger(WintabProvider.class);
 
   private static final NativeLibraryLoader LIB_LOADER =
       new NativeLibraryLoader(
@@ -45,8 +45,6 @@ public class WintabProvider extends AbstractPenProvider {
           new String[] {"64"},
           Integer.valueOf(
               BuildInfo.getProperties().getString("jpen.provider.wintab.nativeVersion")));
-
-  // static{L.setLevel(Level.ALL);}
 
   static void loadLibrary() {
     LIB_LOADER.load();
@@ -76,9 +74,9 @@ public class WintabProvider extends AbstractPenProvider {
       try {
         periodValue = Integer.valueOf(periodString);
         if (periodValue <= 0) {
-          L.severe("ignored illegal PERIOD value " + periodValue + ", period value must be >= 0");
+          L.error("ignored illegal PERIOD value {}, period value must be >= 0", periodValue);
           periodValue = 10;
-        } else L.info("PERIOD set to " + periodValue);
+        } else L.info("PERIOD set to {}", periodValue);
       } catch (NumberFormatException ex) {
       }
     PERIOD = periodValue;
@@ -90,8 +88,9 @@ public class WintabProvider extends AbstractPenProvider {
   final VirtualScreenBounds screenBounds = VirtualScreenBounds.getInstance();
   private final Thread thread;
   private volatile boolean paused = true;
-  private boolean systemCursorEnabled =
-      true; // by default the tablet device moves the system pointer (cursor)
+
+  // by default the tablet device moves the system pointer (cursor)
+  private boolean systemCursorEnabled = true;
 
   public static class Constructor extends AbstractPenProvider.AbstractConstructor {
     // @Override
@@ -174,9 +173,9 @@ public class WintabProvider extends AbstractPenProvider {
               }
             }
             while (paused) {
-              L.fine("going to wait...");
+              L.debug("going to wait...");
               wait();
-              L.fine("notified");
+              L.debug("notified");
               waited = true;
             }
           }
@@ -204,7 +203,7 @@ public class WintabProvider extends AbstractPenProvider {
 
   private WintabProvider(Constructor constructor, WintabAccess wintabAccess) {
     super(constructor);
-    L.fine("start");
+    L.debug("start");
     this.wintabAccess = wintabAccess;
 
     for (int i = PLevel.Type.VALUES.size(); --i >= 0; ) {
@@ -214,8 +213,8 @@ public class WintabProvider extends AbstractPenProvider {
 
     thread = new MyThread();
     thread.start();
-    // System.out.println("wintabAccess=" + ( wintabAccess ));
-    L.fine("end");
+    L.trace("wintabAccess={}", wintabAccess);
+    L.debug("end");
   }
 
   Range getLevelRange(PLevel.Type type) {
@@ -223,19 +222,13 @@ public class WintabProvider extends AbstractPenProvider {
   }
 
   private void processQueuedEvents() {
-    // L.finer("start");
-    // boolean gotPacket=false;
+    L.trace("start");
     while (wintabAccess.nextPacket() && !paused) {
-      // gotPacket=true;
       WintabDevice device = getDevice(wintabAccess.getCursor());
-      if (L.isLoggable(Level.FINE)) {
-        L.finer("device: ");
-        L.finer(device.getName());
-      }
+      L.trace("device: {}", device.getName());
       device.scheduleEvents();
     }
-    // System.out.println("gotPacket=" + ( gotPacket ));
-    // L.finer("end");
+    L.trace("end");
   }
 
   private WintabDevice getDevice(int cursor) {
@@ -255,20 +248,20 @@ public class WintabProvider extends AbstractPenProvider {
   }
 
   synchronized void setPaused(boolean paused) {
-    L.fine("start");
+    L.debug("start");
     if (paused == this.paused) return;
     this.paused = paused;
     if (!paused) {
-      L.fine("false paused value");
+      L.debug("false paused value");
       screenBounds.reset();
       synchronized (thread) {
-        L.fine("going to notify all...");
+        L.debug("going to notify all...");
         thread.notifyAll();
-        L.fine("done notifying ");
+        L.debug("done notifying ");
       }
       wintabAccess.enable(true);
     }
-    L.fine("end");
+    L.debug("end");
   }
 
   @Override

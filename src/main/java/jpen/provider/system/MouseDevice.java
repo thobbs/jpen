@@ -28,17 +28,16 @@ import java.awt.event.MouseWheelListener;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jpen.PButton;
 import jpen.PLevel;
 import jpen.PScroll;
 import jpen.provider.AbstractPenDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("deprecation")
 public final class MouseDevice extends AbstractPenDevice {
-  private static final Logger L = Logger.getLogger(MouseDevice.class.getName());
-  // static {L.setLevel(Level.ALL);	}
+  private static final Logger L = LoggerFactory.getLogger(MouseDevice.class);
 
   private final MouseListener mouseL =
       new MouseAdapter() {
@@ -142,7 +141,7 @@ public final class MouseDevice extends AbstractPenDevice {
     if (!getEnabled()) return;
     PButton.Type buttonType = getButtonType(ev.getButton());
     if (buttonType == null) return;
-    if (L.isLoggable(Level.FINE)) L.fine("scheduling button event: " + buttonType + ", " + state);
+    L.debug("scheduling button event: {}, {}", buttonType, state);
     getPenManager()
         .scheduleButtonEvent(this, ev.getWhen(), new PButton(buttonType.ordinal(), state));
   }

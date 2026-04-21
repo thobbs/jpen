@@ -26,16 +26,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.logging.Logger;
 import jpen.PButton;
 import jpen.PKind;
 import jpen.PenProvider;
 import jpen.provider.AbstractPenDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class KeyboardDevice extends AbstractPenDevice {
-  private static final Logger L = Logger.getLogger(KeyboardDevice.class.getName());
-
-  // static { L.setLevel(Level.ALL); }
+  private static final Logger L = LoggerFactory.getLogger(KeyboardDevice.class);
 
   KeyboardDevice(PenProvider penProvider) {
     super(penProvider);

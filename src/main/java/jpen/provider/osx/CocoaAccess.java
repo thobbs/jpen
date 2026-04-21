@@ -21,16 +21,16 @@ package jpen.provider.osx;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import jpen.PButton;
 import jpen.PKind;
 import jpen.PLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class CocoaAccess {
 
-  static final Logger L = Logger.getLogger(CocoaAccess.class.getName());
-  // static { L.setLevel(Level.ALL); }
+  static final Logger L = LoggerFactory.getLogger(CocoaAccess.class);
 
   protected static final float RADIANS_PER_DEGREE = (float) (Math.PI / 180);
   protected static final float HALF_PI = (float) (Math.PI / 2);

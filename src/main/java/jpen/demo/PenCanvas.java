@@ -32,7 +32,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -41,10 +40,12 @@ import jpen.PLevel;
 import jpen.PLevelEvent;
 import jpen.event.PenAdapter;
 import jpen.owner.multiAwt.AwtPenToolkit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class PenCanvas extends JComponent {
   public static final long serialVersionUID = 1l;
-  private static final Logger L = Logger.getLogger(PenCanvas.class.getName());
+  private static final Logger L = LoggerFactory.getLogger(PenCanvas.class);
 
   private static final Dimension SIZE = new Dimension(1000, 1000);
   private static final Color BACKGROUND_COLOR = new Color(247, 217, 186); // pink yellow
@@ -117,7 +118,7 @@ class PenCanvas extends JComponent {
             // time="+availableTime);
             // System.out.println("paused? "+penManager.getPaused());
             if (availableTime < 0)
-              L.warning("no time to repaint... but this is a test, so I continue.");
+              L.warn("no time to repaint... but this is a test, so I continue.");
             if (isDirty) repaint(dirtyArea.x, dirtyArea.y, dirtyArea.width, dirtyArea.height);
             isDirty = false;
           }
@@ -152,7 +153,7 @@ class PenCanvas extends JComponent {
   private synchronized void paintStroke(PLevelEvent ev) {
     float pressure = ev.pen.getLevelValue(PLevel.Type.PRESSURE);
     if (pressure == 0) {
-      L.fine("no pressure");
+      L.debug("no pressure");
       return;
     }
 
@@ -179,7 +180,7 @@ class PenCanvas extends JComponent {
     stroke.y = cursorCenter.y - r;
     stroke.width = stroke.height = 2 * r;
     g.fill(stroke);
-    L.fine("stoke painted");
+    L.debug("stoke painted");
     addCursorAreaToDirtyArea();
   }
 

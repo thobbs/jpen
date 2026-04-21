@@ -24,13 +24,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import jpen.PenManager;
 import jpen.internal.BuildInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NativeLibraryLoader {
-  private static final Logger L = Logger.getLogger(NativeLibraryLoader.class.getName());
+  private static final Logger L = LoggerFactory.getLogger(NativeLibraryLoader.class);
 
   private static String PREFERENCE_KEY$ARCHITECTURE = "NativeLibraryLoader.architecture";
 
@@ -68,14 +69,14 @@ public class NativeLibraryLoader {
 
   public synchronized void load() {
     if (!loaded) {
-      L.finest("v");
+      L.trace("v");
       Throwable loadExceptionCause = doLoad();
       loaded = true;
       if (loadExceptionCause != null) {
-        L.info("no suitable JNI library found");
+        L.warn("no suitable JNI library found");
         throw new LoadException(loadExceptionCause);
       }
-      L.finest("^");
+      L.trace("^");
     }
   }
 
@@ -169,13 +170,11 @@ public class NativeLibraryLoader {
           public Object run() {
             try {
               L.info(
-                  "loading JPen "
-                      + PenManager.getJPenFullVersion()
-                      + " JNI library: "
-                      + jniLibName
-                      + " ...");
+                  "loading JPen {} JNI library: {} ...",
+                  PenManager.getJPenFullVersion(),
+                  jniLibName);
               System.loadLibrary(jniLibName);
-              L.info(jniLibName + " loaded");
+              L.info("{} loaded", jniLibName);
               return null;
             } catch (RuntimeException ex) {
               logOnFail();
@@ -187,7 +186,7 @@ public class NativeLibraryLoader {
           }
 
           private void logOnFail() {
-            L.info(jniLibName + " couldn't be loaded");
+            L.warn("{} couldn't be loaded", jniLibName);
           }
         });
   }

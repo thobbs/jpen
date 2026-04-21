@@ -27,11 +27,11 @@ import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class LogToFileRule implements RelativeLocationFilter.Rule {
-  private static final Logger L = Logger.getLogger(LogToFileRule.class.getName());
-  // static { L.setLevel(Level.ALL); }
+  private static final Logger L = LoggerFactory.getLogger(LogToFileRule.class);
 
   private int logFileStamp = 0;
   private List<Record> records;
@@ -93,7 +93,7 @@ final class LogToFileRule implements RelativeLocationFilter.Rule {
         writer.write("\n");
       }
       writer.close();
-      L.info("written: " + filePath);
+      L.info("written: {}", filePath);
     } catch (IOException ex) {
       throw new AssertionError(ex);
     }
