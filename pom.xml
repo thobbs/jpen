@@ -191,6 +191,9 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
         <configuration>
           <executable>java</executable>
           <arguments>
+            <!-- Silences the JDK 22+ restricted-method warning for System.loadLibrary/JNI downcalls.
+                 Becomes an error in a future JDK; ALL-UNNAMED covers classpath (unnamed module) code. -->
+            <argument>--enable-native-access=ALL-UNNAMED</argument>
             <argument>-Djava.library.path=${project.build.directory}</argument>
             <argument>-classpath</argument>
             <classpath/>
