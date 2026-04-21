@@ -23,6 +23,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import jpen.PLevel;
@@ -100,13 +101,19 @@ public class WintabProvider extends AbstractPenProvider {
 
     // @Override
     public boolean constructable(PenManager penManager) {
-      return System.getProperty("os.name").toLowerCase().contains("windows");
+      String osName = System.getProperty("os.name");
+      boolean constructable = osName.toLowerCase().contains("windows");
+      L.debug("Wintab constructable check: os.name='{}' => {}", osName, constructable);
+      return constructable;
     }
 
     @Override
     public PenProvider constructProvider() throws Throwable {
+      L.info("constructing Wintab provider");
       loadLibrary();
+      L.debug("native library loaded, creating WintabAccess");
       WintabAccess wintabAccess = new WintabAccess();
+      L.debug("WintabAccess created, instantiating WintabProvider");
       return new WintabProvider(this, wintabAccess);
     }
 
@@ -205,14 +212,23 @@ public class WintabProvider extends AbstractPenProvider {
     super(constructor);
     L.debug("start");
     this.wintabAccess = wintabAccess;
+    L.info(
+        "WintabProvider initializing: deviceName='{}', packetRate={}, hardwareCapabilities=0x{}, systemCursorEnabled={}",
+        wintabAccess.getDeviceName(),
+        wintabAccess.getPacketRate(),
+        Integer.toHexString(wintabAccess.getDeviceHardwareCapabilities()),
+        wintabAccess.getSystemCursorEnabled());
 
     for (int i = PLevel.Type.VALUES.size(); --i >= 0; ) {
       PLevel.Type levelType = PLevel.Type.VALUES.get(i);
-      levelRanges[levelType.ordinal()] = wintabAccess.getLevelRange(levelType);
+      Range range = wintabAccess.getLevelRange(levelType);
+      levelRanges[levelType.ordinal()] = range;
+      L.info("WintabProvider level range: {} = {}", levelType, range);
     }
 
     thread = new MyThread();
     thread.start();
+    L.debug("Wintab thread started: {}", thread.getName());
     L.trace("wintabAccess={}", wintabAccess);
     L.debug("end");
   }
@@ -234,9 +250,23 @@ public class WintabProvider extends AbstractPenProvider {
   private WintabDevice getDevice(int cursor) {
     WintabDevice wintabDevice = cursorToDevice.get(cursor);
     if (wintabDevice == null) {
+      L.info(
+          "discovered new Wintab cursor: index={}, name='{}', cursorType={}, rawType={}, physicalId={}, buttonCount={}, capabilityMask=0x{}",
+          cursor,
+          WintabAccess.getCursorName(cursor),
+          WintabAccess.getCursorType(cursor),
+          WintabAccess.getRawCursorType(cursor),
+          WintabAccess.getPhysicalId(cursor),
+          WintabAccess.getButtonCount(cursor),
+          Integer.toHexString(WintabAccess.getCapabilityMask(cursor)));
+      String[] buttonNames = WintabAccess.getButtonNames(cursor);
+      if (buttonNames != null && buttonNames.length > 0)
+        L.debug("cursor {} button names: {}", cursor, Arrays.toString(buttonNames));
       cursorToDevice.put(cursor, wintabDevice = new WintabDevice(this, cursor));
       devices.clear();
       devices.addAll(cursorToDevice.values());
+      L.info(
+          "Wintab device added (total devices={}): {}", cursorToDevice.size(), wintabDevice.getName());
       getPenManager().firePenDeviceAdded(getConstructor(), wintabDevice);
     }
     return wintabDevice;

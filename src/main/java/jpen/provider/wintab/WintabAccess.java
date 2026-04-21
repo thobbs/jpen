@@ -24,9 +24,12 @@ import java.util.Collections;
 import java.util.List;
 import jpen.PLevel;
 import jpen.internal.Range;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** This class is the low-level wrapper around the native C code from the dll. */
 final class WintabAccess {
+  private static final Logger L = LoggerFactory.getLogger(WintabAccess.class);
   private static final Object LOCK = new Object();
 
   /** This must correspond to Access.h: E_csrTypes enumeration. */
@@ -43,8 +46,19 @@ final class WintabAccess {
 
   public WintabAccess() throws Exception {
     synchronized (LOCK) {
+      L.info("creating WintabAccess (nativeBuild={})", getNativeBuild());
       this.cellIndex = create();
-      if (cellIndex == -1) throw new Exception(getError());
+      if (cellIndex == -1) {
+        String error = getError();
+        L.error("WintabAccess native create() failed: {}", error);
+        throw new Exception(error);
+      }
+      L.info(
+          "WintabAccess created: cellIndex={}, deviceName='{}', packetRate={}, hardwareCapabilities=0x{}",
+          cellIndex,
+          getDeviceName(cellIndex),
+          getPacketRate(cellIndex),
+          Integer.toHexString(getDeviceHardwareCapabilities(cellIndex)));
     }
   }
 

@@ -51,8 +51,16 @@ class WintabDevice extends AbstractPenDevice {
     L.debug("start");
     this.wintabProvider = wintabProvider;
     this.cursor = cursor;
-    setKindTypeNumber(getDefaultKindTypeNumber());
+    int kindTypeNumber = getDefaultKindTypeNumber();
+    setKindTypeNumber(kindTypeNumber);
     setEnabled(true);
+    L.info(
+        "WintabDevice initialized: cursor={}, name='{}', cursorType={}, kindType={}, physicalId='{}'",
+        cursor,
+        getName(),
+        WintabAccess.getCursorType(cursor),
+        PKind.Type.VALUES.get(kindTypeNumber),
+        evalPhysicalId());
     L.debug("end");
   }
 

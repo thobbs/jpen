@@ -153,7 +153,7 @@ class PenCanvas extends JComponent {
   private synchronized void paintStroke(PLevelEvent ev) {
     float pressure = ev.pen.getLevelValue(PLevel.Type.PRESSURE);
     if (pressure == 0) {
-      L.debug("no pressure");
+      L.trace("no pressure");
       return;
     }
 
@@ -180,7 +180,7 @@ class PenCanvas extends JComponent {
     stroke.y = cursorCenter.y - r;
     stroke.width = stroke.height = 2 * r;
     g.fill(stroke);
-    L.debug("stoke painted");
+    L.trace("stoke painted");
     addCursorAreaToDirtyArea();
   }
 
