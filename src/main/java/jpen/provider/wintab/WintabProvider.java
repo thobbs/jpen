@@ -139,8 +139,6 @@ public class WintabProvider extends AbstractPenProvider {
     private long awtEventTime;
     private boolean waitingAwtEvent;
     private int inputEventModifiers;
-    private boolean awtSleep;
-    private final Object awtLock = new Object();
 
     {
       setName("jpen-WintabProvider");

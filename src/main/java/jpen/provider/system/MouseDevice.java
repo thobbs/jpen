@@ -35,7 +35,6 @@ import jpen.provider.AbstractPenDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("deprecation")
 public final class MouseDevice extends AbstractPenDevice {
   private static final Logger L = LoggerFactory.getLogger(MouseDevice.class);
 
@@ -53,6 +52,7 @@ public final class MouseDevice extends AbstractPenDevice {
           mouseButtonChanged(ev, false);
         }
       };
+
   private final MouseMotionListener mouseMotionL =
       new MouseMotionListener() {
         // @Override
@@ -65,6 +65,7 @@ public final class MouseDevice extends AbstractPenDevice {
           scheduleMove(ev);
         }
       };
+
   private final MouseWheelListener mouseWheelL =
       new MouseWheelListener() {
         // @Override
@@ -76,7 +77,7 @@ public final class MouseDevice extends AbstractPenDevice {
             type = PScroll.Type.UP;
             value = -value;
           }
-          if (ev.getScrollType() == ev.WHEEL_UNIT_SCROLL
+          if (ev.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL
               && ev.getScrollAmount()
                   > 0) // > 0 : is because windows bug workaround, sometimes it is 0.
           value *= ev.getScrollAmount();
@@ -85,6 +86,7 @@ public final class MouseDevice extends AbstractPenDevice {
                   MouseDevice.this, ev.getWhen(), new PScroll(type.ordinal(), value));
         }
       };
+
   private final SystemProvider systemProvider;
   private WeakReference<Component> activeComponentRef;
 
@@ -94,7 +96,6 @@ public final class MouseDevice extends AbstractPenDevice {
     setEnabled(true);
   }
 
-  // @Override
   public String getName() {
     return "Mouse";
   }

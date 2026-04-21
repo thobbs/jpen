@@ -20,8 +20,6 @@ package jpen.provider.wintab;
 
 import static java.lang.Math.*;
 
-import java.awt.Dimension;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import jpen.PKind;
@@ -30,7 +28,6 @@ import jpen.provider.AbstractPenDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings("deprecation")
 class WintabDevice extends AbstractPenDevice {
   private static final Logger L = LoggerFactory.getLogger(WintabDevice.class);
 
@@ -41,9 +38,6 @@ class WintabDevice extends AbstractPenDevice {
 
   final WintabProvider wintabProvider;
   public final int cursor;
-  private int lastButtonsValues;
-  private final Point2D.Float componentLocation = new Point2D.Float();
-  private final Dimension componentSize = new Dimension();
   private boolean useFractionalMovement = true;
 
   WintabDevice(WintabProvider wintabProvider, int cursor) {

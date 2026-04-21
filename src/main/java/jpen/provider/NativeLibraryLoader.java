@@ -18,8 +18,6 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 }] */
 package jpen.provider;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -120,74 +118,40 @@ public class NativeLibraryLoader {
   }
 
   private static String getJavaVMDataModel() {
-    String dataModel =
-        AccessController.doPrivileged(
-            new PrivilegedAction<String>() {
-              // @Override
-              public String run() {
-                return System.getProperty("sun.arch.data.model");
-              }
-            });
+    String dataModel = System.getProperty("sun.arch.data.model");
     return dataModel == null ? "32" : dataModel;
   }
 
   private String getPreferredArchitecture() {
-    return AccessController.doPrivileged(
-        new PrivilegedAction<String>() {
-          // @Override
-          public String run() {
-            String override = System.getProperty("jpen.provider.architecture");
-            if (override != null) return override;
-            Preferences preferences = Preferences.userNodeForPackage(NativeLibraryLoader.class);
-            return preferences.get(PREFERENCE_KEY$ARCHITECTURE, null);
-          }
-        });
+    String override = System.getProperty("jpen.provider.architecture");
+    if (override != null) return override;
+    Preferences preferences = Preferences.userNodeForPackage(NativeLibraryLoader.class);
+    return preferences.get(PREFERENCE_KEY$ARCHITECTURE, null);
   }
 
   private static void setPreferredArchitecture(final String architecture) {
-    AccessController.doPrivileged(
-        new PrivilegedAction<Object>() {
-          // @Override
-          public String run() {
-            Preferences preferences = Preferences.userNodeForPackage(NativeLibraryLoader.class);
-            if (architecture == null) {
-              preferences.remove(PREFERENCE_KEY$ARCHITECTURE);
-            } else {
-              preferences.put(PREFERENCE_KEY$ARCHITECTURE, architecture);
-              L.info("preferred architecture set");
-            }
-            return null;
-          }
-        });
+    Preferences preferences = Preferences.userNodeForPackage(NativeLibraryLoader.class);
+    if (architecture == null) {
+      preferences.remove(PREFERENCE_KEY$ARCHITECTURE);
+    } else {
+      preferences.put(PREFERENCE_KEY$ARCHITECTURE, architecture);
+      L.info("preferred architecture set");
+    }
   }
 
   public static final void loadLibrary(final String architecture, final int nativeVersion) {
-    AccessController.doPrivileged(
-        new PrivilegedAction<Object>() {
-          final String jniLibName = getJniLibName(architecture, nativeVersion);
-
-          public Object run() {
-            try {
-              L.info(
-                  "loading JPen {} JNI library: {} ...",
-                  PenManager.getJPenFullVersion(),
-                  jniLibName);
-              System.loadLibrary(jniLibName);
-              L.info("{} loaded", jniLibName);
-              return null;
-            } catch (RuntimeException ex) {
-              logOnFail(ex);
-              throw ex;
-            } catch (Error ex) {
-              logOnFail(ex);
-              throw ex;
-            }
-          }
-
-          private void logOnFail(Throwable ex) {
-            L.warn("{} couldn't be loaded", jniLibName, ex);
-          }
-        });
+    final String jniLibName = getJniLibName(architecture, nativeVersion);
+    try {
+      L.info(
+          "loading JPen {} JNI library: {} ...",
+          PenManager.getJPenFullVersion(),
+          jniLibName);
+      System.loadLibrary(jniLibName);
+      L.info("{} loaded", jniLibName);
+    } catch (Throwable ex) {
+      L.error("{} couldn't be loaded", jniLibName, ex);
+      throw ex;
+    }
   }
 
   private static final String getJniLibName(String architecture, int nativeVersion) {

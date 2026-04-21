@@ -19,9 +19,6 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 package jpen.internal;
 
 import java.lang.reflect.Field;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 
 public final class AccessibleField {
   private final Class clazz;
@@ -37,22 +34,15 @@ public final class AccessibleField {
     if (field == null)
       try {
         field = getAccessibleField(clazz, fieldName);
-      } catch (PrivilegedActionException ex) {
+      } catch (NoSuchFieldException ex) {
         throw new AssertionError(ex);
       }
     return field;
   }
 
-  private static Field getAccessibleField(final Class clazz, final String fieldName)
-      throws PrivilegedActionException {
-    return AccessController.doPrivileged(
-        new PrivilegedExceptionAction<Field>() {
-          // @Override
-          public Field run() throws Exception {
-            Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            return field;
-          }
-        });
+  private static Field getAccessibleField(final Class clazz, final String fieldName) throws NoSuchFieldException {
+    Field field = clazz.getDeclaredField(fieldName);
+    field.setAccessible(true);
+    return field;
   }
 }

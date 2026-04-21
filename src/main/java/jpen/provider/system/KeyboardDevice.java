@@ -24,17 +24,12 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import jpen.PButton;
 import jpen.PKind;
 import jpen.PenProvider;
 import jpen.provider.AbstractPenDevice;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 final class KeyboardDevice extends AbstractPenDevice {
-  private static final Logger L = LoggerFactory.getLogger(KeyboardDevice.class);
 
   KeyboardDevice(PenProvider penProvider) {
     super(penProvider);
@@ -51,17 +46,9 @@ final class KeyboardDevice extends AbstractPenDevice {
   public void setEnabled(boolean enabled) {
     super.setEnabled(enabled);
     if (enabled) {
-      AccessController.doPrivileged(
-          new PrivilegedAction<Object>() {
-            // @Override
-            public Object run() {
-              Toolkit.getDefaultToolkit()
-                  .addAWTEventListener(
-                      awtListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
-              return null;
-            }
-          });
-
+      Toolkit.getDefaultToolkit()
+          .addAWTEventListener(
+              awtListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
     } else {
       Toolkit.getDefaultToolkit().removeAWTEventListener(awtListener);
     }
@@ -128,8 +115,9 @@ final class KeyboardDevice extends AbstractPenDevice {
         return InputEvent.SHIFT_DOWN_MASK;
       case ALT:
         return InputEvent.ALT_DOWN_MASK;
+      default:
+        return 0;
     }
-    return 0;
   }
 
   void setPaused(boolean paused) {
