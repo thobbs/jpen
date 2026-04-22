@@ -33,12 +33,16 @@ import jpen.internal.ObjectUtils;
 import jpen.owner.PenOwner;
 import jpen.owner.awt.AwtPenOwner;
 import jpen.provider.system.MouseDevice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Create a {@code PenManager} to start using JPen, {@link jpen.owner.multiAwt.AwtPenToolkit}
  * contains one ready to be used.
  */
 public final class PenManager {
+
+  private static final Logger L = LoggerFactory.getLogger(PenManager.class);
 
   public static String getJPenFullVersion() {
     return BuildInfo.getFullVersion();
@@ -175,6 +179,7 @@ public final class PenManager {
    * @return The {@link PenProvider} added or null if it couldn't be constructed.
    */
   private PenProvider addProvider(PenProvider.Constructor providerConstructor) {
+    L.info("Adding PenProvider: {}", providerConstructor);
     if (providerConstructor.constructable(this)) {
       if (!this.providerConstructors.add(providerConstructor))
         throw new IllegalArgumentException("constructor already added");
@@ -193,6 +198,7 @@ public final class PenManager {
   }
 
   public void addListener(PenManagerListener l) {
+    L.info("Adding PenManagerListener: {}", l);
     synchronized (listeners) {
       listeners.add(l);
       listenersArray = null;
@@ -200,6 +206,7 @@ public final class PenManager {
   }
 
   public void removeListener(PenManagerListener l) {
+    L.info("Removing PenManagerListener: {}", l);
     synchronized (listeners) {
       listeners.remove(l);
       listenersArray = null;
@@ -215,6 +222,7 @@ public final class PenManager {
   }
 
   public void firePenDeviceAdded(PenProvider.Constructor constructor, PenDevice device) {
+    L.info("Adding PenDevice: {} from provider {}", device, constructor);
     byte nextDeviceId = getNextDeviceId();
     device.penManagerSetId(nextDeviceId);
     if (deviceIdToDevice.put(nextDeviceId, device) != null) throw new AssertionError();
@@ -232,6 +240,7 @@ public final class PenManager {
   }
 
   public void firePenDeviceRemoved(PenProvider.Constructor constructor, PenDevice device) {
+    L.info("Removing PenDevice: {} from provider {}", device, constructor);
     if (deviceIdToDevice.remove(device.getId()) == null)
       throw new IllegalArgumentException("device not found");
     for (PenManagerListener l : getListenersArray()) l.penDeviceRemoved(constructor, device);
