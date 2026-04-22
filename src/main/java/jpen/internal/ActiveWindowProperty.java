@@ -89,7 +89,6 @@ public final class ActiveWindowProperty implements PropertyChangeListener, Runna
           });
   private ScheduledFuture nullWindowTask;
 
-  // @Override
   public void run() {
     try {
       SwingUtilities.invokeAndWait(nullWindowRunnable);

@@ -33,6 +33,8 @@ import javax.swing.WindowConstants;
 import jpen.PenManager;
 import jpen.demo.inspect.Inspector;
 import jpen.owner.multiAwt.AwtPenToolkit;
+import jpen.provider.wintab.SimpleWintabConsumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,6 +92,8 @@ public class JPenDemoControl {
     setupLookAndFeel();
     JPenDemoControl jpenDemoControl = new JPenDemoControl();
     startInspector(AwtPenToolkit.getPenManager());
+    SimpleWintabConsumer simpleWintabConsumer = new SimpleWintabConsumer();
+    simpleWintabConsumer.startLogger();
     jpenDemoControl.showFrame();
   }
 

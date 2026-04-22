@@ -232,13 +232,13 @@ public class WintabProvider extends AbstractPenProvider {
   }
 
   private void processQueuedEvents() {
-    L.trace("start");
+    L.trace("Processing queued events");
     while (wintabAccess.nextPacket() && !paused) {
       WintabDevice device = getDevice(wintabAccess.getCursor());
       L.trace("device: {}", device.getName());
       device.scheduleEvents();
     }
-    L.trace("end");
+    L.trace("Done processing queued events");
   }
 
   private WintabDevice getDevice(int cursor) {

@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** This class is the low-level wrapper around the native C code from the dll. */
-final class WintabAccess {
+public final class WintabAccess {
   private static final Logger L = LoggerFactory.getLogger(WintabAccess.class);
   private static final Object LOCK = new Object();
 
