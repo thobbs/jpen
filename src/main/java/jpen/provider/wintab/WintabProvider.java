@@ -235,7 +235,7 @@ public class WintabProvider extends AbstractPenProvider {
     L.trace("Processing queued events");
     while (wintabAccess.nextPacket() && !paused) {
       WintabDevice device = getDevice(wintabAccess.getCursor());
-      L.trace("device: {}", device.getName());
+      L.trace("Processing queued events for device: {}", device.getName());
       device.scheduleEvents();
     }
     L.trace("Done processing queued events");
@@ -266,22 +266,20 @@ public class WintabProvider extends AbstractPenProvider {
     return wintabDevice;
   }
 
-  // @Override
   public void penManagerPaused(boolean paused) {
     setPaused(paused);
   }
 
   synchronized void setPaused(boolean paused) {
-    L.trace("executing setPaused()");
+    L.debug("Executing setPaused({}), previous value was {}", paused, this.paused);
     if (paused == this.paused) return;
     this.paused = paused;
     if (!paused) {
-      L.debug("false paused value");
       screenBounds.reset();
       synchronized (thread) {
-        L.debug("going to notify all...");
+        L.debug("Going to notify all about unpausing...");
         thread.notifyAll();
-        L.debug("done notifying ");
+        L.debug("Done notifying all about unpausing");
       }
       wintabAccess.enable(true);
     }
@@ -298,6 +296,7 @@ public class WintabProvider extends AbstractPenProvider {
    *     devices cause movement on the system mouse pointer, this is the default value.
    */
   public synchronized void setSystemCursorEnabled(boolean systemCursorEnabled) {
+    L.debug("setSystemCursorEnabled({}), previous value was {}", systemCursorEnabled, this.systemCursorEnabled);
     if (this.systemCursorEnabled == systemCursorEnabled) return;
     this.systemCursorEnabled = systemCursorEnabled;
     wintabAccess.setSystemCursorEnabled(systemCursorEnabled);

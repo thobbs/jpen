@@ -165,6 +165,7 @@ public class Pen extends PenState {
     }
 
     void stop(boolean join) {
+      L.debug("Stopping Pen thread, join={}", join);
       stopRunning = true;
       processNewEvents(); // because it may be waiting for new events.
       if (join)
@@ -185,6 +186,7 @@ public class Pen extends PenState {
   }
 
   void processNewEvents() {
+    L.debug("Notifying new events");
     thread.waiter.notifyNewEvent();
   }
 
@@ -258,6 +260,7 @@ public class Pen extends PenState {
     synchronized (listeners) {
       listeners.add(l);
       listenersArray = null;
+      L.debug("Added PenListener: {}", l);
     }
   }
 
@@ -270,6 +273,7 @@ public class Pen extends PenState {
     synchronized (listeners) {
       listeners.remove(l);
       listenersArray = null;
+      L.debug("Removed PenListener: {}", l);
     }
   }
 

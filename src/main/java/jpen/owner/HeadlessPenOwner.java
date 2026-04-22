@@ -1,6 +1,5 @@
 /* [{
-Copyright 2009 Marcello Bastea-Forte <marcello at cellosoft.com>
-Copyright 2009 Nicolas Carranza <nicarran at gmail.com>
+Copyright 2026 JPen Team
 
 This file is part of jpen.
 
@@ -20,66 +19,45 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
 package jpen.owner;
 
 import java.awt.Point;
-import java.awt.Window;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Collection;
 import jpen.PenEvent;
 import jpen.PenProvider;
-import jpen.internal.ActiveWindowProperty;
 import jpen.provider.osx.CocoaProvider;
 import jpen.provider.wintab.WintabProvider;
 import jpen.provider.xinput.XinputProvider;
 
 /**
- * Defines a {@link PenClip} for all the screen. Its {@link jpen.PenManager} is unpaused when the
- * current application has an active window.
+ * A {@link PenOwner} for headless / non-GUI processes. Unlike {@link ScreenPenOwner}, it does not
+ * tie the {@link jpen.PenManager}'s paused state to AWT active-window focus — it unpauses the
+ * manager as soon as it is installed and leaves it running, so events flow without any AWT Window
+ * being present. Its {@link PenClip} covers all screen coordinates.
  */
-public class ScreenPenOwner implements PenOwner {
-
-  private static ScreenPenOwner instance;
-
-  public static synchronized ScreenPenOwner getInstance() {
-    return instance == null ? instance = new ScreenPenOwner() : instance;
-  }
-
-  private ScreenPenOwner() {}
+public class HeadlessPenOwner implements PenOwner {
 
   public Collection<PenProvider.Constructor> getPenProviderConstructors() {
     return Arrays.asList(
         new PenProvider.Constructor[] {
-          // new SystemProvider.Constructor(), //Does not work because it needs a java.awt.Component
-          // to register the MouseListener
           new XinputProvider.Constructor(),
           new WintabProvider.Constructor(),
           new CocoaProvider.Constructor()
         });
   }
 
-  public void setPenManagerHandle(final PenManagerHandle penManagerHandle) {
-    ActiveWindowProperty.Listener activeWindowPL =
-        new ActiveWindowProperty.Listener() {
-          public void activeWindowChanged(Window activeWindow) {
-            synchronized (penManagerHandle.getPenSchedulerLock()) {
-              penManagerHandle.setPenManagerPaused(activeWindow == null);
-            }
-          }
-        };
-    ActiveWindowProperty activeWindowP =
-        new ActiveWindowProperty(
-            activeWindowPL); // -> registers itself with the current KeyboardFocusManager
-    activeWindowPL.activeWindowChanged(activeWindowP.get());
+  public void setPenManagerHandle(PenManagerHandle penManagerHandle) {
+    synchronized (penManagerHandle.getPenSchedulerLock()) {
+      penManagerHandle.setPenManagerPaused(false);
+    }
   }
 
   private final PenClip penClip =
       new PenClip() {
         public void evalLocationOnScreen(Point locationOnScreen) {
-          // The location of this PenClip is always on (0, 0) screen coordinates.
           locationOnScreen.x = locationOnScreen.y = 0;
         }
 
         public boolean contains(Point2D.Float point) {
-          // This PenClip covers all the screen.
           return true;
         }
       };

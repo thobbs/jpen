@@ -200,6 +200,21 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
             <argument>jpen.demo.JPenDemoControl</argument>
           </arguments>
         </configuration>
+        <executions>
+          <execution>
+            <id>no-swing</id>
+            <configuration>
+              <executable>java</executable>
+              <arguments>
+                <argument>--enable-native-access=ALL-UNNAMED</argument>
+                <argument>-Djava.library.path=${project.build.directory}</argument>
+                <argument>-classpath</argument>
+                <classpath/>
+                <argument>jpen.demo.NoSwingDemo</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -247,6 +262,38 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
     <jpen.provider.osx.nativeVersion>4</jpen.provider.osx.nativeVersion>
   </properties>
   <profiles>
+    <profile>
+      <!-- Shortcut: `mvn -Pno-swing` builds and runs jpen.demo.NoSwingDemo. -->
+      <id>no-swing</id>
+      <build>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>no-swing-run</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>java</executable>
+                  <arguments>
+                    <argument>--enable-native-access=ALL-UNNAMED</argument>
+                    <argument>-Djava.library.path=${project.build.directory}</argument>
+                    <argument>-classpath</argument>
+                    <classpath/>
+                    <argument>jpen.demo.NoSwingDemo</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>amd64</id>
       <activation>

@@ -96,6 +96,13 @@ public final class WintabAccess {
   public static final int PK_ORIENTATION = 0x1000; /* orientation info: tilts */
   public static final int PK_ROTATION = 0x2000; /* rotation info; 1.1 */
 
+  /* packet status bits (from wintab.h). When TPS_PROXIMITY is set in pkStatus, the cursor is out of the context. */
+  public static final int TPS_PROXIMITY = 0x0001;
+  public static final int TPS_QUEUE_ERR = 0x0002;
+  public static final int TPS_MARGIN = 0x0004;
+  public static final int TPS_GRAB = 0x0008;
+  public static final int TPS_INVERT = 0x0010;
+
   /* unit specifiers (from wintab.h) */
   public static final int TU_NONE = 0;
   public static final int TU_INCHES = 1;
@@ -140,6 +147,7 @@ public final class WintabAccess {
   private static native int getStatus(int cellIndex);
 
   public void setEnabled(boolean enabled) {
+    L.debug("In WintabAccess.setEnabled({})", enabled);
     synchronized (LOCK) {
       setEnabled(cellIndex, enabled);
     }
@@ -148,6 +156,12 @@ public final class WintabAccess {
   private static native void setEnabled(int cellIndex, boolean enabled);
 
   public void enable(boolean enable) {
+    if (enable) {
+      L.debug("Enabling WintabAccess");
+    } else {
+      L.debug("Disabling WintabAccess");
+    }
+
     synchronized (LOCK) {
       enable(cellIndex, enable);
     }
@@ -250,7 +264,10 @@ public final class WintabAccess {
   @Override
   protected void finalize() throws Throwable {
     synchronized (LOCK) {
-      if (cellIndex != -1) destroy(cellIndex);
+      if (cellIndex != -1) {
+        L.info("Finalizing WintabAccess with cellIndex={}", cellIndex);
+        destroy(cellIndex);
+      }
     }
     super.finalize();
   }

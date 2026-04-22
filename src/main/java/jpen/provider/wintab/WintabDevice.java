@@ -42,7 +42,7 @@ class WintabDevice extends AbstractPenDevice {
 
   WintabDevice(WintabProvider wintabProvider, int cursor) {
     super(wintabProvider);
-    L.debug("start");
+    L.debug("Constructing new WintabDevice for cursor {} of provider {}", cursor, wintabProvider);
     this.wintabProvider = wintabProvider;
     this.cursor = cursor;
     int kindTypeNumber = getDefaultKindTypeNumber();
@@ -55,7 +55,7 @@ class WintabDevice extends AbstractPenDevice {
         WintabAccess.getCursorType(cursor),
         PKind.Type.VALUES.get(kindTypeNumber),
         evalPhysicalId());
-    L.debug("end");
+    L.debug("Done constructing new WintabDevice");
   }
 
   @Override
@@ -103,12 +103,38 @@ class WintabDevice extends AbstractPenDevice {
 
   void scheduleEvents() {
     if (!getEnabled()) {
-      L.debug("disabled");
+      L.debug("Currently disabled, not going to schedule events");
       return;
     }
-    L.trace("{}", wintabProvider.wintabAccess);
+    L.trace("Going to schedule level events for WintabAccess: {}", wintabProvider.wintabAccess);
+    logProximityTransition();
     scheduleLevelEvent();
     // scheduleButtonEvents(); nicarran:  TODO use this to support extra buttons?
+  }
+
+  // Assume we are in proximity when the device first appears, since WintabDevice is only
+  // constructed in response to an incoming packet for this cursor.
+  private boolean inProximity = true;
+
+  private void logProximityTransition() {
+    int packetStatus = wintabProvider.wintabAccess.getStatus();
+    boolean outOfProximity = (packetStatus & WintabAccess.TPS_PROXIMITY) != 0;
+    boolean nowInProximity = !outOfProximity;
+    if (inProximity && !nowInProximity) {
+      L.info(
+          "Wintab device left proximity: cursor={}, name='{}', packetStatus=0x{}, time={}",
+          cursor,
+          getName(),
+          Integer.toHexString(packetStatus),
+          wintabProvider.wintabAccess.getTime());
+    } else if (!inProximity && nowInProximity) {
+      L.info(
+          "Wintab device entered proximity: cursor={}, name='{}', time={}",
+          cursor,
+          getName(),
+          wintabProvider.wintabAccess.getTime());
+    }
+    inProximity = nowInProximity;
   }
 
   /* nicarran:  TODO use this to support extra buttons?

@@ -163,7 +163,7 @@ final class PenScheduler {
         && kindTypeNumber != lastScheduledState.getKind().typeNumber
         && !lastScheduledState.hasPressedButtons()) {
       PKind newKind = PKind.valueOf(kindTypeNumber);
-      L.debug("changing kind to:{}", newKind);
+      L.debug("changing kind to: {}", newKind);
       L.debug("scheduledLevels: {}", scheduledLevels);
       L.debug("device: {}", device);
       lastScheduledState.setKind(newKind);
@@ -274,10 +274,13 @@ final class PenScheduler {
 
   synchronized void scheduleButtonEvent(PenDevice device, long deviceTime, PButton button) {
     if (lastScheduledState.setButtonValue(button.typeNumber, button.value)) {
-      L.debug("scheduling button event: {}", button);
+      L.debug("scheduling button event for button: {}", button);
       PButtonEvent buttonEvent = new PButtonEvent(device, deviceTime, button);
       schedule(buttonEvent);
-      if (pen.levelEmulator != null) pen.levelEmulator.scheduleEmulatedEvent(buttonEvent);
+      if (pen.levelEmulator != null) {
+        L.debug("scheduling emulated event for button: {}", button);
+        pen.levelEmulator.scheduleEmulatedEvent(buttonEvent);
+      }
     }
   }
 

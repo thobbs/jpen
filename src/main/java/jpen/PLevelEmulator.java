@@ -106,7 +106,7 @@ public final class PLevelEmulator {
   }
 
   public ButtonTriggerPolicy getButtonTriggerPolicy(PKind.Type kindType, PButton.Type buttonType) {
-    return getButtonTriggerPolicy(kindType, buttonType);
+    return getButtonTriggerPolicy(kindType.ordinal(), buttonType.ordinal());
   }
 
   public synchronized ButtonTriggerPolicy getButtonTriggerPolicy(int kindType, int buttonType) {
@@ -145,7 +145,7 @@ public final class PLevelEmulator {
     PenState lastScheduledState = pen.lastScheduledState;
     ButtonTriggerPolicy triggerPolicy =
         getButtonTriggerPolicy(lastScheduledState.getKind().typeNumber, buttonType);
-    L.debug("triggerPolicy: {}, buttonType: {}", triggerPolicy, buttonType);
+    L.debug("emulateOnPress() running for buttonType {}, triggerPolicy: {}", buttonType, triggerPolicy);
     if (triggerPolicy != null) {
       setActiveButtonTriggerPolicy(buttonType, triggerPolicy);
       if (lastScheduledState.getLevelValue(triggerPolicy.levelType) == triggerPolicy.onPressValue)
@@ -169,7 +169,7 @@ public final class PLevelEmulator {
   private PLevel emulateOnRelease(int buttonType) {
     ensureListSize(activeButtonTriggerPolicies, buttonType);
     ButtonTriggerPolicy triggerPolicy = getActiveButtonTriggerPolicy(buttonType);
-    L.debug("triggerPolicy: {}, buttonType: {}", triggerPolicy, buttonType);
+    L.debug("emulateOnRelease() running for buttonType {}, triggerPolicy: {}", buttonType, triggerPolicy);
     if (triggerPolicy != null) {
       setActiveButtonTriggerPolicy(buttonType, null);
       PLevel pLevel = new PLevel(triggerPolicy.levelType, triggerPolicy.onReleaseValue);
