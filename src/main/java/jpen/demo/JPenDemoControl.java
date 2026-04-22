@@ -33,7 +33,6 @@ import javax.swing.WindowConstants;
 import jpen.PenManager;
 import jpen.demo.inspect.Inspector;
 import jpen.owner.multiAwt.AwtPenToolkit;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

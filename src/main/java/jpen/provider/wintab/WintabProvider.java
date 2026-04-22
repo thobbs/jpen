@@ -260,7 +260,9 @@ public class WintabProvider extends AbstractPenProvider {
       devices.clear();
       devices.addAll(cursorToDevice.values());
       L.info(
-          "Wintab device added (total devices={}): {}", cursorToDevice.size(), wintabDevice.getName());
+          "Wintab device added (total devices={}): {}",
+          cursorToDevice.size(),
+          wintabDevice.getName());
       getPenManager().firePenDeviceAdded(getConstructor(), wintabDevice);
     }
     return wintabDevice;
@@ -296,7 +298,10 @@ public class WintabProvider extends AbstractPenProvider {
    *     devices cause movement on the system mouse pointer, this is the default value.
    */
   public synchronized void setSystemCursorEnabled(boolean systemCursorEnabled) {
-    L.debug("setSystemCursorEnabled({}), previous value was {}", systemCursorEnabled, this.systemCursorEnabled);
+    L.debug(
+        "setSystemCursorEnabled({}), previous value was {}",
+        systemCursorEnabled,
+        this.systemCursorEnabled);
     if (this.systemCursorEnabled == systemCursorEnabled) return;
     this.systemCursorEnabled = systemCursorEnabled;
     wintabAccess.setSystemCursorEnabled(systemCursorEnabled);

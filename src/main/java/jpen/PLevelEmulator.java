@@ -145,7 +145,8 @@ public final class PLevelEmulator {
     PenState lastScheduledState = pen.lastScheduledState;
     ButtonTriggerPolicy triggerPolicy =
         getButtonTriggerPolicy(lastScheduledState.getKind().typeNumber, buttonType);
-    L.debug("emulateOnPress() running for buttonType {}, triggerPolicy: {}", buttonType, triggerPolicy);
+    L.debug(
+        "emulateOnPress() running for buttonType {}, triggerPolicy: {}", buttonType, triggerPolicy);
     if (triggerPolicy != null) {
       setActiveButtonTriggerPolicy(buttonType, triggerPolicy);
       if (lastScheduledState.getLevelValue(triggerPolicy.levelType) == triggerPolicy.onPressValue)
@@ -169,7 +170,10 @@ public final class PLevelEmulator {
   private PLevel emulateOnRelease(int buttonType) {
     ensureListSize(activeButtonTriggerPolicies, buttonType);
     ButtonTriggerPolicy triggerPolicy = getActiveButtonTriggerPolicy(buttonType);
-    L.debug("emulateOnRelease() running for buttonType {}, triggerPolicy: {}", buttonType, triggerPolicy);
+    L.debug(
+        "emulateOnRelease() running for buttonType {}, triggerPolicy: {}",
+        buttonType,
+        triggerPolicy);
     if (triggerPolicy != null) {
       setActiveButtonTriggerPolicy(buttonType, null);
       PLevel pLevel = new PLevel(triggerPolicy.levelType, triggerPolicy.onReleaseValue);

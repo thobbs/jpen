@@ -40,7 +40,8 @@ public final class AccessibleField {
     return field;
   }
 
-  private static Field getAccessibleField(final Class clazz, final String fieldName) throws NoSuchFieldException {
+  private static Field getAccessibleField(final Class clazz, final String fieldName)
+      throws NoSuchFieldException {
     Field field = clazz.getDeclaredField(fieldName);
     field.setAccessible(true);
     return field;

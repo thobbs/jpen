@@ -47,8 +47,7 @@ final class KeyboardDevice extends AbstractPenDevice {
     super.setEnabled(enabled);
     if (enabled) {
       Toolkit.getDefaultToolkit()
-          .addAWTEventListener(
-              awtListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
+          .addAWTEventListener(awtListener, AWTEvent.KEY_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK);
     } else {
       Toolkit.getDefaultToolkit().removeAWTEventListener(awtListener);
     }

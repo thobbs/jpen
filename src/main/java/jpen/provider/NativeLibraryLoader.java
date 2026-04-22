@@ -142,10 +142,7 @@ public class NativeLibraryLoader {
   public static final void loadLibrary(final String architecture, final int nativeVersion) {
     final String jniLibName = getJniLibName(architecture, nativeVersion);
     try {
-      L.info(
-          "loading JPen {} JNI library: {} ...",
-          PenManager.getJPenFullVersion(),
-          jniLibName);
+      L.info("loading JPen {} JNI library: {} ...", PenManager.getJPenFullVersion(), jniLibName);
       System.loadLibrary(jniLibName);
       L.info("{} loaded", jniLibName);
     } catch (Throwable ex) {
