@@ -3,7 +3,14 @@
 
 The [original SourceForge documentation page](http://jpen.sf.net) is a decent starting point to learn about JPen.
 
-This fork is attempting to modernize the build system and clean up the code a bit to make it easier to build and use.
+This fork was created in 2026, as the original project did not appear to be actively maintained. This fork introduced several changes:
+ - Modernize the build system, making it less brittle and more portable
+ - Switch to a modern logging setup (SLF4J + Logback)
+ - Code style cleanup and enforcement, via Spotless
+ - Avoid using deprecated JVM features, like the Security Manager
+ - Improve logging to increase visibility into what's happening (or not happening)
+
+This fork has primarily been tested on Windows 11 with a Wacom Cintiq Pro 24. It has been confirmed to build and run in WSL as well as Arch Linux. Testing for OSX is currently planned, but has not been completed.
 
 ## Building
 
@@ -29,8 +36,6 @@ Dependencies:
  - gcc/g++ ("scoop install gcc" works for both)
  - maven
  - Java SDK (last development was against Java 25)
-
-I was able to get this to run on Windows 11 as of April, 2026. I'm using a Wacom Cintiq Pro 24, and the Wacom drivers are installed. Pressure sensitivity and tilt detection work with the demo.
 
 ### OSX
 
