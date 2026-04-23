@@ -25,7 +25,6 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
   <name>JPen</name>
   <version>2.2.1</version>
   <description>Java Pen Tablet Access Library</description>
-  <author>JPen Team</author>
   <url>https://github.com/thobbs/jpen</url>
   <scm>
     <url>https://github.com/thobbs/jpen</url>
