@@ -29,6 +29,20 @@ along with jpen.  If not, see <http://www.gnu.org/licenses/>.
   <scm>
     <url>https://github.com/thobbs/jpen</url>
   </scm>
+  <developers>
+    <developer>
+      <name>Nicolas Carranza</name>
+      <email>nicarran@gmail.com</email>
+      <organization>JPen</organization>
+      <organizationUrl>https://github.io/nicarran/jpen</organizationUrl>
+    </developer>
+    <developer>
+      <name>Tyler Hobbs</name>
+      <email>tyler@tylerxhobbs.com</email>
+      <organization>None</organization>
+      <organizationUrl>https://tylerxhobbs.com</organizationUrl>
+    </developer>
+  </developers>
   <licenses>
     <license>
       <name>The GNU Lesser General Public License</name>

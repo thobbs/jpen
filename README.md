@@ -12,6 +12,10 @@ This fork was created in 2026, as the original project did not appear to be acti
 
 This fork has primarily been tested on Windows 11 with a Wacom Cintiq Pro 24. It has been confirmed to build and run in WSL as well as Arch Linux. Testing for OSX is currently planned, but has not been completed.
 
+This has been published to Maven Central as io.github.thobbs/jpen 2.2.1
+
+However, I don't know if simply adding that as a dependency will work. This build system creates a "nar" package that includes both a jar and native files (.dll or .so files), and those typically need to be handled specially.
+
 ## Building
 
 To build a jar, run: `mvn clean package`
